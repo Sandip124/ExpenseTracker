@@ -5,4 +5,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Enums" />
+      <Folder Include="Repositories" />
+      <Folder Include="Services" />
+    </ItemGroup>
+
 </Project>
