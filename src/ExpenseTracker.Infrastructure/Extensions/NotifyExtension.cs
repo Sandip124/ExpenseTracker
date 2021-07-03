@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpenseTracker.Core.Extensions
+namespace ExpenseTracker.Infrastructure.Extensions
 {
     public static class Notify
     {
