@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExpenseTracker.Core.Helper
+﻿namespace ExpenseTracker.Core.Helper
 {
     public class Alert
     {
-        public string message { get; set; }
-        public messageType message_type { get; set; }
+        public string Message { get; set; }
+        public MessageType MessageType { get; set; }
 
     }
-    public enum messageType
+    public enum MessageType
     {
-        success,
-        error
+        Success,
+        Error,
+        Info
     }
 }
