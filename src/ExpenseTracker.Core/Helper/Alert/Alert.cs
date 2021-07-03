@@ -1,4 +1,4 @@
-﻿namespace ExpenseTracker.Core.Helper
+﻿namespace ExpenseTracker.Core.Helper.Alert
 {
     public class Alert
     {
