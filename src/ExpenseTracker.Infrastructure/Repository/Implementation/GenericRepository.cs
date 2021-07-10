@@ -1,13 +1,14 @@
 ﻿using ExpenseTracker.Core.Data;
-using ExpenseTracker.Core.Repositories.Generic;
+using ExpenseTracker.Core.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Infrastructure.Repository.Generic
+namespace ExpenseTracker.Infrastructure.Repository.Implementation
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
@@ -70,7 +71,7 @@ namespace ExpenseTracker.Infrastructure.Repository.Generic
         {
             return await _dbSet.AnyAsync(predicate).ConfigureAwait(false);
         }
-        
+
         public IQueryable<T> GetQueryable()
         {
             return _appDbContext.Set<T>();
@@ -79,7 +80,7 @@ namespace ExpenseTracker.Infrastructure.Repository.Generic
         public void Insert(T entity)
         {
             _appDbContext.Set<T>().Add(entity);
-           _appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
         }
 
         public void Update(T entity)

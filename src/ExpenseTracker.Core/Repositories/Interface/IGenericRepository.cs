@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace ExpenseTracker.Core.Repositories.Generic
+namespace ExpenseTracker.Core.Repositories.Interface
 {
    public interface IGenericRepository<T>
     {

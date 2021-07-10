@@ -1,9 +1,9 @@
+﻿using ExpenseTracker.Core.Dto.Transaction;
 using System.Threading.Tasks;
-using ExpenseTracker.Core.Dto.Transaction;
 
-namespace ExpenseTracker.Core.Services
+namespace ExpenseTracker.Core.Services.Interface
 {
-    public interface ITransactionService
+   public interface ITransactionService
     {
         Task Create(TransactionCreateDto transactionCreateDto);
         Task Update(TransactionUpdateDto transactionUpdateDto);

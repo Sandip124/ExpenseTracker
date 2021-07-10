@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Core.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +25,9 @@ namespace ExpenseTracker.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("ExpenseTracker.Core")));
+
+            registerElements(services);
             services.AddControllersWithViews();
 
             services.AddMvc().AddRazorRuntimeCompilation();
@@ -55,6 +60,42 @@ namespace ExpenseTracker.Web
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+        private void registerElements(IServiceCollection services)
+        {
+            registerServices(services);
+            registerRepos(services);
+            registerHelpers(services);
+            registerLibraries(services);
+
+        }
+        private void registerServices(IServiceCollection services)
+        {
+           
+            registerCoreServices(services);
+        }
+        private void registerRepos(IServiceCollection services)
+        {
+          
+            registerCoreRepos(services);
+        }
+        private void registerCoreMakers(IServiceCollection services)
+        {
+        }
+        private void registerHelpers(IServiceCollection services)
+        {
+        }
+        private void registerLibraries(IServiceCollection services)
+        {
+
+        }
+        private void registerCoreServices(IServiceCollection services)
+        {
+            
+        }
+        private void registerCoreRepos(IServiceCollection services)
+        {
+           
         }
     }
 }

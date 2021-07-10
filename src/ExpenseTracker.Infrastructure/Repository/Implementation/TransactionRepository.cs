@@ -1,7 +1,11 @@
+﻿using ExpenseTracker.Core.Repositories.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using ExpenseTracker.Core.Repositories.Interface;
 
-namespace ExpenseTracker.Infrastructure.Repository.Transaction
+namespace ExpenseTracker.Infrastructure.Repository.Implementation
 {
     public class TransactionRepository : ITransactionRepository
     {
