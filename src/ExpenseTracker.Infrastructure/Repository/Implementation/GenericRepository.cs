@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static System.GC;
 
 namespace ExpenseTracker.Infrastructure.Repository.Implementation
 {
@@ -40,6 +41,19 @@ namespace ExpenseTracker.Infrastructure.Repository.Implementation
             await _appDbContext.AddAsync(entity).ConfigureAwait(false);
         }
 
+        public async Task UpdateAsync(T entity)
+        {
+            _appDbContext.Entry(entity).State = EntityState.Modified;
+            _appDbContext.Set<T>().Update(entity);
+            await _appDbContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            _appDbContext.Set<T>().Remove(entity);  
+            await _appDbContext.SaveChangesAsync().ConfigureAwait(false);  
+        }
+
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
         {
             predicate ??= x => true;
@@ -67,6 +81,17 @@ namespace ExpenseTracker.Infrastructure.Repository.Implementation
             return await _dbSet.FindAsync(id).ConfigureAwait(false);
         }
 
+        public virtual IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)  
+        {  
+            IQueryable<T> query = _appDbContext.Set<T>().Where(predicate);  
+            return query;  
+        }  
+  
+        public virtual async Task<ICollection<T>> FindByAsync(Expression<Func<T, bool>> predicate)  
+        {  
+            return await _appDbContext.Set<T>().Where(predicate).ToListAsync().ConfigureAwait(false);  
+        } 
+
         public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbSet.AnyAsync(predicate).ConfigureAwait(false);
@@ -89,5 +114,24 @@ namespace ExpenseTracker.Infrastructure.Repository.Implementation
             _appDbContext.Set<T>().Update(entity);
             _appDbContext.SaveChanges();
         }
+        
+        private bool disposed = false;  
+        protected virtual void Dispose(bool disposing)  
+        {  
+            if (!this.disposed)  
+            {  
+                if (disposing)  
+                {  
+                    _appDbContext.Dispose();  
+                }  
+                this.disposed = true;  
+            }  
+        }  
+  
+        public void Dispose()  
+        {  
+            Dispose(true);  
+            SuppressFinalize(this);  
+        }  
     }
 }
