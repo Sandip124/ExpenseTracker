@@ -1,5 +1,4 @@
 using System;
-using ExpenseTracker.Core.Entities;
 
 namespace ExpenseTracker.Core.Dto.Transaction
 {
@@ -12,6 +11,6 @@ namespace ExpenseTracker.Core.Dto.Transaction
         public DateTime EntryDate { get; protected set; }
         public string? Description { get; set; }
 
-        public TransactionType Type { get; protected set; }
+        public string Type { get; protected set; }
     }
 }
