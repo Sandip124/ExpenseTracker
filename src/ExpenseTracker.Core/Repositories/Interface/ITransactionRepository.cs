@@ -1,12 +1,8 @@
-﻿
-using System.Threading.Tasks;
+﻿using ExpenseTracker.Core.Entities;
 
 namespace ExpenseTracker.Core.Repositories.Interface
 {
-   public interface ITransactionRepository
+   public interface ITransactionRepository: IGenericRepository<Transaction>
     {
-        Task InsertAsync(Entities.Transaction transaction);
-        Task UpdateAsync(Entities.Transaction transaction);
-        Task DeleteAsync(Entities.Transaction transaction);
     }
 }

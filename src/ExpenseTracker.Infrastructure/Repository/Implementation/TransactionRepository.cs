@@ -4,24 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ExpenseTracker.Core.Data;
 
 namespace ExpenseTracker.Infrastructure.Repository.Implementation
 {
-    public class TransactionRepository : ITransactionRepository
+    public class TransactionRepository : GenericRepository<Core.Entities.Transaction>,ITransactionRepository
     {
-        public async Task InsertAsync(Core.Entities.Transaction transaction)
+        public TransactionRepository(AppDbContext appDbContext) : base(appDbContext)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task UpdateAsync(Core.Entities.Transaction transaction)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task DeleteAsync(Core.Entities.Transaction transaction)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
