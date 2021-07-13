@@ -6,7 +6,7 @@ namespace ExpenseTracker.Core.Entities
         {
             return new(name,color,icon)
             {
-                Type = TransactionType.Expenses
+                Type = TransactionType.Expense
             };
         }
 
@@ -22,6 +22,8 @@ namespace ExpenseTracker.Core.Entities
         public TransactionCategory(string name,string color,string icon)
         {
             Name = name;
+            Color = color;
+            Icon = icon;
         }
 
         public int Id { get; protected set; }
@@ -31,7 +33,7 @@ namespace ExpenseTracker.Core.Entities
         public string Color { get; protected set; }
         public string Icon { get; protected set; }
 
-        public TransactionType Type { get; protected set; }
+        public string Type { get; protected set; }
 
         
     }

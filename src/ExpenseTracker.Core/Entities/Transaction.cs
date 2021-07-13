@@ -1,31 +1,35 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
     public class Transaction
     {
-        public static Transaction CreateIncomeTransaction(decimal amount,DateTime transactionDate)
+        public static Transaction Create(decimal amount,DateTime transactionDate,string type)
         {
-            return new(amount,transactionDate)
-            {
-                Type = TransactionType.Income
-            };
-        }
-        
-        public static Transaction CreateExpensesTransaction(decimal amount,DateTime transactionDate)
-        {
-            return new(amount,transactionDate)
-            {
-                Type = TransactionType.Expenses
-            };
+            return new(amount, transactionDate, type);
         }
 
-        private Transaction(decimal amount,DateTime transactionDate)
+        private Transaction(decimal amount,DateTime transactionDate,string type)
         {
             if (amount <= 0) throw new InvalidTransactionAmountException();
             Amount = amount;
             EntryDate = DateTime.Now;
+            TransactionDate = transactionDate;
+            if (!TransactionType.IsValidType(type)) throw new InvalidTransactionTypeException(type);
+            Type = type;
+        }
+
+        public void UpdateAmount(decimal amount)
+        {
+            if (amount <= 0) throw new InvalidTransactionAmountException();
+            Amount = amount;
+        }
+
+        public void UpdateTransactionDate(DateTime transactionDate)
+        {
             TransactionDate = transactionDate;
         }
         
@@ -38,6 +42,23 @@ namespace ExpenseTracker.Core.Entities
         public DateTime EntryDate { get; protected set; }
         public string? Description { get; set; }
         
-        public TransactionType Type { get; protected set; }
+        public string Type { get; protected set; }
+    }
+    
+    public class TransactionType
+    {
+        public const string Income = "Income";
+        public const string Expense = "Expense";
+        
+        public static readonly IReadOnlyList<string> ValidTypes = new List<string>
+        {
+            TransactionType.Income,
+            TransactionType.Expense
+        };
+        public static bool IsValidType(string type)
+        {
+            return ValidTypes.Contains(type);
+        }
+
     }
 }
