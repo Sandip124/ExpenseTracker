@@ -27,7 +27,7 @@ namespace ExpenseTracker.Web
         {
             services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("ExpenseTracker.Core")));
 
-            registerElements(services);
+            RegisterElements(services);
             services.AddControllersWithViews();
 
             services.AddMvc().AddRazorRuntimeCompilation();
@@ -61,39 +61,38 @@ namespace ExpenseTracker.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
-        private void registerElements(IServiceCollection services)
+        private void RegisterElements(IServiceCollection services)
         {
-            registerServices(services);
-            registerRepos(services);
-            registerHelpers(services);
-            registerLibraries(services);
+            RegisterServices(services);
+            RegisterRepos(services);
+            RegisterHelpers(services);
+            RegisterLibraries(services);
 
         }
-        private void registerServices(IServiceCollection services)
+        private void RegisterServices(IServiceCollection services)
         {
-           
-            registerCoreServices(services);
+            RegisterCoreServices(services);
         }
-        private void registerRepos(IServiceCollection services)
+        private void RegisterRepos(IServiceCollection services)
         {
           
-            registerCoreRepos(services);
+            RegisterCoreRepos(services);
         }
-        private void registerCoreMakers(IServiceCollection services)
+        private void RegisterCoreMakers(IServiceCollection services)
         {
         }
-        private void registerHelpers(IServiceCollection services)
+        private void RegisterHelpers(IServiceCollection services)
         {
         }
-        private void registerLibraries(IServiceCollection services)
+        private void RegisterLibraries(IServiceCollection services)
         {
 
         }
-        private void registerCoreServices(IServiceCollection services)
+        private void RegisterCoreServices(IServiceCollection services)
         {
             
         }
-        private void registerCoreRepos(IServiceCollection services)
+        private void RegisterCoreRepos(IServiceCollection services)
         {
            
         }
