@@ -3,6 +3,7 @@ using FluentNHibernate;
 using FluentNHibernate.Cfg;
 using Microsoft.AspNetCore.Http;
 using NHibernate;
+using NHibernate.Cache;
 using NHibernate.Tool.hbm2ddl;
 using Configuration = NHibernate.Cfg.Configuration;
 using ISession = NHibernate.ISession;
@@ -22,35 +23,16 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
             lock (LockObject)
             {
                 if (_sessionFactory != null) return;
-                _sessionFactory = BuildSessionFactory(Configuration.DefaultHibernateCfgFileName,true);
+                var configuration = new Configuration().Configure(Configuration.DefaultHibernateCfgFileName);
+                _sessionFactory = Fluently.Configure(configuration)
+                    .Mappings(m => m.FluentMappings.AddFromAssembly(Assembly.Load("ExpenseTracker.Infrastructure")))
+                    .Cache(
+                        c => c.UseQueryCache()
+                            .UseSecondLevelCache()
+                            .ProviderClass<HashtableCacheProvider>())
+                    //.ExposeConfiguration(BuildSchema)
+                    .BuildSessionFactory();
             }
-        }
-
-
-        private static ISessionFactory BuildSessionFactory(string connectionStringName, bool hasToCreateSchema = false)
-        {
-            return Fluently.Configure(new Configuration().Configure(connectionStringName))
-                .Mappings(m =>
-                {
-                    m.FluentMappings.AddFromAssembly(Assembly.Load(nameof(ExpenseTracker.Infrastructure)));
-                    m.UsePersistenceModel(new PersistenceModel());
-                })
-                .ExposeConfiguration(cfg => BuildSchema(cfg, hasToCreateSchema))
-                .BuildSessionFactory();
-        }
-
-
-        /// <summary>  
-        /// Build the schema of the database.  
-        /// </summary>  
-        /// <param name="config">Configuration.</param>
-        /// <param name="hasToCreateSchema"></param>
-        private static void BuildSchema(Configuration config, bool hasToCreateSchema)
-        {
-            if (hasToCreateSchema)
-                new SchemaExport(config).Create(false, true);
-            else
-                new SchemaUpdate(config).Execute(false, false);
         }
 
         private static void BuildSchema(Configuration config)
