@@ -14,18 +14,5 @@ namespace ExpenseTracker.Core.Exceptions
         {
         }
 
-        public TransactionNotFoundException(string message) : base(message)
-        {
-        }
-
-        public TransactionNotFoundException(string message, Exception inner) : base(message, inner)
-        {
-        }
-
-        protected TransactionNotFoundException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
-        {
-        }
     }
 }
