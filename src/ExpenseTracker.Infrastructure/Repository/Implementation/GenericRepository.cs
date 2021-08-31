@@ -1,137 +1,95 @@
-﻿using ExpenseTracker.Core.Data;
+﻿using System;
 using ExpenseTracker.Core.Repositories.Interface;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using static System.GC;
+using ExpenseTracker.Core.Pagination;
+using ExpenseTracker.Infrastructure.SessionFactory;
+using NHibernate;
+using NHibernate.Linq;
 
 namespace ExpenseTracker.Infrastructure.Repository.Implementation
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly AppDbContext _appDbContext;
-        private readonly DbSet<T> _dbSet;
-
-        public GenericRepository(AppDbContext appDbContext)
+        private readonly ISession _currentSession = BaseSessionFactory.GetCurrentSession();
+        public void Delete(T entities)
         {
-            _appDbContext = appDbContext;
-            _dbSet = appDbContext.Set<T>();
-        }
-        public void Delete(T entity)
-        {
-            _appDbContext.Set<T>().Remove(entity);
+            _currentSession.Delete(entities);
         }
 
-        public List<T> GetAll()
+        public async Task DeleteAsync(T entities)
         {
-            return _appDbContext.Set<T>().ToList();
+            await _currentSession.DeleteAsync(entities).ConfigureAwait(false);
         }
 
-        public T GetById(long id)
+        public void Insert(T entities)
         {
-            return _appDbContext.Set<T>().Find(id);
+            _currentSession.Save(entities);
         }
 
-        public async Task InsertAsync(T entity)
+        public async Task InsertAsync(T entities)
         {
-            await _appDbContext.AddAsync(entity).ConfigureAwait(false);
+            await _currentSession.SaveAsync(entities).ConfigureAwait(false);
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entities)
         {
-            _appDbContext.Entry(entity).State = EntityState.Modified;
-            _appDbContext.Set<T>().Update(entity);
-            await _appDbContext.SaveChangesAsync().ConfigureAwait(false);
+            _currentSession.Update(entities);
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task UpdateAsync(T entities)
         {
-            _appDbContext.Set<T>().Remove(entity);  
-            await _appDbContext.SaveChangesAsync().ConfigureAwait(false);  
+            await _currentSession.UpdateAsync(entities).ConfigureAwait(false);
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
+        public IList<T> GetAll()
         {
-            predicate ??= x => true;
-            return await _appDbContext.Set<T>().Where(predicate).ToListAsync().ConfigureAwait(false);
+            return _currentSession.Query<T>().ToList();
         }
 
-        public List<T> Get(Expression<Func<T, bool>> predicate)
+        public async Task<IList<T>> GetAllAsync()
         {
-            return _appDbContext.Set<T>().Where(predicate).ToList();
-        }
-
-        public async Task<T> GetItemAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _appDbContext.Set<T>().FirstOrDefaultAsync(predicate).ConfigureAwait(false);
-        }
-
-        public async Task<int> GetCountAsync(Expression<Func<T, bool>>? predicate)
-        {
-            predicate ??= x => true;
-            return await _appDbContext.Set<T>().CountAsync(predicate).ConfigureAwait(false);
-        }
-
-        public async Task<T> FindAsync(long id)
-        {
-            return await _dbSet.FindAsync(id).ConfigureAwait(false);
-        }
-
-        public virtual IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)  
-        {  
-            IQueryable<T> query = _appDbContext.Set<T>().Where(predicate);  
-            return query;  
-        }  
-  
-        public virtual async Task<ICollection<T>> FindByAsync(Expression<Func<T, bool>> predicate)  
-        {  
-            return await _appDbContext.Set<T>().Where(predicate).ToListAsync().ConfigureAwait(false);  
-        } 
-
-        public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbSet.AnyAsync(predicate).ConfigureAwait(false);
+            return await _currentSession.Query<T>().ToListAsync<T>().ConfigureAwait(false);
         }
 
         public IQueryable<T> GetQueryable()
         {
-            return _appDbContext.Set<T>();
+            return _currentSession.Query<T>();
         }
 
-        public void Insert(T entity)
+        public T GetById(long id)
         {
-            _appDbContext.Set<T>().Add(entity);
-            _appDbContext.SaveChanges();
+            return _currentSession.Get<T>(id);
         }
 
-        public void Update(T entity)
+        public Task<T?> GetByIdAsync(long id)
         {
-            _appDbContext.Entry(entity).State = EntityState.Modified;
-            _appDbContext.Set<T>().Update(entity);
-            _appDbContext.SaveChanges();
+            return _currentSession.GetAsync<T?>(id);
         }
         
-        private bool disposed = false;  
-        protected virtual void Dispose(bool disposing)  
-        {  
-            if (!this.disposed)  
-            {  
-                if (disposing)  
-                {  
-                    _appDbContext.Dispose();  
-                }  
-                this.disposed = true;  
-            }  
-        }  
-  
-        public void Dispose()  
-        {  
-            Dispose(true);  
-            SuppressFinalize(this);  
-        }  
+        public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)
+        {
+            return predicate == null ? GetQueryable() : GetQueryable().Where(predicate);
+        }
+
+        public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await GetPredicatedQueryable(predicate)
+                .CountAsync()
+                .ConfigureAwait(false) != 0;
+            
+        }
+
+        public Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100)
+        {
+            return new Pagination<T>(
+                queryable.Skip((page - 1) * limit).Take(limit).ToList(),
+                queryable.Count(),
+                page,
+                limit
+            );
+        }
     }
 }
