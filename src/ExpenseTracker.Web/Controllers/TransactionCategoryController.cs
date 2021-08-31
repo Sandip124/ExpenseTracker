@@ -1,13 +1,24 @@
+using System.Threading.Tasks;
+using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.Web.ViewModels.TransactionCategory;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Web.Controllers
 {
     public class TransactionCategoryController : Controller
     {
-        // GET
-        public IActionResult Index()
+        private readonly ITransactionCategoryRepository _transactionCategoryRepository;
+
+        public TransactionCategoryController(ITransactionCategoryRepository transactionCategoryRepository)
         {
-            return View();
+            _transactionCategoryRepository = transactionCategoryRepository;
+        }
+        
+        public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
+        {
+            var transactionCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);
+            transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
+            return View(transactionCategoryIndexViewModel);
         }
     }
 }
