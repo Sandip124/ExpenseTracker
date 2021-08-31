@@ -1,0 +1,16 @@
+﻿
+/* Toast notification */
+
+.notyf
+{
+  padding: 40px;
+}
+
+.notyf__toast {
+  max-width: 600px !important;
+}
+
+.notyf__ripple {
+  height: 800px;
+  width: 800px;
+}
