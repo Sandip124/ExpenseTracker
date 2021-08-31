@@ -30,14 +30,14 @@ namespace ExpenseTracker.Core.Services.Implementation
             Tx.Complete();
         }
 
-        public  async Task Delete(long transactionId, string remarks)
+        public  async Task Delete(long transactionId)
         {
             var transactionExists = await _transactionRepository.CheckIfExistAsync(a=>a.Id == transactionId).ConfigureAwait(false);
             if (!transactionExists) throw new TransactionNotFoundException(transactionId);
             
             using var Tx = TransactionScopeHelper.GetInstance();
             
-            var transaction = await _transactionRepository.FindAsync(transactionId).ConfigureAwait(false);
+            var transaction = await _transactionRepository.GetByIdAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
 
             await _transactionRepository.DeleteAsync(transaction).ConfigureAwait(false);
 
@@ -51,7 +51,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             using var Tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionRepository.FindAsync(transactionUpdateDto.Id).ConfigureAwait(false);
+            var transaction = await _transactionRepository.GetByIdAsync(transactionUpdateDto.Id).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
             transaction.UpdateAmount(transactionUpdateDto.Amount);
             transaction.UpdateTransactionDate(transactionUpdateDto.TransactionDate);
 
