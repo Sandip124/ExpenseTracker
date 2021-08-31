@@ -8,8 +8,10 @@ namespace ExpenseTracker.Core.Entities
     {
         protected Transaction() { }
 
-        public Transaction(decimal amount,DateTime transactionDate,string type)
+        public Transaction(Workspace workspace,TransactionCategory transactionCategory,decimal amount,DateTime transactionDate,string type)
         {
+            SetWorkspace(workspace);
+            SetTransactionCategory(transactionCategory);
             if (amount <= 0) throw new InvalidTransactionAmountException();
             Amount = amount;
             EntryDate = DateTime.Now;
@@ -18,9 +20,9 @@ namespace ExpenseTracker.Core.Entities
             Type = type;
         }
         
-        public static Transaction Create(decimal amount,DateTime transactionDate,string type)
+        public static Transaction Create(Workspace workspace,TransactionCategory transactionCategory,decimal amount,DateTime transactionDate,string type)
         {
-            return new(amount, transactionDate, type);
+            return new(workspace,transactionCategory,amount, transactionDate, type);
         }
 
         public virtual void UpdateAmount(decimal amount)
@@ -45,7 +47,24 @@ namespace ExpenseTracker.Core.Entities
         
         public virtual string Type { get; protected set; }
         
-        public virtual int TransactionCategoryId { get=> TransactionCategory.TransactionCategoryId; protected set{} }
+        public virtual int TransactionCategoryId { get; protected set; }
         public virtual TransactionCategory TransactionCategory { get; protected set; }
+
+        protected virtual void SetTransactionCategory(TransactionCategory transactionCategory)
+        {
+            TransactionCategory = transactionCategory;
+            TransactionCategoryId = transactionCategory.TransactionCategoryId;
+        }
+        
+        
+        public virtual int WorkspaceId { get; protected set; }
+        public virtual Workspace Workspace { get; protected set; }
+
+        protected virtual void SetWorkspace(Workspace workspace)
+        {
+            Workspace = workspace;
+            WorkspaceId = workspace.WorkspaceId;
+        }
+
     }
 }
