@@ -7,14 +7,10 @@
 
     <ItemGroup>
       <Folder Include="Enums" />
-      <Folder Include="Makers\Implementation\" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
     </ItemGroup>
 
 </Project>
