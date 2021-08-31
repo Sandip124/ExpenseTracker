@@ -7,12 +7,9 @@ namespace ExpenseTracker.Core.Entities
 {
     public class Transaction
     {
-        public static Transaction Create(decimal amount,DateTime transactionDate,string type)
-        {
-            return new(amount, transactionDate, type);
-        }
+        protected Transaction() { }
 
-        private Transaction(decimal amount,DateTime transactionDate,string type)
+        public Transaction(decimal amount,DateTime transactionDate,string type)
         {
             if (amount <= 0) throw new InvalidTransactionAmountException();
             Amount = amount;
@@ -21,28 +18,36 @@ namespace ExpenseTracker.Core.Entities
             if (!TransactionType.IsValidType(type)) throw new InvalidTransactionTypeException(type);
             Type = type;
         }
+        
+        public static Transaction Create(decimal amount,DateTime transactionDate,string type)
+        {
+            return new(amount, transactionDate, type);
+        }
 
-        public void UpdateAmount(decimal amount)
+        public virtual void UpdateAmount(decimal amount)
         {
             if (amount <= 0) throw new InvalidTransactionAmountException();
             Amount = amount;
         }
 
-        public void UpdateTransactionDate(DateTime transactionDate)
+        public virtual void UpdateTransactionDate(DateTime transactionDate)
         {
             TransactionDate = transactionDate;
         }
         
-        public int Id { get; protected set; }
+        public virtual int Id { get; protected set; }
 
-        public decimal Amount { get; protected set; }
+        public virtual decimal Amount { get; protected set; }
         
-        public DateTime TransactionDate { get; protected set; }
+        public virtual DateTime TransactionDate { get; protected set; }
 
-        public DateTime EntryDate { get; protected set; }
-        public string? Description { get; set; }
+        public virtual DateTime EntryDate { get; protected set; }
+        public virtual string? Description { get; set; }
         
-        public string Type { get; protected set; }
+        public virtual string Type { get; protected set; }
+        
+        public virtual int TransactionCategoryId { get=> TransactionCategory.TransactionCategoryId; protected set{} }
+        public virtual TransactionCategory TransactionCategory { get; protected set; }
     }
     
     public class TransactionType
