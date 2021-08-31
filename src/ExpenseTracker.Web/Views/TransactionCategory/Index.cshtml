@@ -1,0 +1,7 @@
+@model ExpenseTracker.Web.ViewModels.TransactionCategory.TransactionCategoryIndexViewModel
+
+
+@foreach (var item in Model.TransactionCategories)
+{
+    <text>@item.CategoryName</text>
+}

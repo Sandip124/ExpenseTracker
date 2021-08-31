@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
@@ -7,6 +7,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ExpenseTracker.Core\ExpenseTracker.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+      <PackageReference Include="MySql.Data" Version="8.0.26" />
     </ItemGroup>
 
 </Project>
