@@ -1,28 +1,23 @@
 using System.Collections.Generic;
+using ExpenseTracker.Core.Entities.Common;
+using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
     public class TransactionCategory
     {
-        public static TransactionCategory CreateExpensesCategory(string name,string color,string icon)
+        public static TransactionCategory Create(string type,string name,string color,string icon)
         {
-            return new(name,color,icon)
-            {
-                Type = TransactionType.Expense
-            };
-        }
-
-        public static TransactionCategory CreateIncomeCategory(string name,string color,string icon)
-        {
-            return new(name,color,icon)
-            {
-                Type = TransactionType.Income
+            if (!TransactionType.IsValidType(type)) throw new InvalidTransactionTypeException(type);
+            
+            return new TransactionCategory(name,color,icon) {
+                Type = type
             };
         }
 
         protected TransactionCategory() { }
         
-        public TransactionCategory(string categoryName,string color,string icon)
+        private TransactionCategory(string categoryName,string color,string icon)
         {
             CategoryName = categoryName;
             Color = color;

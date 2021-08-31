@@ -1,5 +1,3 @@
-using System;
-
 namespace ExpenseTracker.Core.Dto.TransactionCategory
 {
     public class TransactionCategoryCreateDto

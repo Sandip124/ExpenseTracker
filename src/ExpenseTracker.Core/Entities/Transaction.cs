@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
@@ -48,22 +47,5 @@ namespace ExpenseTracker.Core.Entities
         
         public virtual int TransactionCategoryId { get=> TransactionCategory.TransactionCategoryId; protected set{} }
         public virtual TransactionCategory TransactionCategory { get; protected set; }
-    }
-    
-    public class TransactionType
-    {
-        public const string Income = "Income";
-        public const string Expense = "Expense";
-        
-        public static readonly IReadOnlyList<string> ValidTypes = new List<string>
-        {
-            TransactionType.Income,
-            TransactionType.Expense
-        };
-        public static bool IsValidType(string type)
-        {
-            return ValidTypes.Contains(type);
-        }
-
     }
 }

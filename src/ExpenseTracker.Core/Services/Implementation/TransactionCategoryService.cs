@@ -20,7 +20,7 @@ namespace ExpenseTracker.Core.Services.Implementation
         {
             using var Tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = new TransactionCategory(transactionCategoryCreateDto.Type, transactionCategoryCreateDto.Color,
+            var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
             await _transactionCategoryRepository.InsertAsync(transaction).ConfigureAwait(false);
 
