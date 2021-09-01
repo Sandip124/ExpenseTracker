@@ -12,8 +12,8 @@ namespace ExpenseTracker.Core.Entities
         }
         private Workspace(string workSpaceName,string color)
         {
-            WorkSpaceName = workSpaceName;
-            Color = color;
+            ChangeName(workSpaceName);
+            ChangeColor(color);
         }
 
         public virtual int WorkspaceId { get; protected set; }
@@ -21,8 +21,22 @@ namespace ExpenseTracker.Core.Entities
         public virtual string Token { get; protected set; } = Guid.NewGuid().ToString();
 
         public virtual string WorkSpaceName { get; protected set; }
+
+        public virtual void ChangeName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new Exception("Invalid Workspace name.");
+            WorkSpaceName = name;
+        }
         
-        public virtual string Color { get; set; }
+        public virtual string Color { get; protected set; }
+
+        public virtual void ChangeColor(string color)
+        {
+            if (string.IsNullOrWhiteSpace(color)) throw new Exception("Invalid Workspace name.");
+            // todo more validation for color
+            Color = color;
+        }
+        
 
         public virtual string? BackgroundImage { get; set; }
 
