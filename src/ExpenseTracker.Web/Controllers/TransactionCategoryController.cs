@@ -20,5 +20,12 @@ namespace ExpenseTracker.Web.Controllers
             transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
             return View(transactionCategoryIndexViewModel);
         }
+        
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var transactionCategoryViewModel = new TransactionCategoryViewModel();
+            return View(transactionCategoryViewModel);
+        }
     }
 }

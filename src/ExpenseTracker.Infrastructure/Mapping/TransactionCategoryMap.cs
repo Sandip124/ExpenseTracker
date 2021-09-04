@@ -11,7 +11,7 @@ namespace ExpenseTracker.Infrastructure.Mapping
             Id(x => x.TransactionCategoryId).Column("transaction_category_id");
             Map(x => x.CategoryName).CustomSqlType("varchar(100)").Not.Nullable().Column("category_name");
             Map(x => x.Color).CustomSqlType("varchar(50)").Not.Nullable().Column("color");
-            Map(x => x.Icon).CustomSqlType("varchar(50)").Not.Nullable().Column("icon");
+            Map(x => x.Icon).CustomSqlType("text").Not.Nullable().Column("icon");
             Map(x => x.Type).CustomSqlType("varchar(50)").Nullable().Column("type");
             HasMany(x => x.Transactions)
                 .Cascade.All()

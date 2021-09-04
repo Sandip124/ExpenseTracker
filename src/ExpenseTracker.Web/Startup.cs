@@ -31,14 +31,12 @@ namespace ExpenseTracker.Web
 
             services.AddControllersWithViews();
             services.AddMvc().AddRazorRuntimeCompilation();
-            
+
             services.AddHsts(options =>
             {
                 options.Preload = true;
                 options.IncludeSubDomains = true;
                 options.MaxAge = TimeSpan.FromDays(60);
-                options.ExcludedHosts.Add("example.com");
-                options.ExcludedHosts.Add("www.example.com");
             });
         }
 

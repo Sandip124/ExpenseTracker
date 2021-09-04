@@ -1,0 +1,94 @@
+@using ExpenseTracker.Web.ViewModels.TransactionCategory
+@using ExpenseTracker.Core.Entities.Common
+@using Google.Protobuf.WellKnownTypes
+@model ExpenseTracker.Web.ViewModels.TransactionCategory.TransactionCategoryViewModel
+
+@{
+    ViewData["Title"] = "Transaction Category";
+    Layout = "_Layout";
+}
+
+<div class="page-header d-print-none">
+    <div class="row align-items-center">
+        <div class="col">
+            <!-- Page pre-title -->
+            <div class="page-pretitle">
+                Create
+            </div>
+            <h2 class="page-title">
+                @ViewData["Title"]
+            </h2>
+        </div>
+        <!-- Page title actions -->
+        <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+                <a asp-action="Index" asp-controller="TransactionCategory" class="btn btn-default d-none d-sm-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                    Cancel
+                </a>
+                <a asp-action="Index" asp-controller="TransactionCategory" class="btn btn-default d-sm-none d-sm-inline-block btn-icon" aria-label="Create new Transaction Category">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@ViewData["Title"]</h3>
+        </div>
+        <div class="card-body">
+            <form>
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a=> a.Name,new{@class="form-label col-3 col-form-label"})
+                    <div class="col">
+                        @Html.TextBoxFor(a=>a.Name, new{@class="form-control", placeholder="Enter Category Name"})
+                    </div>
+                </div>
+                <div class="form-group mb-3 row">
+                     @Html.LabelFor(a=> a.Type,new{@class="form-label col-3 col-form-label"})
+                     <div class="col">
+                         <select  asp-items="TransactionCategoryViewModel.TypeSelectList" class="form-control"></select>
+                     </div>
+                </div>
+                <div class="form-group mb-3 row">
+                     @Html.LabelFor(a=> a.Icon,new{@class="form-label col-3 col-form-label"})
+                     <div class="col">
+                         <select name="Icon" class="form-control">
+                         @foreach (var (Key, Value) in CategoryIcon.Icons)
+                         {
+                             <option value="@Value">@Html.Raw(Value) @Key</option>
+                         }
+                         </select>
+                     </div>
+                </div>
+                <div class="form-group row">
+                    <label class="form-label col-3 col-form-label pt-0">Checkboxes</label>
+                    <div class="col">
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" checked="">
+                            <span class="form-check-label">Option 1</span>
+                        </label>
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox">
+                            <span class="form-check-label">Option 2</span>
+                        </label>
+                        <label class="form-check">
+                            <input class="form-check-input" type="checkbox" disabled="">
+                            <span class="form-check-label">Option 3</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

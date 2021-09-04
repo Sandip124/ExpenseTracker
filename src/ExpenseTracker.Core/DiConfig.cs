@@ -1,4 +1,3 @@
-using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Implementation;
 using ExpenseTracker.Core.Services.Interface;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +10,7 @@ namespace ExpenseTracker.Core
         {
             services.AddScoped<ITransactionCategoryService, TransactionCategoryService>();
             services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IWorkspaceService, WorkspaceService>();
         }
 
     }
