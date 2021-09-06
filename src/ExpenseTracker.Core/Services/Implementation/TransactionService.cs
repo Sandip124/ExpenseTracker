@@ -37,7 +37,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             Tx.Complete();
         }
 
-        public  async Task Delete(long transactionId)
+        public  async Task Delete(int transactionId)
         {
             var transactionExists = await _transactionRepository.CheckIfExistAsync(a=>a.Id == transactionId).ConfigureAwait(false);
             if (!transactionExists) throw new TransactionNotFoundException(transactionId);

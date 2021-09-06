@@ -8,6 +8,7 @@ namespace ExpenseTracker.Web.ViewModels.TransactionCategory
 {
     public class TransactionCategoryViewModel
     {
+        public int TransactionCategoryId { get; set; }
         [Required]
         [MinLength(3)]
         [Display(Name = "Category Name")]
@@ -15,8 +16,9 @@ namespace ExpenseTracker.Web.ViewModels.TransactionCategory
 
         [Display(Name = "Color")]
         public string Color { get; set; }
-        
-        public SelectList ColorSelectList => new SelectList(Colors.GetColors.OrderBy(a=>a.Value),"Key","Value");
+
+        public Dictionary<string, string> ColorList = Colors.GetColors;
+
 
         [Display(Name = "Icon")]
         public string Icon { get; set; }

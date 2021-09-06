@@ -1,10 +1,9 @@
 @using ExpenseTracker.Web.ViewModels.TransactionCategory
 @using ExpenseTracker.Core.Entities.Common
-@using Google.Protobuf.WellKnownTypes
 @model ExpenseTracker.Web.ViewModels.TransactionCategory.TransactionCategoryViewModel
 
 @{
-    ViewData["Title"] = "Transaction Category";
+    ViewBag.Title = "Transaction Category";
     Layout = "_Layout";
 }
 
@@ -15,7 +14,7 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    Create
+                    Edit
                 </div>
                 <h2 class="page-title">
                     @ViewData["Title"]
@@ -42,13 +41,15 @@
 }
 
 
+
 <div class="col-md-12">
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">@ViewData["Title"]</h3>
         </div>
         <div class="card-body">
-            <form method="post" asp-action="Create" asp-controller="TransactionCategory">
+            <form method="post" asp-action="Edit" asp-controller="TransactionCategory">
+                <input type="hidden" asp-for="TransactionCategoryId">
                 <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.Name, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">

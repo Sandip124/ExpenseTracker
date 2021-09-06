@@ -47,7 +47,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             Tx.Complete();
         }
 
-        public async Task Delete(long workspaceId)
+        public async Task Delete(int workspaceId)
         {
             using var Tx = TransactionScopeHelper.GetInstance();
 

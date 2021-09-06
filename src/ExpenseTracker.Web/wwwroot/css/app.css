@@ -11,6 +11,13 @@
 }
 
 .notyf__ripple {
-  height: 800px;
-  width: 800px;
+  height: 50000px !important;
+  width: 50000px !important;
+}
+
+
+/* Template */
+
+.page-wrapper{
+  min-height: 85vh;
 }

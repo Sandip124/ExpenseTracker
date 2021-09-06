@@ -7,6 +7,6 @@ namespace ExpenseTracker.Core.Services.Interface
     {
         Task Create(WorkspaceCreateDto workspaceCreateDto);
         Task Update(WorkspaceUpdateDto workspaceUpdateDto);
-        Task Delete(long workspaceId);
+        Task Delete(int workspaceId);
     }
 }

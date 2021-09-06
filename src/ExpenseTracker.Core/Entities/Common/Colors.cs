@@ -11,10 +11,6 @@ namespace ExpenseTracker.Core.Entities.Common
                 "#232E3C"
             },
             {
-                "White",
-                "#FFFFFF"
-            },
-            {
                 "Blue",
                 "#206BC4"
             },
