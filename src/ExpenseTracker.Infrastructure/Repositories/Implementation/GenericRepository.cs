@@ -1,15 +1,15 @@
 ﻿using System;
-using ExpenseTracker.Core.Repositories.Interface;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ExpenseTracker.Core.Pagination;
+using ExpenseTracker.Common.Pagination;
+using ExpenseTracker.Common.Repositories.Interface;
 using ExpenseTracker.Infrastructure.SessionFactory;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace ExpenseTracker.Infrastructure.Repository.Implementation
+namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExpenseTracker.Core.Pagination
+namespace ExpenseTracker.Common.Pagination
 {
     public class Pagination<T>
     {

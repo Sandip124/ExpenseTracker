@@ -1,6 +1,6 @@
 ﻿using ExpenseTracker.Core.Repositories.Interface;
 
-namespace ExpenseTracker.Infrastructure.Repository.Implementation
+namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 {
     public class TransactionRepository : GenericRepository<Core.Entities.Transaction>,ITransactionRepository
     {

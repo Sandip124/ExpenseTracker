@@ -6,7 +6,7 @@ namespace ExpenseTracker.Core
 {
     public static class DiConfig
     {
-        public static void InjectServices(this IServiceCollection services)
+        public static void InjectCoreServices(this IServiceCollection services)
         {
             services.AddScoped<ITransactionCategoryService, TransactionCategoryService>();
             services.AddScoped<ITransactionService, TransactionService>();

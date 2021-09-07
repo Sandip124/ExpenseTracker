@@ -1,6 +1,8 @@
 using System;
 using ExpenseTracker.Core;
 using ExpenseTracker.Infrastructure;
+using ExpenseTracker.Infrastructure.Helpers;
+using ExpenseTracker.Infrastructure.Middleware;
 using ExpenseTracker.Infrastructure.SessionFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,20 +26,18 @@ namespace ExpenseTracker.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
-            services.InjectServices();
-            services.InjectRepositories();
+            services.AddCors();
 
             services.AddControllersWithViews();
             services.AddMvc().AddRazorRuntimeCompilation();
+            
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-            services.AddHsts(options =>
-            {
-                options.Preload = true;
-                options.IncludeSubDomains = true;
-                options.MaxAge = TimeSpan.FromDays(60);
-            });
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            
+            services.InjectCoreServices();
+            services.InjectServices();
+            services.InjectRepositories();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +62,8 @@ namespace ExpenseTracker.Web
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

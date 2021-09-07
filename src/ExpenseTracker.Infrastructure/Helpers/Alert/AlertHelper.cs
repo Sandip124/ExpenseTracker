@@ -1,7 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace ExpenseTracker.Core.Helper.Alert
+namespace ExpenseTracker.Common.Helpers.Alert
 {
+    
+    public class Alert
+    {
+        public string Message { get; set; }
+        public MessageType MessageType { get; set; }
+
+    }
+    public enum MessageType
+    {
+        Success,
+        Error,
+        Info
+    }
+    
    public class AlertHelper
     {
         public static void SetSuccessMessage(Controller controller, string message)
@@ -18,4 +32,6 @@ namespace ExpenseTracker.Core.Helper.Alert
             Alert alert = new() {Message = message, MessageType = MessageType.Info};
         }
     }
+   
+   
 }

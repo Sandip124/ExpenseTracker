@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
-using ExpenseTracker.Core.Helper;
+using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 

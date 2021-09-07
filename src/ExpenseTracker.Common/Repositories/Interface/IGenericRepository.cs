@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ExpenseTracker.Core.Pagination;
+using ExpenseTracker.Common.Pagination;
 
-namespace ExpenseTracker.Core.Repositories.Interface
+namespace ExpenseTracker.Common.Repositories.Interface
 {
    public interface IGenericRepository<T>
     {

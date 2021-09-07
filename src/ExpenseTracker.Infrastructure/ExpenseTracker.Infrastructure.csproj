@@ -6,12 +6,18 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ExpenseTracker.Authentication\ExpenseTracker.Authentication.csproj" />
       <ProjectReference Include="..\ExpenseTracker.Core\ExpenseTracker.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentNHibernate" Version="3.1.0" />
       <PackageReference Include="MySql.Data" Version="8.0.26" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services" />
     </ItemGroup>
 
 </Project>

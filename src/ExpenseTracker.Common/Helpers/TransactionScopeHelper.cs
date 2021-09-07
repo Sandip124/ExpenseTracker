@@ -1,8 +1,8 @@
 using System.Transactions;
 
-namespace ExpenseTracker.Core.Helper
+namespace ExpenseTracker.Common.Helpers
 {
-    internal static class TransactionScopeHelper
+    public static class TransactionScopeHelper
     {
         public static TransactionScope GetInstance()
         {
