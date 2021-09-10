@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ExpenseTracker.Web.Models
+namespace ExpenseTracker.Authentication.Dto
 {
     public class AuthenticateRequestDto
     {
@@ -9,5 +9,9 @@ namespace ExpenseTracker.Web.Models
 
         [Required]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }

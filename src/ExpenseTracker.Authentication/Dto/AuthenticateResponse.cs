@@ -1,6 +1,6 @@
 using ExpenseTracker.Authentication.Entities;
 
-namespace ExpenseTracker.Web.Models
+namespace ExpenseTracker.Authentication.Dto
 {
     public class AuthenticateResponseDto
     {
@@ -9,11 +9,12 @@ namespace ExpenseTracker.Web.Models
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Token { get; set; }
+        public bool RememberMe { get; set; }
 
 
         public AuthenticateResponseDto(User user, string token)
         {
-            Id = user.Id;
+            Id = user.UserId;
             FirstName = user.FirstName;
             LastName = user.LastName;
             Username = user.Username;
