@@ -1,4 +1,4 @@
-using ExpenseTracker.Web.Models;
+using ExpenseTracker.Authentication.Dto;
 
 namespace ExpenseTracker.Authentication.Services.Interface
 {
