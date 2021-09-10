@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 
 namespace ExpenseTracker.Authentication.Entities
@@ -12,11 +13,11 @@ namespace ExpenseTracker.Authentication.Entities
         }
         private User(string username, string password)
         {
-            SetUserName(Username);
+            SetUserName(username);
             SetPassword(password);
         }
         
-        public virtual int Id { get; protected set; }
+        public virtual int UserId { get; protected set; }
         public virtual string FirstName { get;  set; }
         public virtual string LastName { get;  set; }
         public virtual string Username { get; protected set; }
@@ -24,6 +25,11 @@ namespace ExpenseTracker.Authentication.Entities
         public virtual void SetUserName(string userName)
         {
             //validation for the username
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                //todo: change to custom exception
+                throw new Exception("Username Not Valid.");
+            }
             Username = userName;
         }
 
@@ -33,8 +39,12 @@ namespace ExpenseTracker.Authentication.Entities
         public virtual void SetPassword(string password)
         {
             //validation for the password
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                //todo: change to custom exception
+                throw new Exception("Username Not Valid.");
+            }
             Password = password;
         }
-        
     }
 }
