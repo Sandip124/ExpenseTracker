@@ -1,4 +1,5 @@
 using System;
+using ExpenseTracker.Authentication.Entities;
 
 namespace ExpenseTracker.Core.Entities
 {
@@ -32,7 +33,7 @@ namespace ExpenseTracker.Core.Entities
 
         public virtual void ChangeColor(string color)
         {
-            if (string.IsNullOrWhiteSpace(color)) throw new Exception("Invalid Workspace name.");
+            if (string.IsNullOrWhiteSpace(color)) throw new Exception("Invalid Workspace color.");
             // todo more validation for color
             Color = color;
         }
@@ -41,6 +42,15 @@ namespace ExpenseTracker.Core.Entities
         public virtual string? BackgroundImage { get; set; }
 
         public virtual string?  Description { get; set; }
+
+        public virtual User User { get; protected set; }
+        public virtual int UserId { get; protected set; }
+
+        public virtual void AssignUser(User user)
+        {
+            User = user;
+            UserId = user.UserId;
+        }
         
         
         
