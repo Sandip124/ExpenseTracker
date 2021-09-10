@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using ExpenseTracker.Authentication.Dto;
 using ExpenseTracker.Authentication.Entities;
 using ExpenseTracker.Authentication.Repositories.Interface;
 using ExpenseTracker.Authentication.Services.Interface;
-using ExpenseTracker.Infrastructure.Helpers;
-using ExpenseTracker.Web.Models;
-using Microsoft.Extensions.Options;
+using ExpenseTracker.Infrastructure.Extensions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ExpenseTracker.Infrastructure.Services.Implementation
@@ -17,11 +16,11 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly AppSettings _appSettings;
+        private readonly IConfiguration _configuration;
 
-        public UserService(IOptions<AppSettings> appSettings,IUserRepository userRepository)
+        public UserService(IConfiguration configuration,IUserRepository userRepository)
         {
-            _appSettings = appSettings.Value;
+            _configuration = configuration;
             _userRepository = userRepository;
         }
 
@@ -41,17 +40,18 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
 
         private string GenerateJwtToken(User user)
         {
-            // generate token that is valid for 7 days
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            var claims = new Claim[] {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSecret()));
+            SigningCredentials signingCredential = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            JwtHeader jwtHeader = new JwtHeader(signingCredential);
+            JwtPayload jwtPayload = new JwtPayload(claims);
+            JwtSecurityToken token = new JwtSecurityToken(jwtHeader, jwtPayload);
+            
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

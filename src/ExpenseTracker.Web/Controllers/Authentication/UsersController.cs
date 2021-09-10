@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
+using ExpenseTracker.Authentication.Dto;
 using ExpenseTracker.Authentication.Repositories.Interface;
 using ExpenseTracker.Authentication.Services.Interface;
 using ExpenseTracker.Infrastructure.Attributes;
-using ExpenseTracker.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Web.Controllers.Authentication

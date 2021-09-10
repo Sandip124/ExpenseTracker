@@ -12,8 +12,9 @@
 
     <ItemGroup>
       <PackageReference Include="FluentNHibernate" Version="3.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
       <PackageReference Include="MySql.Data" Version="8.0.26" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.1.0" />
     </ItemGroup>
 
     <ItemGroup>

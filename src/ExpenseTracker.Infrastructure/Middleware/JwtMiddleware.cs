@@ -2,31 +2,25 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ExpenseTracker.Authentication.Services.Interface;
-using ExpenseTracker.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Claims;
 using ExpenseTracker.Authentication.Repositories.Interface;
+using ExpenseTracker.Infrastructure.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace ExpenseTracker.Infrastructure.Middleware
 {
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly AppSettings _appSettings;
+        private readonly IConfiguration _configuration;
 
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public JwtMiddleware(RequestDelegate next,IConfiguration configuration)
         {
             _next = next;
-            _appSettings = appSettings.Value;
+            _configuration = configuration;
         }
 
         public async Task Invoke(HttpContext context, IUserRepository userRepository)
@@ -44,7 +38,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var key = Encoding.ASCII.GetBytes(_configuration.GetSecret());
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -56,7 +50,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimsIdentity.DefaultNameClaimType).Value);
 
                 // attach user to context on successful jwt validation
                 context.Items["User"] = await userRepository.GetByIdAsync(userId).ConfigureAwait(false);

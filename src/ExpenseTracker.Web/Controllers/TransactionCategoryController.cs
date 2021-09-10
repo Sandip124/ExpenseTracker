@@ -4,6 +4,7 @@ using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
+using ExpenseTracker.Infrastructure.Attributes;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.ViewModels.TransactionCategory;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ExpenseTracker.Web.Controllers
 {
+    [Authorize]
     public class TransactionCategoryController : Controller
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
