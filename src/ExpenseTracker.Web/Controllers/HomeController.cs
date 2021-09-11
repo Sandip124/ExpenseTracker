@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using ExpenseTracker.Infrastructure.Attributes;
 using ExpenseTracker.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

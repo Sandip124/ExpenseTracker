@@ -45,7 +45,7 @@
         <div class="text-center mb-4">
           <a href="."><img src="~/static/expense-tracker-logo.svg" height="36" alt=""></a>
         </div>
-        <form class="card card-md" asp-action="Login" asp-controller="Account" method="POST">
+        <form class="card card-md" id="LoginForm" method="POST">
           <input type="hidden" asp-for="ReturnUrl">
           <div class="card-body">
             <h2 class="card-title text-center mb-4">Login to your account</h2>
@@ -66,10 +66,10 @@
                 </span>
               </div>
             </div>
-            <div class="mb-2">
+            <div class="mb-2 mt-2">
               <label class="form-check">
                 <input type="checkbox" asp-for="RememberMe" class="form-check-input">
-                <span class="form-check-label">Remember me on this device</span>
+                <span class="form-check-label">Remember me </span>
               </label>
             </div>
             <div class="form-footer">
@@ -100,35 +100,42 @@
       </div>
     </div>
     
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
   <script src="~/dist/js/tabler.min.js" asp-append-version="true"></script>
+
+  <script >
   
+   $("#LoginForm").on("submit", function (event) {
+              event.preventDefault();
+              
+              let userName = $("#Username").val();
+              let password = $("#Password").val();
+              if (!userName || !password) return false;
+              
+              let loginModel = {
+                  ReturnUrl: $("#ReturnUrl").val(),
+                  Username: userName,
+                  Password: password,
+              };
   
-  @* <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> *@
-  @* <script > *@
-  @* *@
-  @* var form = document.getElementById("LoginForm") *@
-  @* *@
-  @* form.addEventListener('submit',function (e){ *@
-  @*   e.preventDefault(); *@
-  @*    *@
-  @*    $.ajax({ *@
-  @*         type: "POST", *@
-  @*         url: '@Url.ActionLink("Login","Account")', *@
-  @*         dataType:"application/json", *@
-  @*         data : {'username': $("#Username").val(),'password': $("#Password").val()}, *@
-  @*         success: function(response){ *@
-  @*             //if request if made successfully then the response represent the data *@
-  @*      *@
-  @*             console.log(response); *@
-  @*         } *@
-  @*       }); *@
-  @* }) *@
-  @* *@
-  @* *@
-  @* *@
-  @* </script> *@
+              $.ajax({
+                  url: "/account/login",
+                  type: "POST",
+                  dataType: "json",
+                  contentType: "application/json; charset=utf-8",
+                  data: JSON.stringify(loginModel),
+                  success: function (response) {
+                    console.log(response);
+                      window.location.href = response.returnUrl;
+                  },
+                  error: function (errorResponse) {
+                    console.log(errorResponse);
+                  }
+              });
+  })  
+  </script>
 
   
   </body></html>

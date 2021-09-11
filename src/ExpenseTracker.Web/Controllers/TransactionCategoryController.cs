@@ -4,9 +4,9 @@ using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
-using ExpenseTracker.Infrastructure.Attributes;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.ViewModels.TransactionCategory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

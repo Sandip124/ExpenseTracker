@@ -28,16 +28,17 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
         {
             var user = _userRepository.GetQueryable().SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
-            // return null if user not found
             if (user == null) return null;
 
-            // authentication successful so generate jwt token
             var token = GenerateJwtToken(user);
 
-            return new AuthenticateResponseDto(user, token);
+            return new AuthenticateResponseDto(user, token)
+            {
+                RememberMe = model.RememberMe,
+                ReturnUrl = model.ReturnUrl
+            };
         }
-
-
+        
         private string GenerateJwtToken(User user)
         {
             var claims = new Claim[] {

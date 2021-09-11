@@ -38,7 +38,7 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
         private static void BuildSchema(Configuration config)
         {
             new SchemaExport(config)
-                .Create(true, true);
+                .Create(true, false);
         }
 
         public static ISession GetCurrentSession()

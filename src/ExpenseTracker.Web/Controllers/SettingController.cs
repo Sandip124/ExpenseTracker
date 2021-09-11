@@ -1,4 +1,4 @@
-using ExpenseTracker.Infrastructure.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Web.Controllers

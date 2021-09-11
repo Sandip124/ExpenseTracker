@@ -11,6 +11,8 @@ namespace ExpenseTracker.Authentication.Dto
         public string Token { get; set; }
         public bool RememberMe { get; set; }
 
+        public string ReturnUrl { get; set; }
+
 
         public AuthenticateResponseDto(User user, string token)
         {

@@ -17,7 +17,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Serialization;
 
 namespace ExpenseTracker.Web
 {
@@ -54,15 +53,8 @@ namespace ExpenseTracker.Web
                     x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 }
-            ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-                {
-                    options.LoginPath = new PathString($"/Account/Login");
-                    // options.AccessDeniedPath = new PathString("/error");
-                    // options.LoginPath = $"/Auth/Login";
-                    // options.LogoutPath = $"/Auth/Logout";
-                    // options.AccessDeniedPath = $"/Auth/AccessDenied";
-                }
-            ).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
+            ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
                 x =>
                 {
                     x.RequireHttpsMetadata = false;
@@ -139,11 +131,15 @@ namespace ExpenseTracker.Web
             });
             
             app.UseStaticFiles();
-            app.UseRouting();
+            
             app.UseCookiePolicy();
+
+            app.UseRouting();
+            
             app.UseAuthorization();
 
             app.UseAuthentication();
+
             app.UseSession();
             
 
