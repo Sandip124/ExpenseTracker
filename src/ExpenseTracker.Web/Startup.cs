@@ -141,8 +141,9 @@ namespace ExpenseTracker.Web
             app.UseStaticFiles();
             app.UseRouting();
             app.UseCookiePolicy();
-            app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseAuthentication();
             app.UseSession();
             
 

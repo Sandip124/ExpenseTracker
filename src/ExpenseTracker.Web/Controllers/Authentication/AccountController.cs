@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 namespace ExpenseTracker.Web.Controllers.Authentication
 {
     [AllowAnonymous]
-    public class AccountController : ControllerBase
+    public class AccountController : Controller
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
