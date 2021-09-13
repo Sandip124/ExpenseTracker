@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +18,10 @@ namespace ExpenseTracker.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var currentLoggedInUser = await this.GetCurrentUser().ConfigureAwait(true);
+
             return View();
         }
 
