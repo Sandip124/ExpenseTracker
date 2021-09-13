@@ -1,5 +1,4 @@
 using System;
-using ExpenseTracker.Authentication.Entities;
 
 namespace ExpenseTracker.Core.Entities
 {

@@ -1,6 +1,6 @@
-using ExpenseTracker.Authentication.Entities;
+using User = ExpenseTracker.Core.Entities.User;
 
-namespace ExpenseTracker.Authentication.Dto
+namespace ExpenseTracker.Core.Dto
 {
     public class AuthenticateResponseDto
     {
@@ -11,7 +11,7 @@ namespace ExpenseTracker.Authentication.Dto
         public string Token { get; set; }
         public bool RememberMe { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; } = "/";
 
 
         public AuthenticateResponseDto(User user, string token)

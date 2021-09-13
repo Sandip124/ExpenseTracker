@@ -1,5 +1,5 @@
-using ExpenseTracker.Authentication.Entities;
-using ExpenseTracker.Authentication.Repositories.Interface;
+using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Repositories.Interface;
 
 namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 {

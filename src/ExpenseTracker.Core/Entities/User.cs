@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace ExpenseTracker.Authentication.Entities
+namespace ExpenseTracker.Core.Entities
 {
     public class User
     {

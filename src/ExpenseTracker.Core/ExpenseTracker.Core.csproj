@@ -10,7 +10,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ExpenseTracker.Authentication\ExpenseTracker.Authentication.csproj" />
       <ProjectReference Include="..\ExpenseTracker.Common\ExpenseTracker.Common.csproj" />
     </ItemGroup>
 

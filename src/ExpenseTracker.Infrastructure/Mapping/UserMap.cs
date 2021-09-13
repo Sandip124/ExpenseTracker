@@ -1,4 +1,4 @@
-using ExpenseTracker.Authentication.Entities;
+using ExpenseTracker.Core.Entities;
 using FluentNHibernate.Mapping;
 
 namespace ExpenseTracker.Infrastructure.Mapping

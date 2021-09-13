@@ -1,6 +1,5 @@
-using ExpenseTracker.Authentication.Repositories.Interface;
-using ExpenseTracker.Authentication.Services.Interface;
 using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Repositories.Implementation;
 using ExpenseTracker.Infrastructure.Services.Implementation;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,8 +1,8 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ExpenseTracker.Authentication.Entities;
-using ExpenseTracker.Authentication.Repositories.Interface;
+using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,7 +1,7 @@
-using ExpenseTracker.Authentication.Entities;
 using ExpenseTracker.Common.Repositories.Interface;
+using User = ExpenseTracker.Core.Entities.User;
 
-namespace ExpenseTracker.Authentication.Repositories.Interface
+namespace ExpenseTracker.Core.Repositories.Interface
 {
     public interface IUserRepository : IGenericRepository<User>
     {

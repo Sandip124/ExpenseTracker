@@ -8,4 +8,11 @@
       <ProjectReference Include="..\ExpenseTracker.Common\ExpenseTracker.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dto" />
+      <Folder Include="Entities" />
+      <Folder Include="Repositories\Interface" />
+      <Folder Include="Services\Interface" />
+    </ItemGroup>
+
 </Project>
