@@ -4,16 +4,20 @@ namespace ExpenseTracker.Core.Entities
 {
     public class Workspace
     {
+        public const string TypeDefaultWorkspace = "DEFAULT_WORKSPACE";
+        public const string TypeNormalWorkspace = "NORMAL_WORKSPACE";
+        
         protected Workspace() { }
 
-        public static Workspace Create(string workspaceName,string color)
+        public static Workspace Create(User user,string workspaceName,string color)
         {
-            return new Workspace(workspaceName,color);
+            return new Workspace(user,workspaceName,color);
         }
-        private Workspace(string workSpaceName,string color)
+        private Workspace(User user,string workSpaceName,string color)
         {
             ChangeName(workSpaceName);
             ChangeColor(color);
+            AssignUser(user);
         }
 
         public virtual int WorkspaceId { get; protected set; }
@@ -36,7 +40,6 @@ namespace ExpenseTracker.Core.Entities
             // todo more validation for color
             Color = color;
         }
-        
 
         public virtual string? BackgroundImage { get; set; }
 
@@ -45,8 +48,15 @@ namespace ExpenseTracker.Core.Entities
         public virtual User User { get; protected set; }
         public virtual int UserId { get; protected set; }
 
+        public virtual string WorkspaceType { get; protected set; }
+
+        public virtual void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
+
+        public virtual void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
+
         public virtual void AssignUser(User user)
         {
+            User.AddWorkspace(this);
             User = user;
             UserId = user.UserId;
         }

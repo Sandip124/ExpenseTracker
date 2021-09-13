@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace ExpenseTracker.Core.Entities
 {
@@ -46,5 +48,13 @@ namespace ExpenseTracker.Core.Entities
             }
             Password = password;
         }
+
+        public virtual ICollection<Workspace> Workspaces { get; set; } = new List<Workspace>();
+
+        public virtual void AddWorkspace(Workspace workspace)
+        {
+            Workspaces.Add(workspace);
+        }
+
     }
 }
