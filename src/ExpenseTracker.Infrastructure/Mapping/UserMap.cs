@@ -13,6 +13,11 @@ namespace ExpenseTracker.Infrastructure.Mapping
             Map(a => a.LastName).Column("last_name").CustomSqlType("varchar(50)");
             Map(a => a.Username).Column("user_name").CustomSqlType("varchar(50)");
             Map(a => a.Password).Column("password").CustomSqlType("varchar(50)");
+            HasMany(x => x.Workspaces)
+                .Cascade.All()
+                .KeyColumn("user_id")
+                .LazyLoad()
+                .Inverse();
         }
     }
 }
