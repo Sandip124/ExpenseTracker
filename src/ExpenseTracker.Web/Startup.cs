@@ -111,7 +111,9 @@ namespace ExpenseTracker.Web
         {
             var httpAccessor = serviceProvider.GetService<IHttpContextAccessor>();
             BaseSessionFactory.HttpContextAccessor = httpAccessor;
-
+            
+            ServiceActivator.Configure(app.ApplicationServices);
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
