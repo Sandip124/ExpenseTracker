@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Dto.Workspace;
@@ -11,16 +13,31 @@ namespace ExpenseTracker.Core.Services.Implementation
     public class WorkspaceService : IWorkspaceService
     {
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IUserRepository _userRepository;
 
-        public WorkspaceService(IWorkspaceRepository workspaceRepository)
+        public WorkspaceService(IWorkspaceRepository workspaceRepository,IUserRepository userRepository)
         {
             _workspaceRepository = workspaceRepository;
+            _userRepository = userRepository;
         }
         public async Task Create(WorkspaceCreateDto workspaceCreateDto)
         {
             using var Tx = TransactionScopeHelper.GetInstance();
+
+            var userWorkspaces =  _workspaceRepository
+                .GetPredicatedQueryable(a => a.UserId == workspaceCreateDto.UserId).ToList();
+
+            var user = await _userRepository.GetByIdAsync(workspaceCreateDto.UserId).ConfigureAwait(false) ?? throw new Exception("User not found exception");
             
-            var workspace = Workspace.Create(workspaceCreateDto.Name,workspaceCreateDto.Color);
+            var workspace = Workspace.Create(user,workspaceCreateDto.Name,workspaceCreateDto.Color);
+            
+            if (userWorkspaces.Any())
+            {
+                workspace.SetAsNormalWorkspace();
+            }else{
+                workspace.SetAsDefaultWorkspace();
+            }
+            
             workspace.BackgroundImage = workspaceCreateDto.BackgroundImage;
 
             await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
