@@ -5,7 +5,7 @@ namespace ExpenseTracker.Core.Dto.Workspace
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public string BackgroundImage { get; set; }
+        public string? Description { get; set; }
         
     }
 }

@@ -40,9 +40,6 @@ namespace ExpenseTracker.Core.Entities
             // todo more validation for color
             Color = color;
         }
-
-        public virtual string? BackgroundImage { get; set; }
-
         public virtual string?  Description { get; set; }
 
         public virtual User User { get; protected set; }
@@ -52,13 +49,15 @@ namespace ExpenseTracker.Core.Entities
 
         public virtual void SetAsDefaultWorkspace() => WorkspaceType = TypeDefaultWorkspace;
 
+        public virtual bool IsDefault => WorkspaceType == TypeDefaultWorkspace;
+
         public virtual void SetAsNormalWorkspace() => WorkspaceType = TypeNormalWorkspace;
 
         public virtual void AssignUser(User user)
         {
-            User.AddWorkspace(this);
             User = user;
             UserId = user.UserId;
+            User.AddWorkspace(this);
         }
         
         
