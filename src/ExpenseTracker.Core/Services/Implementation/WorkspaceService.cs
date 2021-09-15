@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Common.Helpers;
@@ -38,8 +39,6 @@ namespace ExpenseTracker.Core.Services.Implementation
                 workspace.SetAsDefaultWorkspace();
             }
             
-            workspace.BackgroundImage = workspaceCreateDto.BackgroundImage;
-
             await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
 
             Tx.Complete();
@@ -55,7 +54,6 @@ namespace ExpenseTracker.Core.Services.Implementation
                 
             workspace.ChangeName(workspaceUpdateDto.Name);
             workspace.ChangeColor(workspaceUpdateDto.Color);
-            workspace.BackgroundImage = workspaceUpdateDto.BackgroundImage;
             workspace.Description = workspaceUpdateDto.Description;
 
             await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
@@ -71,6 +69,25 @@ namespace ExpenseTracker.Core.Services.Implementation
                             throw new WorkspaceNotFoundException();
 
             await _workspaceRepository.DeleteAsync(workspace).ConfigureAwait(false);
+            
+            Tx.Complete();
+        }
+
+        public async Task ChangeDefault(string workspaceToken)
+        {
+            using var Tx = TransactionScopeHelper.GetInstance();
+
+            var selectedWorkspace = await _workspaceRepository.GetByToken(workspaceToken).ConfigureAwait(false) ??
+                            throw new WorkspaceNotFoundException();
+            
+            var userWorkspaces =  _workspaceRepository
+                .GetPredicatedQueryable(a => a.UserId == selectedWorkspace.UserId).ToList();
+
+            foreach (var workspace in userWorkspaces.Except(new List<Workspace> {selectedWorkspace}))
+            {
+                workspace.SetAsNormalWorkspace();
+            }
+            selectedWorkspace.SetAsDefaultWorkspace();
             
             Tx.Complete();
         }
