@@ -10,6 +10,10 @@ namespace ExpenseTracker.Infrastructure.Extensions
 {
     public static class CurrentUserExtension
     {
+        public static int GetCurrentUserId(this ControllerBase controller)
+        {
+            return Convert.ToInt32(controller.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        }
         public static async Task<User> GetCurrentUser(this ControllerBase controller)
         {
             var userId = Convert.ToInt32(controller.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
