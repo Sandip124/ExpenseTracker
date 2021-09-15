@@ -2,7 +2,9 @@ using System;
 using System.Text;
 using ExpenseTracker.Core;
 using ExpenseTracker.Infrastructure;
+using ExpenseTracker.Infrastructure.ActionFilters;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Infrastructure.Middleware;
 using ExpenseTracker.Infrastructure.SessionFactory;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -82,7 +84,11 @@ namespace ExpenseTracker.Web
                 }
             );
             
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(
+                opt =>
+                {
+                    opt.Filters.Add(typeof(ViewBagInjector));
+                });
 
             services.AddSession(
                 options =>
@@ -90,7 +96,7 @@ namespace ExpenseTracker.Web
                     options.Cookie.HttpOnly = true;
                     options.Cookie.SameSite = SameSiteMode.Strict;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.IdleTimeout = TimeSpan.FromMinutes(20);
+                    options.IdleTimeout = TimeSpan.FromMinutes(3);
                 }
             );
             
@@ -99,7 +105,7 @@ namespace ExpenseTracker.Web
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             }).AddRazorRuntimeCompilation();
             
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
             
             services.InjectCoreServices();
             services.InjectServices();
@@ -138,12 +144,13 @@ namespace ExpenseTracker.Web
 
             app.UseRouting();
             
-            app.UseAuthorization();
-
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseSession();
             
+            app.UseWorkspaceMiddleware();
 
             app.UseEndpoints(endpoints =>
             {

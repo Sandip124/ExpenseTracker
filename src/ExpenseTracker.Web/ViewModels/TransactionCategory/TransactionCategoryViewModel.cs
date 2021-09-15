@@ -17,7 +17,7 @@ namespace ExpenseTracker.Web.ViewModels.TransactionCategory
         [Display(Name = "Color")]
         public string Color { get; set; }
 
-        public Dictionary<string, string> ColorList = Colors.GetColors;
+        public readonly Dictionary<string, string> ColorList = Colors.GetColors;
 
 
         [Display(Name = "Icon")]

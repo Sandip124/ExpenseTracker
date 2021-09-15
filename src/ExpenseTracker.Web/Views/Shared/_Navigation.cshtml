@@ -111,62 +111,7 @@
                     </li>
                 </ul>
                 <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-                    <div class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle btn" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 4 4 8 12 12 20 8 12 4"/><polyline points="4 12 12 16 20 12"/><polyline points="4 16 12 20 20 16"/>
-                                    </svg>
-                                </span>
-                                <span class="nav-link-title">
-                                    Workspace
-                                </span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-menu-columns">
-                                    <div class="dropdown-menu-column">
-
-                                        <a class="dropdown-item" asp-action="Index" asp-controller="TransactionCategory">
-                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2"/><path d="M12 3v3m0 12v3"/>
-                                                </svg>
-                                            </span> Transaction Category
-                                        </a>
-
-                                        <div class="dropdown-divider"></div>
-
-                                        <a class="dropdown-item" asp-action="Index" asp-controller="Transaction">
-                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2"/><path d="M12 3v3m0 12v3"/>
-                                                </svg>
-                                            </span> Add Expense
-                                        </a>
-
-                                        <a class="dropdown-item"asp-action="Index" asp-controller="Transaction">
-                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="3"/><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="18" y1="12" x2="18.01" y2="12"/><line x1="6" y1="12" x2="6.01" y2="12"/>
-                                                </svg>
-                                            </span> Add Income
-                                        </a>
-                                        <a class="dropdown-item" asp-action="Index" asp-controller="Transaction">
-                                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M14 11h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"/><path d="M12 17v1m0 -8v1"/>
-                                                    </svg>
-                                                </span>
-                                            </span>
-                                            Set Budget
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
+                    @await Html.PartialAsync("_WorkspaceComponent").ConfigureAwait(true)
                 </div>
             </div>
         </div>
