@@ -12,5 +12,11 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             return await GetPredicatedQueryable(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task<Workspace> GetByToken(string token)
+        {
+            return await GetPredicatedQueryable(a => a.Token == token)
+                .SingleOrDefaultAsync();
+        }
     }
 }
