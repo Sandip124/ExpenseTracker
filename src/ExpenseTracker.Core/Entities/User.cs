@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
@@ -50,6 +51,13 @@ namespace ExpenseTracker.Core.Entities
         }
 
         public virtual ICollection<Workspace> Workspaces { get; set; } = new List<Workspace>();
+
+        public virtual bool HasDefaultWorkspace => Workspaces.Count(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace) == 1;
+        public virtual Workspace DefaultWorkspace =>
+            (HasDefaultWorkspace
+                ? Workspaces.FirstOrDefault(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace)
+                : throw new Exception("Default Workspace Not Found")) ??
+            throw new Exception("Default Workspace Not Found");
 
         public virtual void AddWorkspace(Workspace workspace)
         {
