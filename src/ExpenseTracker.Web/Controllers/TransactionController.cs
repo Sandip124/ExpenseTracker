@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.Transaction;
 using ExpenseTracker.Core.Dto.TransactionCategory;
@@ -6,6 +7,8 @@ using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.ViewModels;
+using ExpenseTracker.Web.ViewModels.Transaction;
+using ExpenseTracker.Web.ViewModels.TransactionCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,20 +20,26 @@ namespace ExpenseTracker.Web.Controllers
     {
         private readonly ITransactionService _transactionService;
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly ILogger<TransactionController> _logger;
 
         public TransactionController(ITransactionService transactionService,
             ITransactionCategoryRepository transactionCategoryRepository,
+            ITransactionRepository transactionRepository,
             ILogger<TransactionController> logger)
         {
             _transactionService = transactionService;
             _transactionCategoryRepository = transactionCategoryRepository;
+            _transactionRepository = transactionRepository;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
         {
-            return View();
+            var DefaultWorkspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var transactions = _transactionRepository.GetPredicatedQueryable(a=>a.Workspace.Token == DefaultWorkspaceToken).ToList();
+            transactionIndexViewModel.Transactions = transactions;
+            return View(transactionIndexViewModel);
         }
 
         public async Task<IActionResult> Create()
