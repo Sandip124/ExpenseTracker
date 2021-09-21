@@ -49,7 +49,7 @@
                 <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.TransactionEntryDate, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
-                        <input asp-for="TransactionEntryDate" class="form-control"/>
+                        <input asp-for="TransactionEntryDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")"/>
                     </div>
                 </div>
                 <div class="form-group mb-3 row">

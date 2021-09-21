@@ -9,7 +9,7 @@ namespace ExpenseTracker.Web.ViewModels
     public class TransactionViewModel
     {
         public decimal TransactionAmount { get; set; }
-        public DateTime TransactionEntryDate { get; set; } = DateTime.Now.Date;
+        public DateTime TransactionEntryDate { get; set; }
         [Display(Name = "Transaction Category")]
         public int TransactionCategoryId { get; set; }
         public string Type { get; set; }
