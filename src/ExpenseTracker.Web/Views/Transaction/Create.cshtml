@@ -1,4 +1,5 @@
-@model dynamic
+@using ExpenseTracker.Core.Entities.Common
+@model ExpenseTracker.Web.ViewModels.TransactionViewModel
 
 @{
     ViewBag.Title = "Transaction";
@@ -36,4 +37,120 @@
             </div>
         </div>
     </div>
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">@ViewData["Title"]</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-action="Create" asp-controller="Transaction">
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.TransactionEntryDate, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col">
+                        <input asp-for="TransactionEntryDate" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.Type, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col">
+                        <select asp-for="Type" asp-items="Model.TransactionTypes" class="form-control" id="transactionType"></select>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.TransactionCategoryId, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col">
+                        <select asp-for="TransactionCategoryId" asp-items="Model.TransactionCategoriesSelectList" class="form-control"></select>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.TransactionAmount, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col input-group">
+                           <span class="input-group-text">
+                           Rs.
+                           </span>
+                        <input type="number" asp-for="TransactionAmount" placeholder="Enter Transaction Amount" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.Description, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col">
+                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Styles
+{
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>     
+       
+       $('#transactionType').on('change',function (e){
+            e.preventDefault();
+            
+            fetchAndUpdateCategoriesList()
+            
+       });
+       
+       function fetchAndUpdateCategoriesList(){
+                   let type = $('#transactionType').val();
+                      $.ajax({
+                          url: `/api/TransactionCategory/${type}/getByType`,
+                          type: "GET",
+                          dataType: "json",
+                          contentType: "application/json; charset=utf-8",
+                          success: function (response) {
+                            console.log(response);
+                            $('#TransactionCategoryId').empty();
+                            $.each(response,
+                                        function (index, value) {
+                                            $('#TransactionCategoryId').append(`<option value="${value.transactionCategoryId}">${value.categoryName}</option>`);
+                                        });
+                            //initChoices();
+                            $('#TransactionCategoryId').select2();
+                          },
+                          error: function (errorResponse) {
+                            console.log(errorResponse);
+                          }
+                      })
+       }
+                        
+         document.addEventListener("DOMContentLoaded", function () {
+             	let el;
+             	window.Choices && (new Choices(el = document.getElementById('transactionType'), {
+             		classNames: {
+             			containerInner: el.className,
+             			input: 'form-control',
+             			inputCloned: 'form-control-sm',
+             			listDropdown: 'dropdown-menu',
+             			itemChoice: 'dropdown-item',
+             			activeState: 'show',
+             			selectedState: 'active',
+             		},
+             		shouldSort: false,
+             		searchEnabled: false,
+             	}));
+             });
+                        
+           
+           fetchAndUpdateCategoriesList();
+           
+        $('#TransactionCategoryId').select2();
+        
+    </script>
 }

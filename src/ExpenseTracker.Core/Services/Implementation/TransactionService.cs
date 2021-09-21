@@ -24,7 +24,7 @@ namespace ExpenseTracker.Core.Services.Implementation
         {
             using var Tx = TransactionScopeHelper.GetInstance();
             
-            var workspace = await  _workspaceRepository.GetByIdAsync(transactionCreateDto.WorkspaceId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+            var workspace = await  _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken).ConfigureAwait(false) ?? throw new WorkspaceNotFoundException();
 
             var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCreateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
 

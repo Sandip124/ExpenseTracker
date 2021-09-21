@@ -1,3 +1,5 @@
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
 <div class="navbar-expand-md">
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar navbar-light">
@@ -111,7 +113,10 @@
                     </li>
                 </ul>
                 <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-                    @await Html.PartialAsync("_WorkspaceComponent").ConfigureAwait(true)
+                    @if (HttpContextAccessor.HttpContext.Request.Path != "/Workspace/Create")
+                    {
+                        @await Html.PartialAsync("_WorkspaceComponent").ConfigureAwait(true)   
+                    }
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Repositories.Interface;
@@ -37,7 +38,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
 
             var currentUser = await _userRepository.GetByIdAsync(userId).ConfigureAwait(true);
 
-            if ( currentUser is { HasDefaultWorkspace: false } && !PathsToAvoid.Contains(currentRequestPath))
+            if ( currentUser != null && !currentUser.Workspaces.Any() && !currentUser.Workspaces.Any(a => a.IsDefault) && !PathsToAvoid.Contains(currentRequestPath))
             {
                 httpContext.Response.Redirect(WorkspaceCreateUrl);
             }

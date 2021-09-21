@@ -51,6 +51,7 @@ namespace ExpenseTracker.Web.Controllers
 
                 await _transactionCategoryService.Create(new TransactionCategoryCreateDto()
                 {
+                    
                     Color = transactionCategoryViewModel.Color,
                     Type = transactionCategoryViewModel.Type,
                     Name = transactionCategoryViewModel.Name,
