@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.Transaction;
 using ExpenseTracker.Core.Dto.TransactionCategory;
+using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
@@ -78,6 +79,79 @@ namespace ExpenseTracker.Web.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        
+        public async Task<IActionResult> Edit(int Id)
+        {
+            try
+            {
+                var transaction = await _transactionRepository.GetByIdAsync(Id)
+                    .ConfigureAwait(true) ?? throw new TransactionNotFoundException();
+
+                var transactionViewModel = new TransactionViewModel()
+                {
+                  
+                
+                    Amount = transaction.Amount,
+                   
+
+                };
+
+                return View(transactionViewModel);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                this.AddErrorMessage(e.Message);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(TransactionViewModel transactionViewModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+
+                    await _transactionService.Update(new TransactionUpdateDto()
+                    {
+
+                        Amount = transactionViewModel.Amount,
+                        Id=transactionViewModel.Id,
+
+
+                    });
+                }
+                this.AddSuccessMessage("Transaction  Updated Successfully");
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                this.AddErrorMessage(e.Message);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(int Id)
+        {
+            try
+            {
+                var transaction = await _transactionRepository.GetByIdAsync(Id)
+                    .ConfigureAwait(true) ?? throw new TransactionNotFoundException();
+
+                await _transactionService.Delete(transaction.Id)
+                    .ConfigureAwait(true);
+
+                this.AddSuccessMessage("Transaction  Deleted Successfully");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                this.AddErrorMessage(e.Message);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

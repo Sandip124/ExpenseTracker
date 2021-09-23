@@ -13,6 +13,9 @@ namespace ExpenseTracker.Web.ViewModels
         [Display(Name = "Transaction Category")]
         public int TransactionCategoryId { get; set; }
         public string Type { get; set; }
+        public virtual int Id { get; set; }
+
+        public decimal Amount { get; set; }
 
         public SelectList TransactionTypes => new SelectList(TransactionType.ValidTypes);
 

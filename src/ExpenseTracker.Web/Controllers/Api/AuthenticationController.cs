@@ -36,20 +36,26 @@ namespace ExpenseTracker.Web.Controllers.Api
             {
                 var response = _userService.Authenticate(authenticateRequestDto);
 
-                if (response == null)
-                    return BadRequest(new { message = "Username or password is incorrect" });
 
                 await SetClaimsAndSignInUser(response).ConfigureAwait(true);
-
-                return this.Ok(new
+                if(response!=null)
                 {
-                    AccessToken = response.Token,
-                    Id = response.Id,
-                    FirstName = response.FirstName,
-                    LastName = response.LastName,
-                    UserName = response.Username,
-                    ReturnUrl = response.ReturnUrl
-                });
+                    return this.Ok(new
+                    {
+                        AccessToken = response.Token,
+                        Id = response.Id,
+                        FirstName = response.FirstName,
+                        LastName = response.LastName,
+                        UserName = response.Username,
+                        ReturnUrl = response.ReturnUrl
+                    });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Username or password is incorrect" });
+
+                }
+
             }
             catch (Exception e)
             {
