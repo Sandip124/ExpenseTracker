@@ -1,7 +1,148 @@
+@using ExpenseTracker.Core.Entities.Common
+@model ExpenseTracker.Web.ViewModels.Transaction.TransactionIndexViewModel
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Transaction";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+@section PageTitle
+{
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    Overview
+                </div>
+                <h2 class="page-title">
+                    @ViewData["Title"]
+                </h2>
+            </div>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a asp-action="Create" asp-controller="Transaction" class="btn btn-primary d-none d-sm-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Create New
+                    </a>
+                    <a asp-action="Create" asp-controller="Transaction" class="btn btn-primary d-sm-none d-sm-inline-block btn-icon" aria-label="Create new Transaction Category">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row row-cards">
+    <div class="col-12">
+        <div class="card">
+            <div class="table-responsive">
+                @if (Model.Transactions.Any())
+                {
+                    <table class="table card-table table-vcenter text-nowrap">
+
+                        <thead>
+                        <tr>
+                            <th class="w-2">TXN No.</th>
+                            <th>Transaction Amount</th>
+                            <th>Transaction Date</th>
+                            <th>Icon</th>
+                            <th>Type</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        @foreach (var item in Model.Transactions)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted">@item.Id.ToString("D5")</span>
+                                </td>
+                                <td>
+                                    <strong>
+                                        @if (item.Type == TransactionType.Income)
+                                        {
+                                            <span class="text-success">
+                                                @item.Amount
+                                            </span>
+                                        }
+                                        else if (item.Type == TransactionType.Expense)
+                                        {
+                                            <span class="text-danger">
+                                                @item.Amount
+                                            </span>
+                                        }
+                                    </strong>
+                                </td>
+                                <td>
+                                    @item.TransactionDate.ToString("f")
+                                </td>
+                                <td>
+                                    @Html.Raw(CategoryIcon.Icons[item.TransactionCategory.Icon]) @item.TransactionCategory.CategoryName
+                                </td>
+                                <td>
+                                    <span class="me-1">
+                                        @if (item.Type == TransactionType.Income)
+                                        {
+                                            <span class="text-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="18" y1="11" x2="12" y2="5"/><line x1="6" y1="11" x2="12" y2="5"/>
+                                                </svg>
+                                            </span>
+                                        }
+                                        else if (item.Type == TransactionType.Expense)
+                                        {
+                                            <span class="text-danger">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="18" y1="13" x2="12" y2="19"/><line x1="6" y1="13" x2="12" y2="19"/>
+                                                </svg>
+                                            </span>
+                                        }
+                                    </span> @item.Type
+                                </td>
+                                <td class="w-2">
+                                    <a asp-action="Index" asp-controller="Transaction" asp-route-transactionCategoryId="@item.TransactionCategoryId" class="btn btn-default">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"/><path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"/><line x1="16" y1="5" x2="19" y2="8"/>
+                                        </svg>
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty">
+                        <div class="empty-img">
+                            <img src="./static/illustrations/undraw_printing_invoices_5r4r.svg" height="128" alt="">
+                        </div>
+                        <p class="empty-title">Transactions Not Found.</p>
+                        <p class="empty-subtitle text-muted">
+                            Try adjusting your search or filter to find what you're looking for.
+                        </p>
+                        <div class="empty-action">
+                            <a asp-action="Create" asp-controller="Transaction" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Create New
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Core.Entities;
+﻿using ExpenseTracker.Common.Repositories.Interface;
+using ExpenseTracker.Core.Entities;
 
 namespace ExpenseTracker.Core.Repositories.Interface
 {

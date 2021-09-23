@@ -7,6 +7,6 @@ namespace ExpenseTracker.Core.Services.Interface
     {
         Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto);
         Task Update(TransactionCategoryUpdateDto transactionCategoryUpdateDto);
-        Task Delete(long transactionCategoryId);
+        Task Delete(int transactionCategoryId);
     }
 }

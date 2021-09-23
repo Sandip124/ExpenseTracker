@@ -37,7 +37,7 @@ namespace ExpenseTracker.Core.Entities
 
         public virtual string Type { get; protected set; }
 
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         
     }

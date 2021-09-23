@@ -16,6 +16,9 @@ namespace ExpenseTracker.Infrastructure.Mapping
             Map(a => a.Type).Column("type");
             Map(x => x.TransactionCategoryId).Column("transaction_category_id").Not.Nullable().Not.Insert().Not.Update();
             References(x => x.TransactionCategory).Column("transaction_category_id").Cascade.None();
+            Map(x => x.WorkspaceId).Column("workspace_id").Not.Nullable().Not.Insert().Not.Update();
+            References(x => x.Workspace).Column("workspace_id").Cascade.None();
+
         }
     }
 }

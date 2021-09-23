@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
-using ExpenseTracker.Core.Helper;
+using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 
@@ -44,7 +44,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             Tx.Complete();
         }
 
-        public async Task Delete(long transactionCategoryId)
+        public async Task Delete(int transactionCategoryId)
         {
             var transactionCategoryExists = await _transactionCategoryRepository.CheckIfExistAsync(a=>a.TransactionCategoryId == transactionCategoryId).ConfigureAwait(false);
             if (!transactionCategoryExists) throw new TransactionCategoryNotFoundException(transactionCategoryId);

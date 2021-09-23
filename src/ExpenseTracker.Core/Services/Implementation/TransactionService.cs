@@ -1,8 +1,8 @@
 ﻿using ExpenseTracker.Core.Dto.Transaction;
-using ExpenseTracker.Core.Helper;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
 
@@ -11,17 +11,24 @@ namespace ExpenseTracker.Core.Services.Implementation
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
+        private readonly ITransactionCategoryRepository _transactionCategoryRepository;
+        private readonly IWorkspaceRepository _workspaceRepository;
 
-        public TransactionService(ITransactionRepository transactionRepository)
+        public TransactionService(ITransactionRepository transactionRepository,ITransactionCategoryRepository transactionCategoryRepository,IWorkspaceRepository workspaceRepository)
         {
             _transactionRepository = transactionRepository;
-            
+            _transactionCategoryRepository = transactionCategoryRepository;
+            _workspaceRepository = workspaceRepository;
         }
         public async Task Create(TransactionCreateDto transactionCreateDto)
         {
             using var Tx = TransactionScopeHelper.GetInstance();
+            
+            var workspace = await  _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken).ConfigureAwait(false) ?? throw new WorkspaceNotFoundException();
 
-            var transaction = Transaction.Create(transactionCreateDto.Amount, transactionCreateDto.TransactionDate,
+            var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCreateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+
+            var transaction = Transaction.Create(workspace,transactionCategory,transactionCreateDto.Amount, transactionCreateDto.TransactionDate,
                 transactionCreateDto.Type);
             transaction.Description = transactionCreateDto.Description;
 
@@ -30,7 +37,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             Tx.Complete();
         }
 
-        public  async Task Delete(long transactionId)
+        public  async Task Delete(int transactionId)
         {
             var transactionExists = await _transactionRepository.CheckIfExistAsync(a=>a.Id == transactionId).ConfigureAwait(false);
             if (!transactionExists) throw new TransactionNotFoundException(transactionId);

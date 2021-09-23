@@ -1,0 +1,33 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="icon" href="~/static/expense-tracker-icon.svg">
+    <title>@ViewData["Title"] | Expense Tracker</title>
+    <!-- CSS files -->
+    <link rel="stylesheet" href="~/dist/css/tabler.min.css"  asp-append-version="true"/>
+    
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true"/>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" asp-append-version="true">
+
+    @await RenderSectionAsync("Styles", required: false).ConfigureAwait(true)
+  </head>
+  <body class="antialiased">
+   @RenderBody()
+    <!-- Libs JS -->
+  <script src="~/dist/js/tabler.min.js" asp-append-version="true"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" asp-append-version="true"></script>
+  
+  <script src="~/js/Helper/NotifyHelper.js" asp-append-version="true"></script>
+  @await Component.InvokeAsync("Notify").ConfigureAwait(true)
+  <!--    Section Scripts-->
+  @await RenderSectionAsync("Scripts", required: false).ConfigureAwait(true)
+  
+  @await RenderSectionAsync("_ValidationScriptsPartial",false)
+
+  </body>
+</html>

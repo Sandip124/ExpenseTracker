@@ -30,7 +30,7 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
                         c => c.UseQueryCache()
                             .UseSecondLevelCache()
                             .ProviderClass<HashtableCacheProvider>())
-                    //.ExposeConfiguration(BuildSchema)
+                    .ExposeConfiguration(BuildSchema)
                     .BuildSessionFactory();
             }
         }
@@ -38,7 +38,7 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
         private static void BuildSchema(Configuration config)
         {
             new SchemaExport(config)
-                .Create(false, true);
+                .Create(true, false);
         }
 
         public static ISession GetCurrentSession()

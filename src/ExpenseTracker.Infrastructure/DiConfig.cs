@@ -1,5 +1,7 @@
 using ExpenseTracker.Core.Repositories.Interface;
-using ExpenseTracker.Infrastructure.Repository.Implementation;
+using ExpenseTracker.Core.Services.Interface;
+using ExpenseTracker.Infrastructure.Repositories.Implementation;
+using ExpenseTracker.Infrastructure.Services.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpenseTracker.Infrastructure
@@ -10,6 +12,13 @@ namespace ExpenseTracker.Infrastructure
         {
             services.AddScoped<ITransactionCategoryRepository, TransactionCategoryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+        }
+        
+        public static void InjectServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

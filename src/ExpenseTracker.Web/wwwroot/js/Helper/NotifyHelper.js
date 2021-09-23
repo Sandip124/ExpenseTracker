@@ -1,6 +1,6 @@
 
 let notyf = new Notyf({
-    duration: 5000,
+    duration: 500000,
     dismissible: true,
     position: {
         x: 'center',
