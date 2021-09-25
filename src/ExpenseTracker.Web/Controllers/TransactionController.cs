@@ -38,7 +38,7 @@ namespace ExpenseTracker.Web.Controllers
         public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
         {
             var DefaultWorkspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
-            var transactions = _transactionRepository.GetPredicatedQueryable(a=>a.Workspace.Token == DefaultWorkspaceToken).ToList();
+            var transactions = _transactionRepository.GetPredicatedQueryable(a=>a.Workspace.Token == DefaultWorkspaceToken).OrderByDescending(x => x.TransactionDate).ToList();
             transactionIndexViewModel.Transactions = transactions;
             return View(transactionIndexViewModel);
         }

@@ -33,7 +33,7 @@ namespace ExpenseTracker.Web.Controllers
 
             var transactionQueryable = _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
             
-            homeViewModel.Transactions = transactionQueryable.OrderByDescending(a=>a.EntryDate).Take(5).ToList();
+            homeViewModel.Transactions = transactionQueryable.OrderByDescending(a=>a.TransactionDate).Take(5).ToList();
                 homeViewModel.TopExpendingCategories = transactionQueryable
                     .Where(a => a.Type == TransactionType.Expense)
                     .OrderByDescending(a => a.Amount)
@@ -45,26 +45,26 @@ namespace ExpenseTracker.Web.Controllers
                     }).ToList();
                 homeViewModel.AllCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);
                 homeViewModel.DailyExpenseAmount = transactionQueryable.Where(a =>
-                        a.EntryDate.Date == DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
+                        a.TransactionDate.Date == DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
                     .Sum(a => a.Amount);
                 homeViewModel.DailyIncomeAmount = transactionQueryable.Where(a =>
-                        a.EntryDate.Date == DateTime.Today.Date && a.Type == TransactionType.Income).ToList()
+                        a.TransactionDate.Date == DateTime.Today.Date && a.Type == TransactionType.Income).ToList()
                     .Sum(a => a.Amount);
                 homeViewModel.WeeklyExpenseAmount = transactionQueryable.Where(a =>
-                        a.EntryDate.Date >= DateTime.Today.AddDays(-7).Date &&
-                        a.EntryDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
+                        a.TransactionDate.Date >= DateTime.Today.AddDays(-7).Date &&
+                        a.TransactionDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
                     .Sum(a => a.Amount);
                 homeViewModel.WeeklyIncomeAmount = transactionQueryable.Where(a =>
-                        a.EntryDate.Date >= DateTime.Today.AddDays(-7).Date &&
-                        a.EntryDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Income).ToList()
+                        a.TransactionDate.Date >= DateTime.Today.AddDays(-7).Date &&
+                        a.TransactionDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Income).ToList()
                     .Sum(a => a.Amount);
                 homeViewModel.MonthlyExpenseAmount = transactionQueryable.Where(a =>
-                        a.EntryDate.Date >= DateTime.Today.AddMonths(-1).Date &&
-                        a.EntryDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
+                        a.TransactionDate.Date >= DateTime.Today.AddMonths(-1).Date &&
+                        a.TransactionDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Expense).ToList()
                     .Sum(a => a.Amount);
                 homeViewModel.MonthlyIncomeAmount = transactionQueryable.Where(a =>
-                        a.EntryDate.Date >= DateTime.Today.AddMonths(-1).Date &&
-                        a.EntryDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Income).ToList()
+                        a.TransactionDate.Date >= DateTime.Today.AddMonths(-1).Date &&
+                        a.TransactionDate.Date <= DateTime.Today.Date && a.Type == TransactionType.Income).ToList()
                     .Sum(a => a.Amount);
                     
                 return View(homeViewModel);
