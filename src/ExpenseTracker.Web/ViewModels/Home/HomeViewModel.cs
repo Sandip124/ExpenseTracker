@@ -25,5 +25,6 @@ namespace ExpenseTracker.Web.ViewModels.Home
         public string? CategoryName { get; set; }
         public int CategoryId { get; set; }
         public decimal Amount { get; set; }
+        public string  Color { get; set; }
     }
 }
