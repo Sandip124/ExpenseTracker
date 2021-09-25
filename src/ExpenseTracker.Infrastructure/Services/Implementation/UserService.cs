@@ -28,7 +28,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
         {
             var user = _userRepository.GetQueryable().SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
 
-            if (user == null) return null;
+            if (user == null) throw new Exception("Username or password does not match.");
 
             var token = GenerateJwtToken(user);
 

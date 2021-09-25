@@ -97,7 +97,8 @@
                       window.location.href = response.returnUrl;
                   },
                   error: function (errorResponse) {
-                    console.log(errorResponse);
+                  console.log(errorResponse)
+                    notifyError(errorResponse.responseText);
                   }
               });
   })  
