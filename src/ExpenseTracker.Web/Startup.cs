@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace ExpenseTracker.Web
 {
@@ -103,7 +104,8 @@ namespace ExpenseTracker.Web
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-            }).AddRazorRuntimeCompilation();
+            }).AddRazorRuntimeCompilation()
+            .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             
             services.AddHttpContextAccessor();
             
