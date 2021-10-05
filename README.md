@@ -1,4 +1,5 @@
 
+[Expense Tracker Logo](expense-tracker-logo.svg)
 
 # ExpenseTracker
 
