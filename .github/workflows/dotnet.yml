@@ -21,6 +21,8 @@ jobs:
       run: dotnet restore "./src/ExpenseTracker.Web"
     - name: Build
       run: dotnet build "./src/ExpenseTracker.Web" --configuration Release --no-restore
+    - name: Test Code 
+      run: dotnet test "./myApp" --no-restore --verbosity normal
     - name: Publish application
       run: dotnet publish "./src/ExpenseTracker.Web" -c Release -o ExpenseTracker
     - name: Upload Artifacts
