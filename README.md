@@ -1,5 +1,5 @@
 
-[Expense Tracker Logo](expense-tracker-logo.svg)
+![Expense Tracker Logo](expense-tracker-logo.svg)
 
 # ExpenseTracker
 
