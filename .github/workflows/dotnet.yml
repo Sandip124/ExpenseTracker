@@ -24,9 +24,9 @@ jobs:
     - name: Run Unit tests 
       run: dotnet test "./tests/ExpenseTracker.UnitTests" --no-restore --verbosity normal
     - name: Publish application
-      run: dotnet publish "./src/ExpenseTracker.Web" -c Release -o ExpenseTracker
+      run: dotnet publish "./src/ExpenseTracker.Web" -c Release -o "./src/ExpenseTracker.Web/publish"
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
       with:
        name: my-artifact
-       path: "./src/ExpenseTracker.Web" 
+       path: "./src/ExpenseTracker.Web/publish" 
