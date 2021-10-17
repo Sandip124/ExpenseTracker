@@ -10,11 +10,6 @@ namespace ExpenseTracker.Core.Exceptions
         {
         }
 
-        public InvalidTransactionTypeException(string message) : base(message)
-        {
-        }
-        
-        
         public InvalidTransactionTypeException(string type, string message = "") : base(string.IsNullOrEmpty(message)? $"Invalid Transaction Type {type}": message)
         {
         }
