@@ -23,16 +23,13 @@ namespace ExpenseTracker.Core.Services.Implementation
         }
         public async Task Create(WorkspaceCreateDto workspaceCreateDto)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
-
-            var userWorkspaces =  _workspaceRepository
-                .GetPredicatedQueryable(a => a.UserId == workspaceCreateDto.UserId).ToList();
-
+            using var tx = TransactionScopeHelper.GetInstance();
+            
             var user = await _userRepository.GetByIdAsync(workspaceCreateDto.UserId).ConfigureAwait(false) ?? throw new Exception("User not found exception");
             
             var workspace = Workspace.Create(user,workspaceCreateDto.Name,workspaceCreateDto.Color);
             
-            if (userWorkspaces.Any())
+            if (user.HasWorkspace)
             {
                 workspace.SetAsNormalWorkspace();
             }else{
@@ -41,12 +38,12 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
 
-            Tx.Complete();
+            tx.Complete();
         }
 
         public async Task Update(WorkspaceUpdateDto workspaceUpdateDto)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
             var workspace = await _workspaceRepository.GetByIdAsync(workspaceUpdateDto.WorkspaceId)
                                 .ConfigureAwait(false) ??
@@ -58,24 +55,24 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
 
-            Tx.Complete();
+            tx.Complete();
         }
 
         public async Task Delete(int workspaceId)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
             var workspace = await _workspaceRepository.GetByIdAsync(workspaceId).ConfigureAwait(false) ??
                             throw new WorkspaceNotFoundException();
 
             await _workspaceRepository.DeleteAsync(workspace).ConfigureAwait(false);
             
-            Tx.Complete();
+            tx.Complete();
         }
 
         public async Task ChangeDefault(string workspaceToken)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
             var selectedWorkspace = await _workspaceRepository.GetByToken(workspaceToken).ConfigureAwait(false) ??
                             throw new WorkspaceNotFoundException();
@@ -89,7 +86,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             }
             selectedWorkspace.SetAsDefaultWorkspace();
             
-            Tx.Complete();
+            tx.Complete();
         }
     }
 }

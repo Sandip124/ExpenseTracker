@@ -18,21 +18,18 @@ namespace ExpenseTracker.Core.Services.Implementation
         }
         public async Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
             var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
             await _transactionCategoryRepository.InsertAsync(transaction).ConfigureAwait(false);
 
-            Tx.Complete();
+            tx.Complete();
         }
 
         public async Task Update(TransactionCategoryUpdateDto transactionCategoryUpdateDto)
         {
-            var transactionCategoryExists = await _transactionCategoryRepository.CheckIfExistAsync(a=>a.TransactionCategoryId == transactionCategoryUpdateDto.TransactionCategoryId).ConfigureAwait(false);
-            if (!transactionCategoryExists) throw new TransactionCategoryNotFoundException(transactionCategoryUpdateDto.TransactionCategoryId);
-            
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
             var transaction = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
             transaction.UpdateName(transactionCategoryUpdateDto.Name);
@@ -41,21 +38,18 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             await _transactionCategoryRepository.UpdateAsync(transaction).ConfigureAwait(false);
 
-            Tx.Complete();
+            tx.Complete();
         }
 
         public async Task Delete(int transactionCategoryId)
         {
-            var transactionCategoryExists = await _transactionCategoryRepository.CheckIfExistAsync(a=>a.TransactionCategoryId == transactionCategoryId).ConfigureAwait(false);
-            if (!transactionCategoryExists) throw new TransactionCategoryNotFoundException(transactionCategoryId);
-            
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
             
             var transaction = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
 
             await _transactionCategoryRepository.DeleteAsync(transaction).ConfigureAwait(false);
 
-            Tx.Complete();
+            tx.Complete();
         }
     }
 }
