@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Web.Provider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,15 +29,11 @@ namespace ExpenseTracker.Infrastructure.Middleware
         {
             _next = next;
         }
-        public async Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext, IUserProvider userProvider)
         {
-            var userId = Convert.ToInt32(httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            using var serviceScope = ServiceActivator.GetScope();
-            IUserRepository _userRepository = serviceScope.ServiceProvider.GetService<IUserRepository>();
-            
             var currentRequestPath = httpContext.Request.Path;
 
-            var currentUser = await _userRepository.GetByIdAsync(userId).ConfigureAwait(true);
+            var currentUser = await userProvider.GetCurrentUser();
 
             if ( currentUser != null && !currentUser.Workspaces.Any() && !currentUser.Workspaces.Any(a => a.IsDefault) && !PathsToAvoid.Contains(currentRequestPath))
             {

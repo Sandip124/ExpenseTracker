@@ -5,6 +5,7 @@ using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Web.Provider;
 // using ExpenseTracker.Infrastructure.SessionFactory;
 using ExpenseTracker.Web.ViewModels.Workspace;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace ExpenseTracker.Web.Controllers
     {
         private readonly IWorkspaceService _workspaceService;
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IUserProvider userProvider;
 
-        public WorkspaceController(IWorkspaceService workspaceService,IWorkspaceRepository workspaceRepository)
+        public WorkspaceController(IWorkspaceService workspaceService,IWorkspaceRepository workspaceRepository, IUserProvider userProvider)
         {
             _workspaceService = workspaceService;
             _workspaceRepository = workspaceRepository;
+            this.userProvider = userProvider;
         }
         // GET
         public async Task<IActionResult> Index(string name)
@@ -85,6 +88,17 @@ namespace ExpenseTracker.Web.Controllers
 
             return LocalRedirectPreserveMethod(redirectUrl);
         }
-        
+
+        private async Task<User> GetCurrentUser()
+        {
+            return await this.userProvider.GetCurrentUser();
+        }
+
+        private int GetCurrentUserId()
+        {
+            return this.userProvider.GetCurrentUserId();
+        }
+
+
     }
 }

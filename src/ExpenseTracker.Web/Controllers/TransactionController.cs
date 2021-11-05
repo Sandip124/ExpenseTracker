@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.Transaction;
 using ExpenseTracker.Core.Dto.TransactionCategory;
+using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Web.Provider;
 using ExpenseTracker.Web.ViewModels;
 using ExpenseTracker.Web.ViewModels.Transaction;
 using ExpenseTracker.Web.ViewModels.TransactionCategory;
@@ -23,21 +25,23 @@ namespace ExpenseTracker.Web.Controllers
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly ILogger<TransactionController> _logger;
+        private readonly IUserProvider userProvider;
 
         public TransactionController(ITransactionService transactionService,
             ITransactionCategoryRepository transactionCategoryRepository,
             ITransactionRepository transactionRepository,
-            ILogger<TransactionController> logger)
+            ILogger<TransactionController> logger, IUserProvider userProvider)
         {
             _transactionService = transactionService;
             _transactionCategoryRepository = transactionCategoryRepository;
             _transactionRepository = transactionRepository;
             _logger = logger;
+            this.userProvider = userProvider;
         }
 
         public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
         {
-            var DefaultWorkspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var DefaultWorkspaceToken = (await this.userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactions = _transactionRepository.GetPredicatedQueryable(a=>a.Workspace.Token == DefaultWorkspaceToken).OrderByDescending(x => x.TransactionDate).ToList();
             transactionIndexViewModel.Transactions = transactions;
             return View(transactionIndexViewModel);
@@ -151,6 +155,16 @@ namespace ExpenseTracker.Web.Controllers
                 this.AddErrorMessage(e.Message);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<User> GetCurrentUser()
+        {
+            return await this.userProvider.GetCurrentUser();
+        }
+
+        private int GetCurrentUserId()
+        {
+            return this.userProvider.GetCurrentUserId();
         }
 
     }
