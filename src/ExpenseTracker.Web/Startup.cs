@@ -5,7 +5,8 @@ using ExpenseTracker.Infrastructure;
 using ExpenseTracker.Infrastructure.ActionFilters;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Infrastructure.Middleware;
-using ExpenseTracker.Infrastructure.SessionFactory;
+// using ExpenseTracker.Infrastructure.SessionFactory;
+using ExpenseTracker.Web.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -35,6 +37,11 @@ namespace ExpenseTracker.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("Default"));
+            });
+
             services.Configure<CookiePolicyOptions>(
                 options =>
                 {
@@ -44,10 +51,10 @@ namespace ExpenseTracker.Web
             );
 
             services.Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
-            
-            
+
+
             var key = Encoding.ASCII.GetBytes(Configuration.GetSecret());
-            
+
             services.AddAuthentication(
                 x =>
                 {
@@ -71,7 +78,7 @@ namespace ExpenseTracker.Web
                     };
                 }
             );
-            
+
             services.AddAuthorization(
                 options =>
                 {
@@ -84,12 +91,13 @@ namespace ExpenseTracker.Web
                     options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
                 }
             );
-            
+
             services.AddControllersWithViews(
-                opt =>
-                {
-                    opt.Filters.Add(typeof(ViewBagInjector));
-                });
+                // opt =>
+                // {
+                //     opt.Filters.Add(typeof(ViewBagInjector));
+                // }
+            );
 
             services.AddSession(
                 options =>
@@ -100,28 +108,28 @@ namespace ExpenseTracker.Web
                     options.IdleTimeout = TimeSpan.FromMinutes(3);
                 }
             );
-            
+
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             }).AddRazorRuntimeCompilation()
             .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            
+
             services.AddHttpContextAccessor();
-            
+            services.AddScoped<DbContext, AppDbContext>();
+            services.UseExpenseTracker();
+
             services.InjectCoreServices();
             services.InjectServices();
             services.InjectRepositories();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContext dbContext)
         {
-            var httpAccessor = serviceProvider.GetService<IHttpContextAccessor>();
-            BaseSessionFactory.HttpContextAccessor = httpAccessor;
-            
+            dbContext.Database.Migrate();
             ServiceActivator.Configure(app.ApplicationServices);
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -133,25 +141,25 @@ namespace ExpenseTracker.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
-            
+
             app.UseStaticFiles();
-            
+
             app.UseCookiePolicy();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.UseSession();
-            
+
             app.UseWorkspaceMiddleware();
 
             app.UseEndpoints(endpoints =>

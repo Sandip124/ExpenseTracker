@@ -36,7 +36,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             transaction.UpdateColor(transactionCategoryUpdateDto.Color);
             transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
 
-            await _transactionCategoryRepository.UpdateAsync(transaction).ConfigureAwait(false);
+            _transactionCategoryRepository.Update(transaction);
 
             tx.Complete();
         }
@@ -47,7 +47,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             var transaction = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
 
-            await _transactionCategoryRepository.DeleteAsync(transaction).ConfigureAwait(false);
+            _transactionCategoryRepository.Delete(transaction);
 
             tx.Complete();
         }

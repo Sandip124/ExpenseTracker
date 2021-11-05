@@ -10,11 +10,9 @@ namespace ExpenseTracker.Common.Repositories.Interface
    public interface IGenericRepository<T>
     {
         void Delete(T entities);
-        Task DeleteAsync(T entities);
         void Insert(T entities);
         Task InsertAsync(T entities);
         void Update(T entities);
-        Task UpdateAsync(T entities);
         IList<T> GetAll();
         Task<IList<T>> GetAllAsync();
         IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate);

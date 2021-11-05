@@ -10,9 +10,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentNHibernate" Version="3.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="5.0.11" />
       <PackageReference Include="MySql.Data" Version="8.0.26" />
       <PackageReference Include="Npgsql" Version="5.0.10" />
     </ItemGroup>

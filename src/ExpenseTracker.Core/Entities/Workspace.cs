@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
 {
+    [Table("workspace", Schema ="core")]
     public class Workspace : BaseModel
     {
         public const string TypeDefaultWorkspace = "DEFAULT_WORKSPACE";

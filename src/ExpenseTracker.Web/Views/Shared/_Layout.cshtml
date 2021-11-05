@@ -1,4 +1,8 @@
-﻿<!doctype html>
+﻿@inject ExpenseTracker.Web.Provider.IUserProvider userProvider
+@{
+  ViewBag.__CurrentUser = await userProvider.GetCurrentUser();
+}
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8"/>

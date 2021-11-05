@@ -1,10 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using ExpenseTracker.Common.Model;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
+    [Table("transaction", Schema ="core")]
     public class Transaction : BaseModel
     {
         protected Transaction() { }

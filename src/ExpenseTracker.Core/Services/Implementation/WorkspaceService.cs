@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Dto.Workspace;
 using ExpenseTracker.Core.Entities;
@@ -15,11 +16,13 @@ namespace ExpenseTracker.Core.Services.Implementation
     {
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IUow _uow;
 
-        public WorkspaceService(IWorkspaceRepository workspaceRepository,IUserRepository userRepository)
+        public WorkspaceService(IWorkspaceRepository workspaceRepository,IUserRepository userRepository, IUow uow)
         {
             _workspaceRepository = workspaceRepository;
             _userRepository = userRepository;
+            _uow = uow;
         }
         public async Task Create(WorkspaceCreateDto workspaceCreateDto)
         {
@@ -37,7 +40,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             }
             
             await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
-
+            await _uow.CommitAsync();
             tx.Complete();
         }
 
@@ -53,7 +56,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             workspace.ChangeColor(workspaceUpdateDto.Color);
             workspace.Description = workspaceUpdateDto.Description;
 
-            await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
+            _workspaceRepository.Update(workspace);
 
             tx.Complete();
         }
@@ -65,7 +68,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             var workspace = await _workspaceRepository.GetByIdAsync(workspaceId).ConfigureAwait(false) ??
                             throw new WorkspaceNotFoundException();
 
-            await _workspaceRepository.DeleteAsync(workspace).ConfigureAwait(false);
+            _workspaceRepository.Delete(workspace);
             
             tx.Complete();
         }

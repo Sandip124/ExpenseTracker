@@ -6,6 +6,7 @@ using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Models;
+using ExpenseTracker.Web.Provider;
 using ExpenseTracker.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +20,19 @@ namespace ExpenseTracker.Web.Controllers
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly ILogger<HomeController> _logger;
+        private readonly IUserProvider userProvider;
 
-        public HomeController(ITransactionRepository transactionRepository,ITransactionCategoryRepository transactionCategoryRepository,ILogger<HomeController> logger)
+        public HomeController(ITransactionRepository transactionRepository,ITransactionCategoryRepository transactionCategoryRepository,ILogger<HomeController> logger, IUserProvider userProvider)
         {
             _transactionRepository = transactionRepository;
             _transactionCategoryRepository = transactionCategoryRepository;
             _logger = logger;
+            this.userProvider = userProvider;
         }
 
         public async Task<IActionResult> Index(HomeViewModel homeViewModel)
         {
-            var workspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var workspaceToken = (await userProvider.GetCurrentUser()).DefaultWorkspace.Token;
 
             var transactionQueryable = _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
             

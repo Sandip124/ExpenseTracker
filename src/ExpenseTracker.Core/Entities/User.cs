@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
 using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
 {
+    [Table("user", Schema ="core")]
     public class User : BaseModel
     {
         protected User() { }
@@ -49,7 +51,7 @@ namespace ExpenseTracker.Core.Entities
             Password = password;
         }
 
-        public virtual ICollection<Workspace> Workspaces { get; set; } = new List<Workspace>();
+        public virtual List<Workspace> Workspaces { get; set; } = new List<Workspace>();
 
         public virtual bool HasWorkspace => Workspaces.Any();
 

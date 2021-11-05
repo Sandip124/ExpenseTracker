@@ -86,7 +86,7 @@ namespace ExpenseTracker.UnitTests.Service
 
             await _transactionCategoryService.Update(transactionCategoryUpdateDto);
 
-            _transactionCategoryRepository.Verify(a => a.UpdateAsync(It.Is<TransactionCategory>(x =>
+            _transactionCategoryRepository.Verify(a => a.Update(It.Is<TransactionCategory>(x =>
                 x.CategoryName == "Health" &&
                 x.Icon == "ambulance" &&
                 x.Color == "#fff000"
@@ -123,7 +123,7 @@ namespace ExpenseTracker.UnitTests.Service
 
             await _transactionCategoryService.Delete(transactionCategoryId);
 
-            _transactionCategoryRepository.Verify(a => a.DeleteAsync(It.IsAny<TransactionCategory>()), Times.Once);
+            _transactionCategoryRepository.Verify(a => a.Delete(It.IsAny<TransactionCategory>()), Times.Once);
         }
     }
 }

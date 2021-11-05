@@ -5,10 +5,10 @@ using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
-using ExpenseTracker.Infrastructure.SessionFactory;
+// using ExpenseTracker.Infrastructure.SessionFactory;
 using ExpenseTracker.Web.ViewModels.Workspace;
 using Microsoft.AspNetCore.Mvc;
-using NHibernate;
+// using NHibernate;
 
 namespace ExpenseTracker.Web.Controllers
 {
@@ -56,9 +56,9 @@ namespace ExpenseTracker.Web.Controllers
                 
                 await _workspaceService.Create(workspaceDto).ConfigureAwait(true);
 
-                BaseSessionFactory.HttpContextAccessor?.HttpContext?.Session.SetDefaultWorkspace(currentUser.DefaultWorkspace.Token);
+                HttpContext?.Session.SetDefaultWorkspace(currentUser.DefaultWorkspace.Token);
                 
-                var defaultWorkspace = BaseSessionFactory.HttpContextAccessor?.HttpContext?.Session.GetDefaultWorkspace();
+                var defaultWorkspace = HttpContext?.Session.GetDefaultWorkspace();
                 
                 this.AddSuccessMessage("Workspace Created Successfully.");
             }
