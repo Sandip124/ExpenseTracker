@@ -41,7 +41,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             tx.Complete();
         }
 
-        public async Task Delete(int transactionCategoryId)
+        public async Task Delete(long transactionCategoryId)
         {
             using var tx = TransactionScopeHelper.GetInstance();
             

@@ -1,10 +1,11 @@
 using System;
+using ExpenseTracker.Common.Model;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
-    public class Transaction
+    public class Transaction : BaseModel
     {
         protected Transaction() { }
 
@@ -36,8 +37,6 @@ namespace ExpenseTracker.Core.Entities
             TransactionDate = transactionDate;
         }
         
-        public virtual int Id { get; protected set; }
-
         public virtual decimal Amount { get; protected set; }
         
         public virtual DateTime TransactionDate { get; protected set; }
@@ -47,23 +46,23 @@ namespace ExpenseTracker.Core.Entities
         
         public virtual string Type { get; protected set; }
         
-        public virtual int TransactionCategoryId { get; protected set; }
+        public virtual long TransactionCategoryId { get; protected set; }
         public virtual TransactionCategory TransactionCategory { get; protected set; }
 
         protected virtual void SetTransactionCategory(TransactionCategory transactionCategory)
         {
             TransactionCategory = transactionCategory;
-            TransactionCategoryId = transactionCategory.TransactionCategoryId;
+            TransactionCategoryId = transactionCategory.Id;
         }
         
         
-        public virtual int WorkspaceId { get; protected set; }
+        public virtual long WorkspaceId { get; protected set; }
         public virtual Workspace Workspace { get; protected set; }
 
         protected virtual void SetWorkspace(Workspace workspace)
         {
             Workspace = workspace;
-            WorkspaceId = workspace.WorkspaceId;
+            WorkspaceId = workspace.Id;
         }
 
     }

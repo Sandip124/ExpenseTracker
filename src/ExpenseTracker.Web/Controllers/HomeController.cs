@@ -44,7 +44,7 @@ namespace ExpenseTracker.Web.Controllers
                     {
                         CategoryName = x.Select(z=>z.TransactionCategory.CategoryName).Last(),
                         Amount = x.Sum(z=>z.Amount),
-                        CategoryId = x.Select(z=>z.TransactionCategory.TransactionCategoryId).Last(),
+                        CategoryId = x.Select(z=>z.TransactionCategory.Id).Last(),
                         Color = x.Select(z=>z.TransactionCategory.Color).Last()
                     }).OrderByDescending(a => a.Amount).ToList();
                 homeViewModel.AllCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);

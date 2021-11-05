@@ -41,6 +41,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
             if ( currentUser != null && !currentUser.Workspaces.Any() && !currentUser.Workspaces.Any(a => a.IsDefault) && !PathsToAvoid.Contains(currentRequestPath))
             {
                 httpContext.Response.Redirect(WorkspaceCreateUrl);
+                return;
             }
             
             await _next(httpContext);

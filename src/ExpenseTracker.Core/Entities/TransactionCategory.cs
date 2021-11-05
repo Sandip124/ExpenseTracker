@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using ExpenseTracker.Common.Model;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
-    public class TransactionCategory
+    public class TransactionCategory : BaseModel
     {
         public static TransactionCategory Create(string type,string name,string color,string icon)
         {
@@ -23,8 +24,6 @@ namespace ExpenseTracker.Core.Entities
             Color = color;
             Icon = icon;
         }
-
-        public virtual int TransactionCategoryId { get; protected set; }
 
         public virtual string CategoryName { get; protected set; }
 

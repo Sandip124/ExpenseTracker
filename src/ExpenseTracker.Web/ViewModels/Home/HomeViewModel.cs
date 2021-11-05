@@ -23,7 +23,7 @@ namespace ExpenseTracker.Web.ViewModels.Home
     public class TopCategory
     {
         public string? CategoryName { get; set; }
-        public int CategoryId { get; set; }
+        public long CategoryId { get; set; }
         public decimal Amount { get; set; }
         public string  Color { get; set; }
     }

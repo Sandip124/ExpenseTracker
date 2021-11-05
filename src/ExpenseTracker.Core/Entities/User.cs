@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Configuration;
+using ExpenseTracker.Common.Model;
 
 namespace ExpenseTracker.Core.Entities
 {
-    public class User
+    public class User : BaseModel
     {
-        protected  User(){}
+        protected User() { }
 
         public static User Create(string userName, string password)
         {
@@ -19,12 +19,11 @@ namespace ExpenseTracker.Core.Entities
             SetUserName(username);
             SetPassword(password);
         }
-        
-        public virtual int UserId { get; protected set; }
-        public virtual string FirstName { get;  set; }
-        public virtual string LastName { get;  set; }
+
+        public virtual string FirstName { get; set; }
+        public virtual string LastName { get; set; }
         public virtual string Username { get; protected set; }
-        
+
         public virtual void SetUserName(string userName)
         {
             //validation for the username

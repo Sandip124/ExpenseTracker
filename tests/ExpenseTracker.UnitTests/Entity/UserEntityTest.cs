@@ -10,7 +10,7 @@ namespace ExpenseTracker.UnitTests.Entity
         {
             var user = User.Create("admin", "admin");
 
-            typeof(User).GetProperty(nameof(User.UserId))?
+            typeof(User).GetProperty(nameof(User.Id))?
                 .SetValue(user, 1);
             typeof(User).GetProperty(nameof(User.Username))?
                 .SetValue(user, "ad");
@@ -18,7 +18,7 @@ namespace ExpenseTracker.UnitTests.Entity
                 .SetValue(user, "psd");
             Assert.Equal("ad", user.Username);
             Assert.Equal("psd", user.Password);
-            Assert.Equal(1, user.UserId);
+            Assert.Equal(1, user.Id);
 
         }
         [Fact]
