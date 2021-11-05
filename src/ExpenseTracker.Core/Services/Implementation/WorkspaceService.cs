@@ -29,7 +29,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             var workspace = Workspace.Create(user,workspaceCreateDto.Name,workspaceCreateDto.Color);
             
-            if (user.HasWorkspace)
+            if (user.HasWorkspace && user.Workspaces.Count > 1)
             {
                 workspace.SetAsNormalWorkspace();
             }else{
