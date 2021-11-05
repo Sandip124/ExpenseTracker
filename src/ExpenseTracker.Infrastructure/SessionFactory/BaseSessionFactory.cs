@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using ExpenseTracker.Infrastructure.Mapping;
 using FluentNHibernate;
 using FluentNHibernate.Cfg;
 using Microsoft.AspNetCore.Http;
@@ -20,12 +21,18 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
 
         static BaseSessionFactory()
         {
+            var connectionString = "Server=localhost; port=5432; Username=postgres; Password=admin; Database=expense_tracker";
             lock (LockObject)
             {
                 if (_sessionFactory != null) return;
                 var configuration = new Configuration().Configure(Configuration.DefaultHibernateCfgFileName);
-                _sessionFactory = Fluently.Configure(configuration)
-                    .Mappings(m => m.FluentMappings.AddFromAssembly(Assembly.Load("ExpenseTracker.Infrastructure")))
+                _sessionFactory = Fluently.Configure()
+                .Database(
+                    FluentNHibernate.Cfg.Db.PostgreSQLConfiguration.Standard.ConnectionString(connectionString))
+                    .Mappings(m => {
+                        m.FluentMappings.AddFromAssembly(Assembly.Load("ExpenseTracker.Infrastructure"));
+                        m.FluentMappings.Add<UserMap>();
+                    })
                     .Cache(
                         c => c.UseQueryCache()
                             .UseSecondLevelCache()
@@ -37,8 +44,10 @@ namespace ExpenseTracker.Infrastructure.SessionFactory
 
         private static void BuildSchema(Configuration config)
         {
-            new SchemaExport(config)
-                .Create(true, false);
+            // new SchemaExport(config)
+            //     .Create(true, false);
+            var update = new SchemaUpdate(config);
+            update.Execute(false, true);
         }
 
         public static ISession GetCurrentSession()

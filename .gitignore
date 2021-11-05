@@ -5,4 +5,5 @@ riderModule.iml
 /_ReSharper.Caches/
 .idea/
 .vs/
+.vscode/
 *.sln.DotSettings.user
