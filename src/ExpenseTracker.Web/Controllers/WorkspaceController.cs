@@ -48,7 +48,7 @@ namespace ExpenseTracker.Web.Controllers
                 var currentUser = await this.GetCurrentUser().ConfigureAwait(true);
                 var workspaceDto = new WorkspaceCreateDto()
                 {
-                    UserId = currentUser.UserId,
+                    UserId = currentUser.Id,
                     Color = workspaceViewModel.Color,
                     Name = workspaceViewModel.WorkspaceName,
                     Description = workspaceViewModel.Description

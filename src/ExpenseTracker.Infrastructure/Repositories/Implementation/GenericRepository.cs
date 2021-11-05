@@ -59,12 +59,12 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             return _currentSession.Query<T>();
         }
 
-        public T GetById(int id)
+        public T GetById(long id)
         {
             return _currentSession.Get<T>(id);
         }
 
-        public Task<T?> GetByIdAsync(int id)
+        public Task<T?> GetByIdAsync(long id)
         {
             return _currentSession.GetAsync<T?>(id);
         }

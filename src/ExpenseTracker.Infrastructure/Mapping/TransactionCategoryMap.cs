@@ -8,7 +8,7 @@ namespace ExpenseTracker.Infrastructure.Mapping
         public TransactionCategoryMap()
         {
             Table("transaction_category");
-            Id(x => x.TransactionCategoryId).Column("transaction_category_id");
+            Id(x => x.Id).Column("transaction_category_id");
             Map(x => x.CategoryName).CustomSqlType("varchar(100)").Not.Nullable().Column("category_name");
             Map(x => x.Color).CustomSqlType("varchar(50)").Not.Nullable().Column("color");
             Map(x => x.Icon).CustomSqlType("text").Not.Nullable().Column("icon");

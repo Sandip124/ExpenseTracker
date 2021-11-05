@@ -8,7 +8,7 @@ namespace ExpenseTracker.Web.ViewModels.TransactionCategory
 {
     public class TransactionCategoryViewModel
     {
-        public int TransactionCategoryId { get; set; }
+        public long TransactionCategoryId { get; set; }
         [Required]
         [MinLength(3)]
         [Display(Name = "Category Name")]

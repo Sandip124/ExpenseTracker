@@ -19,8 +19,8 @@ namespace ExpenseTracker.Common.Repositories.Interface
         Task<IList<T>> GetAllAsync();
         IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate);
         IQueryable<T> GetQueryable();
-        T GetById(int id);
-        Task<T?> GetByIdAsync(int id);
+        T GetById(long id);
+        Task<T?> GetByIdAsync(long id);
 
         Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate);
         

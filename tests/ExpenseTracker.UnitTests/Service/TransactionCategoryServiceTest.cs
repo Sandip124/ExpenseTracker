@@ -115,7 +115,7 @@ namespace ExpenseTracker.UnitTests.Service
             var transactionCategoryId = 1;
 
             var transactionCategory = TransactionCategory.Create(TransactionType.Expense, "hello", "#ffffff", "bla");
-            typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.TransactionCategoryId))
+            typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.Id))
                 ?.SetValue(transactionCategory, transactionCategoryId);
 
             _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))

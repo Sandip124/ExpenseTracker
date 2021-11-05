@@ -4,7 +4,7 @@ namespace ExpenseTracker.Core.Dto
 {
     public class AuthenticateResponseDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
@@ -16,7 +16,7 @@ namespace ExpenseTracker.Core.Dto
 
         public AuthenticateResponseDto(User user, string token)
         {
-            Id = user.UserId;
+            Id = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
             Username = user.Username;
