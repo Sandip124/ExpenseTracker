@@ -39,13 +39,13 @@ namespace ExpenseTracker.Web.Controllers
                     a.Type == TransactionType.Expense &&
                     a.TransactionDate.Date >= DateTime.Today.AddMonths(-1).Date &&
                     a.TransactionDate.Date <= DateTime.Today.Date)
-                    .GroupBy(a=>a.TransactionCategory)
+                    .GroupBy(a=> new { CategoryName = a.TransactionCategory.CategoryName, CategoryId = a.TransactionCategory.Id, a.TransactionCategory.Color })
                     .Select(x => new TopCategory()
                     {
-                        CategoryName = x.Select(z=>z.TransactionCategory.CategoryName).Last(),
+                        CategoryName = x.Key.CategoryName,
                         Amount = x.Sum(z=>z.Amount),
-                        CategoryId = x.Select(z=>z.TransactionCategory.Id).Last(),
-                        Color = x.Select(z=>z.TransactionCategory.Color).Last()
+                        CategoryId = x.Key.CategoryId,
+                        Color = x.Key.Color
                     }).OrderByDescending(a => a.Amount).ToList();
                 homeViewModel.AllCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);
                 homeViewModel.DailyExpenseAmount = transactionQueryable.Where(a =>
