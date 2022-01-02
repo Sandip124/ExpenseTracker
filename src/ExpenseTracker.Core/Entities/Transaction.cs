@@ -1,9 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
+    [Table("transaction")]
     public class Transaction
     {
         protected Transaction() { }
@@ -53,17 +55,16 @@ namespace ExpenseTracker.Core.Entities
         protected virtual void SetTransactionCategory(TransactionCategory transactionCategory)
         {
             TransactionCategory = transactionCategory;
-            TransactionCategoryId = transactionCategory.TransactionCategoryId;
+            TransactionCategoryId = transactionCategory.Id;
         }
-        
-        
+
         public virtual int WorkspaceId { get; protected set; }
         public virtual Workspace Workspace { get; protected set; }
 
         protected virtual void SetWorkspace(Workspace workspace)
         {
             Workspace = workspace;
-            WorkspaceId = workspace.WorkspaceId;
+            WorkspaceId = workspace.Id;
         }
 
     }

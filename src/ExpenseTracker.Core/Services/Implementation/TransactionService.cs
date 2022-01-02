@@ -2,6 +2,7 @@
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
@@ -13,16 +14,20 @@ namespace ExpenseTracker.Core.Services.Implementation
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IUnitofWork _unitOfWork;
 
-        public TransactionService(ITransactionRepository transactionRepository,ITransactionCategoryRepository transactionCategoryRepository,IWorkspaceRepository workspaceRepository)
+        public TransactionService(ITransactionRepository transactionRepository,
+            ITransactionCategoryRepository transactionCategoryRepository,
+            IWorkspaceRepository workspaceRepository,IUnitofWork unitOfWork)
         {
             _transactionRepository = transactionRepository;
             _transactionCategoryRepository = transactionCategoryRepository;
             _workspaceRepository = workspaceRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task Create(TransactionCreateDto transactionCreateDto)
         {
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
             
             var workspace = await  _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken).ConfigureAwait(false) ?? throw new WorkspaceNotFoundException();
 
@@ -33,8 +38,10 @@ namespace ExpenseTracker.Core.Services.Implementation
             transaction.Description = transactionCreateDto.Description;
 
             await _transactionRepository.InsertAsync(transaction).ConfigureAwait(false);
-
-            Tx.Complete();
+            
+            await _unitOfWork.CommitAsync();
+            
+            tx.Complete();
         }
 
         public  async Task Delete(int transactionId)
@@ -42,13 +49,15 @@ namespace ExpenseTracker.Core.Services.Implementation
             var transactionExists = await _transactionRepository.CheckIfExistAsync(a=>a.Id == transactionId).ConfigureAwait(false);
             if (!transactionExists) throw new TransactionNotFoundException(transactionId);
             
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
             
             var transaction = await _transactionRepository.GetByIdAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
 
             await _transactionRepository.DeleteAsync(transaction).ConfigureAwait(false);
-
-            Tx.Complete();
+            
+            await _unitOfWork.CommitAsync();
+            
+            tx.Complete();
         }
 
         public async Task Update(TransactionUpdateDto transactionUpdateDto)
@@ -56,7 +65,7 @@ namespace ExpenseTracker.Core.Services.Implementation
             var transactionExists = await _transactionRepository.CheckIfExistAsync(a=>a.Id == transactionUpdateDto.Id).ConfigureAwait(false);
             if (!transactionExists) throw new TransactionNotFoundException(transactionUpdateDto.Id);
             
-            using var Tx = TransactionScopeHelper.GetInstance();
+            using var tx = TransactionScopeHelper.GetInstance();
 
             var transaction = await _transactionRepository.GetByIdAsync(transactionUpdateDto.Id).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
             transaction.UpdateAmount(transactionUpdateDto.Amount);
@@ -64,7 +73,9 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             await _transactionRepository.UpdateAsync(transaction).ConfigureAwait(false);
 
-            Tx.Complete();
+            await _unitOfWork.CommitAsync();
+            
+            tx.Complete();
         }
     }
 }

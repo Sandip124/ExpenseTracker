@@ -13,4 +13,10 @@
       <ProjectReference Include="..\ExpenseTracker.Common\ExpenseTracker.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Entities\PersonalType.cs" />
+      <Compile Remove="Entities\IWorkspaceType.cs" />
+      <Compile Remove="Entities\BusinessType.cs" />
+    </ItemGroup>
+
 </Project>

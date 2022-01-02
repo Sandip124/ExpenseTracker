@@ -5,33 +5,39 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ExpenseTracker.Common.Pagination;
 using ExpenseTracker.Common.Repositories.Interface;
-using ExpenseTracker.Infrastructure.SessionFactory;
-using NHibernate;
-using NHibernate.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories.Implementation
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    internal class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly ISession _currentSession = BaseSessionFactory.GetCurrentSession();
+        private DbContext _context;
+        private DbSet<T> _currentSession;
+        
+        public GenericRepository(DbContext context)
+        {
+            _context = context;
+            _currentSession = _context.Set<T>();
+        }
         public void Delete(T entities)
         {
-            _currentSession.Delete(entities);
+            _currentSession.Remove(entities);
         }
 
-        public async Task DeleteAsync(T entities)
+        public Task DeleteAsync(T entities)
         {
-            await _currentSession.DeleteAsync(entities).ConfigureAwait(false);
+            _currentSession.Remove(entities);
+            return Task.CompletedTask;
         }
 
         public void Insert(T entities)
         {
-            _currentSession.Save(entities);
+            _currentSession.Add(entities);
         }
 
         public async Task InsertAsync(T entities)
         {
-            await _currentSession.SaveAsync(entities).ConfigureAwait(false);
+            await _currentSession.AddAsync(entities);
         }
 
         public void Update(T entities)
@@ -39,34 +45,41 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
             _currentSession.Update(entities);
         }
 
-        public async Task UpdateAsync(T entities)
+        public Task UpdateAsync(T entities)
         {
-            await _currentSession.UpdateAsync(entities).ConfigureAwait(false);
+            _currentSession.Update(entities);
+            return Task.CompletedTask;
         }
 
-        public IList<T> GetAll()
+        public List<T> GetAll()
         {
-            return _currentSession.Query<T>().ToList();
+            return _context.Set<T>().AsNoTracking().ToList();
         }
 
-        public async Task<IList<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync()
         {
-            return await _currentSession.Query<T>().ToListAsync<T>().ConfigureAwait(false);
+            return await _context.Set<T>().AsNoTracking().ToListAsync<T>();
+        }
+        
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null)
+        {
+            predicate ??= x => true;
+            return _context.Set<T>().AsNoTracking().Where(predicate).ToListAsync();
         }
 
         public IQueryable<T> GetQueryable()
         {
-            return _currentSession.Query<T>();
+            return _currentSession.AsQueryable<T>().AsNoTracking();
         }
 
         public T GetById(int id)
         {
-            return _currentSession.Get<T>(id);
+            return _currentSession.Find(id);
         }
 
-        public Task<T?> GetByIdAsync(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
-            return _currentSession.GetAsync<T?>(id);
+            return await _currentSession.FindAsync(id);
         }
         
         public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)

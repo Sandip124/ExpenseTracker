@@ -12,7 +12,18 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.10" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.7" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.13">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.13" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.13">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+      <PackageReference Include="MySql.Data" Version="8.0.27" />
+      <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
@@ -204,6 +215,10 @@
       <_ContentIncludedByDefault Remove="wwwroot\static\tracks\fb4998c955d8eba049ffbfc7ab8523a4a4a1f7e9.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\static\tracks\fe4ee21d30450829e5b172e806b3c1e14ca1e5f3.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\static\tracks\ff2381a011d29cefb3804436ed29f60b4faa63d6.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
     </ItemGroup>
 
 </Project>

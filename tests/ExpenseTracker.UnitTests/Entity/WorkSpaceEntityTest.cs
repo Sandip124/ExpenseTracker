@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Entities.Common;
 using Xunit;
 
 namespace ExpenseTracker.UnitTests.Entity
@@ -9,7 +10,7 @@ namespace ExpenseTracker.UnitTests.Entity
         public void test_protected_property_sets_correct_value()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
 
             typeof(Workspace).GetProperty(nameof(Workspace.UserId))?
                 .SetValue(workspace, 1);
@@ -26,27 +27,27 @@ namespace ExpenseTracker.UnitTests.Entity
         public void test_set_name_method_sets_correct_value()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
 
-            workspace.ChangeName("name");
+            workspace.UpdateName("name");
             Assert.Equal("name", workspace.WorkSpaceName);
         }
         [Fact]
         public void test_set_default_method_sets_default()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
 
-            workspace.SetAsDefaultWorkspace();
-            Assert.Equal(Workspace.TypeDefaultWorkspace, workspace.WorkspaceType);
+            workspace.SetDefault();
+            Assert.True(workspace.IsDefault);
         }
         [Fact]
         public void test_change_color_method_sets_default()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
 
-            workspace.ChangeColor("cc");
+            workspace.UpdateColor("cc");
             Assert.Equal("cc", workspace.Color);
         }
     }

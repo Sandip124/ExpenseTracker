@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Configuration;
 
 namespace ExpenseTracker.Core.Entities
 {
+    [Table("user")]
     public class User
     {
         protected  User(){}
@@ -54,10 +55,10 @@ namespace ExpenseTracker.Core.Entities
 
         public virtual bool HasWorkspace => Workspaces.Any();
 
-        public virtual bool HasDefaultWorkspace => Workspaces.Count(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace) == 1;
+        public virtual bool HasDefaultWorkspace => Workspaces.Count(a => a.IsDefault) == 1;
         public virtual Workspace DefaultWorkspace =>
             (HasDefaultWorkspace
-                ? Workspaces.FirstOrDefault(a => a.WorkspaceType == Workspace.TypeDefaultWorkspace)
+                ? Workspaces.FirstOrDefault(a => a.IsDefault)
                 : throw new Exception("Default Workspace Not Found")) ??
             throw new Exception("Default Workspace Not Found");
 

@@ -1,0 +1,45 @@
+<!--TODO: Blazor component -->
+
+@using ExpenseTracker.Web.Models
+
+    <h3>
+        Hello, @APerson.FirstName
+        <br />
+            <input type="button" @onclick="ChangeName" value="Change Name" />
+        <br />
+    </h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Fist Name
+            </th>
+            <th>
+                Last Name
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>
+                    @APerson.FirstName
+                </td>
+
+                <td>
+                    @APerson.LastName
+                </td>
+            </tr>
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public PersonViewModel APerson { get; set; }
+
+    private void ChangeName()
+    {
+        APerson.FirstName = "New Name";
+    }
+}

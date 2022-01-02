@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Core.Dto.Workspace;
 using ExpenseTracker.Core.Entities;
@@ -15,11 +16,13 @@ namespace ExpenseTracker.Core.Services.Implementation
     {
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IUnitofWork _unitOfWork;
 
-        public WorkspaceService(IWorkspaceRepository workspaceRepository,IUserRepository userRepository)
+        public WorkspaceService(IWorkspaceRepository workspaceRepository,IUserRepository userRepository,IUnitofWork unitOfWork)
         {
             _workspaceRepository = workspaceRepository;
             _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task Create(WorkspaceCreateDto workspaceCreateDto)
         {
@@ -27,17 +30,13 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             var user = await _userRepository.GetByIdAsync(workspaceCreateDto.UserId).ConfigureAwait(false) ?? throw new Exception("User not found exception");
             
-            var workspace = Workspace.Create(user,workspaceCreateDto.Name,workspaceCreateDto.Color);
+            var workspace = Workspace.Create(workspaceCreateDto.WorkspaceType,user,workspaceCreateDto.Name,workspaceCreateDto.Color);
             
-            if (user.HasWorkspace)
-            {
-                workspace.SetAsNormalWorkspace();
-            }else{
-                workspace.SetAsDefaultWorkspace();
-            }
-            
+            if (!user.HasWorkspace) workspace.SetDefault();
+
             await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
 
+            await _unitOfWork.CommitAsync();
             tx.Complete();
         }
 
@@ -49,12 +48,12 @@ namespace ExpenseTracker.Core.Services.Implementation
                                 .ConfigureAwait(false) ??
                             throw new WorkspaceNotFoundException();
                 
-            workspace.ChangeName(workspaceUpdateDto.Name);
-            workspace.ChangeColor(workspaceUpdateDto.Color);
+            workspace.UpdateName(workspaceUpdateDto.Name);
+            workspace.UpdateColor(workspaceUpdateDto.Color);
             workspace.Description = workspaceUpdateDto.Description;
 
             await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
-
+            await _unitOfWork.CommitAsync();
             tx.Complete();
         }
 
@@ -66,7 +65,7 @@ namespace ExpenseTracker.Core.Services.Implementation
                             throw new WorkspaceNotFoundException();
 
             await _workspaceRepository.DeleteAsync(workspace).ConfigureAwait(false);
-            
+            await _unitOfWork.CommitAsync();
             tx.Complete();
         }
 
@@ -82,10 +81,10 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             foreach (var workspace in userWorkspaces.Except(new List<Workspace> {selectedWorkspace}))
             {
-                workspace.SetAsNormalWorkspace();
+                workspace.RemoveDefault();
             }
-            selectedWorkspace.SetAsDefaultWorkspace();
-            
+            selectedWorkspace.SetDefault();
+            await _unitOfWork.CommitAsync();
             tx.Complete();
         }
     }
