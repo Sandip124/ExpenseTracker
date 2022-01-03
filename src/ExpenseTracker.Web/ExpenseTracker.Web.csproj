@@ -215,6 +215,7 @@
       <_ContentIncludedByDefault Remove="wwwroot\static\tracks\fb4998c955d8eba049ffbfc7ab8523a4a4a1f7e9.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\static\tracks\fe4ee21d30450829e5b172e806b3c1e14ca1e5f3.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\static\tracks\ff2381a011d29cefb3804436ed29f60b4faa63d6.jpg" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Hello.razor" />
     </ItemGroup>
 
     <ItemGroup>
