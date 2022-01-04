@@ -90,7 +90,6 @@ namespace ExpenseTracker.Web
                 }
             );
 
-            services.AddServerSideBlazor();
             services.AddControllersWithViews();
 
             services.AddSession(
@@ -162,7 +161,6 @@ namespace ExpenseTracker.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
-                endpoints.MapBlazorHub();
                 endpoints.MapDefaultControllerRoute().RequireAuthorization();
             });
         }
