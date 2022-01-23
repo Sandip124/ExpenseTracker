@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Dto;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
@@ -26,7 +27,7 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
 
         public AuthenticateResponseDto Authenticate(AuthenticateRequestDto model)
         {
-            var user = _userRepository.GetQueryable().SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            var user = _userRepository.GetQueryable().SingleOrDefault(x => x.Username == model.Username);
 
             if (user == null) throw new Exception("Username or password does not match.");
 

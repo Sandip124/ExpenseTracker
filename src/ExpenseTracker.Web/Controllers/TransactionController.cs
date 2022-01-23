@@ -7,6 +7,7 @@ using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Web.Provider;
 using ExpenseTracker.Web.ViewModels;
 using ExpenseTracker.Web.ViewModels.Transaction;
 using ExpenseTracker.Web.ViewModels.TransactionCategory;
@@ -23,21 +24,23 @@ namespace ExpenseTracker.Web.Controllers
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly ILogger<TransactionController> _logger;
+        private readonly IUserProvider _userProvider;
 
         public TransactionController(ITransactionService transactionService,
             ITransactionCategoryRepository transactionCategoryRepository,
             ITransactionRepository transactionRepository,
-            ILogger<TransactionController> logger)
+            ILogger<TransactionController> logger,IUserProvider userProvider)
         {
             _transactionService = transactionService;
             _transactionCategoryRepository = transactionCategoryRepository;
             _transactionRepository = transactionRepository;
             _logger = logger;
+            _userProvider = userProvider;
         }
 
         public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
         {
-            var DefaultWorkspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var DefaultWorkspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactions = _transactionRepository.GetPredicatedQueryable(a=>a.Workspace.Token == DefaultWorkspaceToken).OrderByDescending(x => x.TransactionDate).ToList();
             transactionIndexViewModel.Transactions = transactions;
             return View(transactionIndexViewModel);
@@ -61,8 +64,8 @@ namespace ExpenseTracker.Web.Controllers
 
                 await _transactionService.Create(new TransactionCreateDto()
                 {
-                    UserId = this.GetCurrentUserId(),
-                    WorkspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token, 
+                    UserId = _userProvider.GetCurrentUserId(),
+                    WorkspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token, 
                     TransactionDate = transactionViewModel.TransactionEntryDate,
                     Amount = transactionViewModel.TransactionAmount,
                     TransactionCategoryId = transactionViewModel.TransactionCategoryId,

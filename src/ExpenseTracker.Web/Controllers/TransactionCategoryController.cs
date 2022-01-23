@@ -79,7 +79,7 @@ namespace ExpenseTracker.Web.Controllers
 
                 var transactionViewModel = new TransactionCategoryViewModel()
                 {
-                    TransactionCategoryId = transactionCategory.TransactionCategoryId,
+                    TransactionCategoryId = transactionCategory.Id,
                     Name = transactionCategory.CategoryName,
                     Icon = transactionCategory.Icon,
                     Type = transactionCategory.Type,
@@ -130,7 +130,7 @@ namespace ExpenseTracker.Web.Controllers
                 var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId)
                     .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
 
-                await _transactionCategoryService.Delete(transactionCategory.TransactionCategoryId)
+                await _transactionCategoryService.Delete(transactionCategory.Id)
                     .ConfigureAwait(true);
                 
                 this.AddSuccessMessage("Transaction Category Deleted Successfully");

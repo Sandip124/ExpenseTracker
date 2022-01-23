@@ -1,14 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Dto.Workspace;
-using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
-using ExpenseTracker.Infrastructure.SessionFactory;
+using ExpenseTracker.Web.Provider;
 using ExpenseTracker.Web.ViewModels.Workspace;
 using Microsoft.AspNetCore.Mvc;
-using NHibernate;
 
 namespace ExpenseTracker.Web.Controllers
 {
@@ -16,18 +15,21 @@ namespace ExpenseTracker.Web.Controllers
     {
         private readonly IWorkspaceService _workspaceService;
         private readonly IWorkspaceRepository _workspaceRepository;
+        private readonly IUserProvider _userProvider;
 
-        public WorkspaceController(IWorkspaceService workspaceService,IWorkspaceRepository workspaceRepository)
+        public WorkspaceController(IWorkspaceService workspaceService,IWorkspaceRepository workspaceRepository,IUserProvider userProvider)
         {
             _workspaceService = workspaceService;
             _workspaceRepository = workspaceRepository;
+            _userProvider = userProvider;
         }
         // GET
         public async Task<IActionResult> Index(string name)
         {
+            var currentUser = await _userProvider.GetCurrentUser();
             var workspaceViewModel = new WorkspaceIndexViewModel
             {
-                Workspaces = await _workspaceRepository.GetAllAsync().ConfigureAwait(true)
+                Workspaces = await _workspaceRepository.GetActiveWorkspaces(currentUser.UserId).ConfigureAwait(true)
             };
             return View(workspaceViewModel);
         }
@@ -45,21 +47,20 @@ namespace ExpenseTracker.Web.Controllers
             {
                 if (!ModelState.IsValid) return View(workspaceViewModel);
 
-                var currentUser = await this.GetCurrentUser().ConfigureAwait(true);
+                var currentUser = await _userProvider.GetCurrentUser();
                 var workspaceDto = new WorkspaceCreateDto()
                 {
                     UserId = currentUser.UserId,
                     Color = workspaceViewModel.Color,
                     Name = workspaceViewModel.WorkspaceName,
-                    Description = workspaceViewModel.Description
+                    Description = workspaceViewModel.Description,
+                    WorkspaceType = WorkspaceType.Personal
                 };
                 
                 await _workspaceService.Create(workspaceDto).ConfigureAwait(true);
+                
+                HttpContext?.Session.SetDefaultWorkspace(currentUser.DefaultWorkspace.Token);
 
-                BaseSessionFactory.HttpContextAccessor?.HttpContext?.Session.SetDefaultWorkspace(currentUser.DefaultWorkspace.Token);
-                
-                var defaultWorkspace = BaseSessionFactory.HttpContextAccessor?.HttpContext?.Session.GetDefaultWorkspace();
-                
                 this.AddSuccessMessage("Workspace Created Successfully.");
             }
             catch (Exception e)

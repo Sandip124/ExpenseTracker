@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
+using ExpenseTracker.Web.Provider;
 using ExpenseTracker.Web.ViewModels.Report;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,17 @@ namespace ExpenseTracker.Web.Controllers
     public class ReportController : Controller
     {
         private readonly ITransactionRepository _transactionRepository;
+        private readonly IUserProvider _userProvider;
 
-        public ReportController(ITransactionRepository transactionRepository)
+        public ReportController(ITransactionRepository transactionRepository,IUserProvider userProvider)
         {
             _transactionRepository = transactionRepository;
+            _userProvider = userProvider;
         }
         // GET
         public async Task<IActionResult> Index(ReportViewModel reportViewModel)
         {
-            var workspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactionQueryable =
                 _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
 
@@ -42,7 +45,7 @@ namespace ExpenseTracker.Web.Controllers
 
         public async Task<IActionResult> Monthly(ReportViewModel reportViewModel)
         {
-            var workspaceToken = (await this.GetCurrentUser()).DefaultWorkspace.Token;
+            var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactionQueryable =
                 _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
                 

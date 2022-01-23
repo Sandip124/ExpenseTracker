@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Entities.Common;
@@ -15,12 +16,13 @@ namespace ExpenseTracker.UnitTests.Service
     public class TransactionCategoryServiceTest
     {
         private readonly Mock<ITransactionCategoryRepository> _transactionCategoryRepository = new();
+        private readonly Mock<IUnitofWork> _unitOfWork = new();
 
         private readonly TransactionCategoryService _transactionCategoryService;
 
         public TransactionCategoryServiceTest()
         {
-            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object);
+            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object,_unitOfWork.Object);
         }
 
         [Fact]
@@ -57,7 +59,7 @@ namespace ExpenseTracker.UnitTests.Service
 
             _transactionCategoryRepository
                 .Setup(a => a.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId))
-                .ReturnsAsync((TransactionCategory)null);
+                .ReturnsAsync((TransactionCategory)null!);
 
             Func<Task> updatingTransactionCategory = async () =>
                 await _transactionCategoryService.Update(transactionCategoryUpdateDto);
@@ -99,7 +101,7 @@ namespace ExpenseTracker.UnitTests.Service
             var transactionCategoryId = 1;
 
             _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))
-                .ReturnsAsync((TransactionCategory)null);
+                .ReturnsAsync((TransactionCategory)null!);
 
             Func<Task> updatingTransactionCategory = async () =>
                 await _transactionCategoryService.Delete(transactionCategoryId);
@@ -115,7 +117,7 @@ namespace ExpenseTracker.UnitTests.Service
             var transactionCategoryId = 1;
 
             var transactionCategory = TransactionCategory.Create(TransactionType.Expense, "hello", "#ffffff", "bla");
-            typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.TransactionCategoryId))
+            typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.Id))
                 ?.SetValue(transactionCategory, transactionCategoryId);
 
             _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))

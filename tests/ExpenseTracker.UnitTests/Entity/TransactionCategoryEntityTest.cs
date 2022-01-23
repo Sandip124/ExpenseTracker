@@ -39,9 +39,9 @@ namespace ExpenseTracker.UnitTests.Entity
         {
             var transactionCategory = TransactionCategory.Create(TransactionType.Expense, "Health Expense", "#ffffff", "Medical");
 
-            typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.TransactionCategoryId))?
+            typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.Id))?
                 .SetValue(transactionCategory, 1);
-            Assert.Equal(1, transactionCategory.TransactionCategoryId);
+            Assert.Equal(1, transactionCategory.Id);
         }
         [Fact]
         public void test_protected_property_sets_correct_value()

@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
@@ -11,10 +12,12 @@ namespace ExpenseTracker.Core.Services.Implementation
     public class TransactionCategoryService : ITransactionCategoryService
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
+        private readonly IUnitofWork _unitOfWork;
 
-        public TransactionCategoryService(ITransactionCategoryRepository transactionCategoryRepository)
+        public TransactionCategoryService(ITransactionCategoryRepository transactionCategoryRepository,IUnitofWork unitOfWork)
         {
             _transactionCategoryRepository = transactionCategoryRepository;
+            _unitOfWork = unitOfWork;
         }
         public async Task Create(TransactionCategoryCreateDto transactionCategoryCreateDto)
         {
@@ -23,7 +26,9 @@ namespace ExpenseTracker.Core.Services.Implementation
             var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
             await _transactionCategoryRepository.InsertAsync(transaction).ConfigureAwait(false);
-
+            
+            await _unitOfWork.CommitAsync();
+            
             tx.Complete();
         }
 
@@ -38,6 +43,8 @@ namespace ExpenseTracker.Core.Services.Implementation
 
             await _transactionCategoryRepository.UpdateAsync(transaction).ConfigureAwait(false);
 
+            await _unitOfWork.CommitAsync();
+            
             tx.Complete();
         }
 
@@ -48,7 +55,9 @@ namespace ExpenseTracker.Core.Services.Implementation
             var transaction = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
 
             await _transactionCategoryRepository.DeleteAsync(transaction).ConfigureAwait(false);
-
+            
+            await _unitOfWork.CommitAsync();
+            
             tx.Complete();
         }
     }

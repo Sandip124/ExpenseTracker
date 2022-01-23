@@ -11,7 +11,7 @@ namespace ExpenseTracker.UnitTests.Entity
         public void test_protected_property_sets_correct_value()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
             var category = TransactionCategory.Create(TransactionType.Income, "cat", "red", "ico");
 
             var transaction = Transaction.Create(workspace, category, 10, System.DateTime.Now, TransactionType.Income);
@@ -31,7 +31,7 @@ namespace ExpenseTracker.UnitTests.Entity
         public void test_Update_transasction_date_updates_correct_date()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
             var category = TransactionCategory.Create(TransactionType.Income, "cat", "red", "ico");
             var transaction = Transaction.Create(workspace, category, 10, System.DateTime.Now, TransactionType.Income);
 
@@ -43,7 +43,7 @@ namespace ExpenseTracker.UnitTests.Entity
         public void test_Update_transasction_amount_updates_correct_amount()
         {
             var user = User.Create("admin", "admin");
-            var workspace = Workspace.Create(user, "apt", "red");
+            var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
             var category = TransactionCategory.Create(TransactionType.Income, "cat", "red", "ico");
             var transaction = Transaction.Create(workspace, category, 10, System.DateTime.Now, TransactionType.Income);
 

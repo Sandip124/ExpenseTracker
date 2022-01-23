@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 
 namespace ExpenseTracker.Core.Entities
 {
+    [Table("transaction_category")]
     public class TransactionCategory
     {
         public static TransactionCategory Create(string type,string name,string color,string icon)
@@ -24,7 +26,7 @@ namespace ExpenseTracker.Core.Entities
             Icon = icon;
         }
 
-        public virtual int TransactionCategoryId { get; protected set; }
+        public virtual int Id { get; protected set; }
 
         public virtual string CategoryName { get; protected set; }
 
@@ -35,7 +37,7 @@ namespace ExpenseTracker.Core.Entities
         public virtual string Icon { get; protected set; }
         public virtual void UpdateIcon(string icon) => Icon = icon;
 
-        public virtual string Type { get; protected set; }
+        public virtual string Type { get; protected init; }
 
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 

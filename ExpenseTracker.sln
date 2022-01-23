@@ -1,30 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9864D78F-0F61-451A-8BC3-7771BDB3CF74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1E461352-51F4-4F9D-B65B-689E2A0D31C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Web", "src\ExpenseTracker.Web\ExpenseTracker.Web.csproj", "{760235CF-44FF-4F5B-B9FC-9AF9EEEE9957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseTracker.Web", "src\ExpenseTracker.Web\ExpenseTracker.Web.csproj", "{760235CF-44FF-4F5B-B9FC-9AF9EEEE9957}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Core", "src\ExpenseTracker.Core\ExpenseTracker.Core.csproj", "{711DCE37-E2E4-46CE-97D2-A10680A3802D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseTracker.Core", "src\ExpenseTracker.Core\ExpenseTracker.Core.csproj", "{711DCE37-E2E4-46CE-97D2-A10680A3802D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Infrastructure", "src\ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj", "{BA974234-FD51-4B05-BCE2-34ED04841D95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseTracker.Infrastructure", "src\ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj", "{BA974234-FD51-4B05-BCE2-34ED04841D95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.UnitTests", "tests\ExpenseTracker.UnitTests\ExpenseTracker.UnitTests.csproj", "{EEC1D3A7-E9D4-441C-80E2-D7ACED82A3B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseTracker.UnitTests", "tests\ExpenseTracker.UnitTests\ExpenseTracker.UnitTests.csproj", "{EEC1D3A7-E9D4-441C-80E2-D7ACED82A3B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Common", "src\ExpenseTracker.Common\ExpenseTracker.Common.csproj", "{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseTracker.Common", "src\ExpenseTracker.Common\ExpenseTracker.Common.csproj", "{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{760235CF-44FF-4F5B-B9FC-9AF9EEEE9957} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
-		{711DCE37-E2E4-46CE-97D2-A10680A3802D} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
-		{BA974234-FD51-4B05-BCE2-34ED04841D95} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
-		{EEC1D3A7-E9D4-441C-80E2-D7ACED82A3B2} = {1E461352-51F4-4F9D-B65B-689E2A0D31C0}
-		{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{760235CF-44FF-4F5B-B9FC-9AF9EEEE9957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -47,5 +43,18 @@ Global
 		{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{760235CF-44FF-4F5B-B9FC-9AF9EEEE9957} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
+		{711DCE37-E2E4-46CE-97D2-A10680A3802D} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
+		{BA974234-FD51-4B05-BCE2-34ED04841D95} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
+		{EEC1D3A7-E9D4-441C-80E2-D7ACED82A3B2} = {1E461352-51F4-4F9D-B65B-689E2A0D31C0}
+		{72BA5D1B-FF17-4837-8BCC-8D49DE7BA4D7} = {9864D78F-0F61-451A-8BC3-7771BDB3CF74}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ECC151B9-B5B5-4B43-8F7B-ECA75E7B0F17}
 	EndGlobalSection
 EndGlobal
