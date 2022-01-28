@@ -1,16 +1,13 @@
-using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Repositories.Interface;
-using ExpenseTracker.Infrastructure.Middleware;
-using ExpenseTracker.Web.Providers;
 using ExpenseTracker.Web.Providers.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace ExpenseTracker.Infrastructure.Middleware
+namespace ExpenseTracker.Web.Middleware
 {
     public class WorkspaceMiddleware
     {
