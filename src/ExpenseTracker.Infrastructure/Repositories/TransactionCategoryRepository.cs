@@ -4,7 +4,7 @@ using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpenseTracker.Infrastructure.Repositories.Implementation
+namespace ExpenseTracker.Infrastructure.Repositories
 {
     internal class TransactionCategoryRepository : GenericRepository<TransactionCategory>,ITransactionCategoryRepository
     {

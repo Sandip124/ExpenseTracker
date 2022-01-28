@@ -1,8 +1,7 @@
-@using ExpenseTracker.Core.Entities.Common
 @model ExpenseTracker.Web.ViewModels.TransactionViewModel
 
 @{
-    ViewBag.Title = "Transaction";
+    ViewData["Title"] = "Transaction";
     Layout = "_Layout";
 }
 
@@ -49,7 +48,7 @@
                 <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.TransactionEntryDate, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
-                        <input asp-for="TransactionEntryDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")"/>
+                        <input asp-for="TransactionEntryDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" autofocus/>
                     </div>
                 </div>
                 <div class="form-group mb-3 row">

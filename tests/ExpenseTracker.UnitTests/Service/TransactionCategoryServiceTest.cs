@@ -1,12 +1,12 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
-using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
-using ExpenseTracker.Core.Services.Implementation;
+using ExpenseTracker.Core.Services;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -16,13 +16,12 @@ namespace ExpenseTracker.UnitTests.Service
     public class TransactionCategoryServiceTest
     {
         private readonly Mock<ITransactionCategoryRepository> _transactionCategoryRepository = new();
-        private readonly Mock<IUnitofWork> _unitOfWork = new();
 
         private readonly TransactionCategoryService _transactionCategoryService;
 
         public TransactionCategoryServiceTest()
         {
-            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object,_unitOfWork.Object);
+            _transactionCategoryService = new TransactionCategoryService(_transactionCategoryRepository.Object);
         }
 
         [Fact]
@@ -43,7 +42,7 @@ namespace ExpenseTracker.UnitTests.Service
                 x.CategoryName == "Office Expense" &&
                 x.Icon == "office" &&
                 x.Color == "#ffffff"
-            )), Times.Once);
+            ),CancellationToken.None), Times.Once);
         }
 
         [Fact]
@@ -58,7 +57,7 @@ namespace ExpenseTracker.UnitTests.Service
             };
 
             _transactionCategoryRepository
-                .Setup(a => a.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId))
+                .Setup(a => a.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId))
                 .ReturnsAsync((TransactionCategory)null!);
 
             Func<Task> updatingTransactionCategory = async () =>
@@ -83,7 +82,7 @@ namespace ExpenseTracker.UnitTests.Service
             };
 
             _transactionCategoryRepository
-                .Setup(a => a.GetByIdAsync(transactionCategoryUpdateDto.TransactionCategoryId))
+                .Setup(a => a.FindAsync(transactionCategoryUpdateDto.TransactionCategoryId))
                 .ReturnsAsync(transactionCategory);
 
             await _transactionCategoryService.Update(transactionCategoryUpdateDto);
@@ -92,7 +91,7 @@ namespace ExpenseTracker.UnitTests.Service
                 x.CategoryName == "Health" &&
                 x.Icon == "ambulance" &&
                 x.Color == "#fff000"
-            )), Times.Once);
+            ),CancellationToken.None), Times.Once);
         }
 
         [Fact]
@@ -100,7 +99,7 @@ namespace ExpenseTracker.UnitTests.Service
         {
             var transactionCategoryId = 1;
 
-            _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))
+            _transactionCategoryRepository.Setup(a => a.FindAsync(transactionCategoryId))
                 .ReturnsAsync((TransactionCategory)null!);
 
             Func<Task> updatingTransactionCategory = async () =>
@@ -120,12 +119,12 @@ namespace ExpenseTracker.UnitTests.Service
             typeof(TransactionCategory).GetProperty(nameof(TransactionCategory.Id))
                 ?.SetValue(transactionCategory, transactionCategoryId);
 
-            _transactionCategoryRepository.Setup(a => a.GetByIdAsync(transactionCategoryId))
+            _transactionCategoryRepository.Setup(a => a.FindAsync(transactionCategoryId))
                 .ReturnsAsync(transactionCategory);
 
             await _transactionCategoryService.Delete(transactionCategoryId);
 
-            _transactionCategoryRepository.Verify(a => a.DeleteAsync(It.IsAny<TransactionCategory>()), Times.Once);
+            _transactionCategoryRepository.Verify(a => a.DeleteAsync(It.IsAny<TransactionCategory>(),CancellationToken.None), Times.Once);
         }
     }
 }

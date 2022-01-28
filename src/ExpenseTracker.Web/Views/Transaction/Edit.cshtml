@@ -1,9 +1,7 @@
-﻿@using ExpenseTracker.Web.ViewModels.Transaction
-@using ExpenseTracker.Core.Entities.Common
-@model ExpenseTracker.Web.ViewModels.TransactionViewModel
+﻿@model ExpenseTracker.Web.ViewModels.TransactionViewModel
 
 @{
-    ViewBag.Title = "Transaction ";
+    ViewData["Title"] = "Transaction ";
     Layout = "_Layout";
 }
 
@@ -53,7 +51,7 @@
                 <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.Amount, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
-                        @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", placeholder = "Enter Ampunt " })
+                        @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", placeholder = "Enter Amount" })
                     </div>
                 </div>
                
@@ -72,7 +70,7 @@
     <script>
         // @@formatter:off
         document.addEventListener("DOMContentLoaded", function () {
-        	var el;
+        	let el;
         	window.Choices && (new Choices(el = document.getElementById('select-icon'), {
         		classNames: {
         			containerInner: el.className,
@@ -86,7 +84,7 @@
         		shouldSort: false,
         		searchEnabled: false,
         		callbackOnCreateTemplates: function(template) {
-        			var classNames = this.config.className,
+        			let classNames = this.config.className,
         			itemSelectText = this.config.itemSelectText;
         			return {
         				item: function(classNames, data) {
@@ -101,7 +99,7 @@
         	}));
         });
             document.addEventListener("DOMContentLoaded", function () {
-            	var el;
+            	let el;
             	window.Choices && (new Choices(el = document.getElementById('select-type'), {
             		classNames: {
             			containerInner: el.className,

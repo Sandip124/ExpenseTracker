@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using ExpenseTracker.Common.Pagination;
 
@@ -9,22 +10,15 @@ namespace ExpenseTracker.Common.Repositories.Interface
 {
    public interface IGenericRepository<T>
     {
-        void Delete(T entities);
-        Task DeleteAsync(T entities);
-        void Insert(T entities);
-        Task InsertAsync(T entities);
-        void Update(T entities);
-        Task UpdateAsync(T entities);
-        List<T> GetAll();
-        Task<List<T>> GetAllAsync();
-        Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null);
+        Task DeleteAsync(T entities,CancellationToken cancellationToken = default);
+        Task InsertAsync(T entities,CancellationToken cancellationToken = default);
+        Task UpdateAsync(T entities, CancellationToken cancellationToken = default);
+        Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate,CancellationToken cancellationToken = default);
         IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate);
         IQueryable<T> GetQueryable();
-        T GetById(int id);
-        Task<T?> GetByIdAsync(int id);
-
-        Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate);
-        
-        Pagination<T> Paginate(IQueryable<T> queryable, int page = 1, int limit = 100);
+        Task<T?> FindAsync(int id);
+        Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate,CancellationToken cancellationToken = default);
+        Task<Pagination<T>> PaginateAsync(IQueryable<T> queryable, int page = 1, int limit = 50);
     }
 }

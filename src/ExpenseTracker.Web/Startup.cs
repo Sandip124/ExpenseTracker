@@ -1,7 +1,6 @@
 using System;
 using System.Text;
-using ExpenseTracker.Core;
-using ExpenseTracker.Infrastructure;
+using AspNetCoreHero.ToastNotification;
 using ExpenseTracker.Infrastructure.Data;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Infrastructure.Middleware;
@@ -18,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 
 namespace ExpenseTracker.Web
@@ -112,10 +110,8 @@ namespace ExpenseTracker.Web
             services.AddHttpContextAccessor();
             services.AddScoped<DbContext, AppDbContext>();
             services.UseExpenseTracker();
-
-            services.InjectCoreServices();
-            services.InjectServices();
-            services.InjectRepositories();
+            
+            services.AddNotyf(config=> { config.DurationInSeconds = 10;config.IsDismissable = true;config.Position = NotyfPosition.BottomCenter; });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

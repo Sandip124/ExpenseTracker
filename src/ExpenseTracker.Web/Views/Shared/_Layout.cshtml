@@ -1,8 +1,4 @@
-﻿@inject ExpenseTracker.Web.Provider.IUserProvider _userProvider
-@{
-    ViewBag.__CurrentUser = await _userProvider.GetCurrentUser();
-}
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
@@ -19,30 +15,28 @@
     
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true"/>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" asp-append-version="true">
-
-    @await RenderSectionAsync("Styles", required: false).ConfigureAwait(true)
+    @await RenderSectionAsync("Styles", false)
   </head>
   <body class="antialiased">
     <div class="wrapper">
 
 	    <!--Header-->
-	    @await Html.PartialAsync("_Header").ConfigureAwait(true)
+	    @await Html.PartialAsync("_Header")
 
 	    <!--Navigation-->
-	    @await Html.PartialAsync("_Navigation").ConfigureAwait(true)
+	    @await Html.PartialAsync("_Navigation")
 
 	    <div class="page-wrapper">
         <div class="container-xl">
           
-          @await RenderSectionAsync("PageTitle").ConfigureAwait(true)
+          @await RenderSectionAsync("PageTitle")
           <!-- Page title -->
           
           <div class="page-body">
             @RenderBody()
           </div>
         </div>
-		    @await Html.PartialAsync("_Footer").ConfigureAwait(true)
+		    @await Html.PartialAsync("_Footer")
 	    </div>
     </div>
     <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
@@ -155,13 +149,11 @@
 
   <script src="~/dist/js/tabler.min.js" asp-append-version="true"></script>
   
-  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" asp-append-version="true"></script>
-  
-  <script src="~/js/Helper/NotifyHelper.js" asp-append-version="true"></script>
-  @await Component.InvokeAsync("Notify").ConfigureAwait(true)
   <script src="~/js/app.js" asp-append-version="true"></script>
   <!--    Section Scripts-->
-  @await RenderSectionAsync("Scripts", required: false).ConfigureAwait(true)
+   @await Component.InvokeAsync("Notyf")
+
+  @await RenderSectionAsync("Scripts", false)
   
   @await RenderSectionAsync("_ValidationScriptsPartial",false)
 

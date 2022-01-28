@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ExpenseTracker.Web.Controllers.Api
 {
     [ApiController]
-    [Route("/api/TransactionCategory/")]
+    [Route("/api/transaction-categories/")]
     public class TransactionCategoryApiController : ControllerBase
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
@@ -16,7 +16,7 @@ namespace ExpenseTracker.Web.Controllers.Api
             _transactionCategoryRepository = transactionCategoryRepository;
         }
 
-        [HttpGet("{type}/getByType")]
+        [HttpGet("{type}/type")]
         public async Task<IActionResult> GetCategoriesByType(string type)
         {
             if (!TransactionType.IsValidType(type))

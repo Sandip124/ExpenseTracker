@@ -16,8 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="ActionFilters" />
-      <Folder Include="Services" />
+      <Folder Include="Helpers" />
     </ItemGroup>
 
 </Project>

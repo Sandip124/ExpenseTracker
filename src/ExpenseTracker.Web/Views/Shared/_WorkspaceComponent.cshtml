@@ -1,13 +1,15 @@
 @using ExpenseTracker.Core.Entities
 @using ExpenseTracker.Infrastructure.Extensions
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using ExpenseTracker.Web.Providers.Interface
+@inject IUserProvider _userProvider
 @{
+    var currentUser = await _userProvider.GetCurrentUser();
     var session = HttpContextAccessor.HttpContext.Session;
-    var CurrentUser = ViewBag.__CurrentUser as User;
-    var workspaces = CurrentUser.Workspaces;
+    var workspaces = currentUser.Workspaces;
 
     var workspaceToken = session.GetDefaultWorkspace();
-    var DefaultWorkspace = workspaces.SingleOrDefault(a => a.Token == workspaceToken) ?? CurrentUser.DefaultWorkspace;
+    var defaultWorkspace = workspaces.SingleOrDefault(a => a.Token == workspaceToken) ?? currentUser.DefaultWorkspace;
     var redirectUrl = HttpContextAccessor.HttpContext.Request.Path;
 }
 
@@ -20,7 +22,7 @@
                 </svg>
             </span>
             <span class="nav-link-title">
-                @DefaultWorkspace.WorkSpaceName
+                @defaultWorkspace.WorkSpaceName
             </span>
         </a>
         <div class="dropdown-menu">

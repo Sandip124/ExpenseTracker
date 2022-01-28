@@ -4,7 +4,7 @@ using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpenseTracker.Infrastructure.Repositories.Implementation
+namespace ExpenseTracker.Infrastructure.Repositories
 {
     internal class WorkspaceRepository : GenericRepository<Workspace>, IWorkspaceRepository
     {
@@ -27,7 +27,6 @@ namespace ExpenseTracker.Infrastructure.Repositories.Implementation
         public async Task<IEnumerable<Workspace>> GetActiveWorkspaces(int userId)
         {
             return await GetAllAsync(x => x.UserId == userId);
-            //TODO: implement active and inactive  
         }
 
         public async Task<bool> HasDefaultWorkspace(int userId)

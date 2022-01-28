@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using ExpenseTracker.Common.DBAL;
 using ExpenseTracker.Core.Dto;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
@@ -12,7 +11,7 @@ using ExpenseTracker.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ExpenseTracker.Infrastructure.Services.Implementation
+namespace ExpenseTracker.Infrastructure.Services
 {
     public class UserService : IUserService
     {
@@ -43,15 +42,15 @@ namespace ExpenseTracker.Infrastructure.Services.Implementation
         private string GenerateJwtToken(User user)
         {
             var claims = new Claim[] {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+                new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+                new(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
-            SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSecret()));
-            SigningCredentials signingCredential = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-            JwtHeader jwtHeader = new JwtHeader(signingCredential);
-            JwtPayload jwtPayload = new JwtPayload(claims);
-            JwtSecurityToken token = new JwtSecurityToken(jwtHeader, jwtPayload);
+            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSecret()));
+            var signingCredential = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            var jwtHeader = new JwtHeader(signingCredential);
+            var jwtPayload = new JwtPayload(claims);
+            var token = new JwtSecurityToken(jwtHeader, jwtPayload);
             
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

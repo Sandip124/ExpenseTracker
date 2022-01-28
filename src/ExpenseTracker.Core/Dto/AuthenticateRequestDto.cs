@@ -5,6 +5,7 @@ namespace ExpenseTracker.Core.Dto
     public class AuthenticateRequestDto
     {
         [Required]
+        
         public string Username { get; set; }
 
         [Required]

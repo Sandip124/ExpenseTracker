@@ -2,9 +2,12 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Web.Models;
-using ExpenseTracker.Web.Provider;
+using ExpenseTracker.Web.Providers;
+using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -51,7 +51,7 @@
                 <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.Name, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
-                        @Html.TextBoxFor(a => a.Name, new { @class = "form-control", placeholder = "Enter Category Name" })
+                        <input type="text" asp-for="Name" class="form-control" placeholder="Enter Category Name" autofocus>
                     </div>
                 </div>
                 <div class="form-group mb-3 row">
@@ -116,7 +116,7 @@
         		shouldSort: false,
         		searchEnabled: false,
         		callbackOnCreateTemplates: function(template) {
-        			var classNames = this.config.className,
+        			const classNames = this.config.className,
         			itemSelectText = this.config.itemSelectText;
         			return {
         				item: function(classNames, data) {

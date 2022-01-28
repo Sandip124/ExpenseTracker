@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
@@ -18,19 +19,21 @@ namespace ExpenseTracker.Web.Controllers
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly ITransactionCategoryService _transactionCategoryService;
         private readonly ILogger<TransactionCategoryController> _logger;
+        private readonly INotyfService _notifyService;
 
         public TransactionCategoryController(ITransactionCategoryRepository transactionCategoryRepository,
             ITransactionCategoryService transactionCategoryService,
-            ILogger<TransactionCategoryController> logger)
+            ILogger<TransactionCategoryController> logger,INotyfService notifyService)
         {
             _transactionCategoryRepository = transactionCategoryRepository;
             _transactionCategoryService = transactionCategoryService;
             _logger = logger;
+            _notifyService = notifyService;
         }
         
         public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
         {
-            var transactionCategories = await _transactionCategoryRepository.GetAllAsync().ConfigureAwait(true);
+            var transactionCategories = await _transactionCategoryRepository.GetAllAsync();
             transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
             return View(transactionCategoryIndexViewModel);
         }
@@ -58,7 +61,8 @@ namespace ExpenseTracker.Web.Controllers
                     Icon = transactionCategoryViewModel.Icon
                 });
             
-                this.AddSuccessMessage("Transaction Category Create Successfully");
+                
+                _notifyService.Success("Transaction Category Create Successfully");
                 
             }
             catch (Exception e)
@@ -74,8 +78,8 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId)
-                    .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
+                     ?? throw new TransactionCategoryNotFoundException();
 
                 var transactionViewModel = new TransactionCategoryViewModel()
                 {
@@ -112,7 +116,7 @@ namespace ExpenseTracker.Web.Controllers
                     Icon = transactionCategoryViewModel.Icon
                 });
             
-                this.AddSuccessMessage("Transaction Category Updated Successfully");
+                _notifyService.Success("Transaction Category Updated Successfully");
                 
             }
             catch (Exception e)
@@ -127,13 +131,12 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCategoryId)
-                    .ConfigureAwait(true) ?? throw new TransactionCategoryNotFoundException();
+                var transactionCategory = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
+                     ?? throw new TransactionCategoryNotFoundException();
 
-                await _transactionCategoryService.Delete(transactionCategory.Id)
-                    .ConfigureAwait(true);
+                await _transactionCategoryService.Delete(transactionCategory.Id);
                 
-                this.AddSuccessMessage("Transaction Category Deleted Successfully");
+                _notifyService.Success("Transaction Category Deleted Successfully");
             }
             catch (Exception e)
             {

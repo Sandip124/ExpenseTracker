@@ -8,7 +8,7 @@
  <div class="page page-center">
       <div class="container-tight py-4">
         <div class="text-center mb-4">
-          <a href="."><img src="~/static/expense-tracker-logo.svg" height="36" alt=""></a>
+          <a href="#"><img src="~/static/expense-tracker-logo.svg" height="36" alt=" Expense Tracker Logo"></a>
         </div>
         <form class="card card-md" id="LoginForm" method="POST">
           <input type="hidden" asp-for="ReturnUrl">
@@ -16,7 +16,7 @@
             <h2 class="card-title text-center mb-4">Login to your account</h2>
             <div class="mb-3">
               <label class="form-label">Username</label>
-              <input type="text" class="form-control" asp-for="Username" placeholder="Enter Username">
+              <input type="text" class="form-control" asp-for="Username" placeholder="Enter Username" autofocus="autofocus">
             </div>
             <div class="mb-2">
               <label class="form-label">
@@ -60,7 +60,7 @@
           </div>
         </form>
         <div class="text-center text-muted mt-3">
-          Don't have account yet? <a href="#" tabindex="-1">Sign up</a>
+          Don't have account yet? <a href="#">Sign up</a>
         </div>
       </div>
     </div>

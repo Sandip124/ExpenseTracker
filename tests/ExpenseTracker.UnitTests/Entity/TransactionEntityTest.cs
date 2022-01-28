@@ -28,7 +28,7 @@ namespace ExpenseTracker.UnitTests.Entity
 
         }
         [Fact]
-        public void test_Update_transasction_date_updates_correct_date()
+        public void test_Update_transaction_date_updates_correct_date()
         {
             var user = User.Create("admin", "admin");
             var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");
@@ -40,7 +40,7 @@ namespace ExpenseTracker.UnitTests.Entity
 
         }
         [Fact]
-        public void test_Update_transasction_amount_updates_correct_amount()
+        public void test_Update_transaction_amount_updates_correct_amount()
         {
             var user = User.Create("admin", "admin");
             var workspace = Workspace.Create(WorkspaceType.Personal,user, "apt", "red");

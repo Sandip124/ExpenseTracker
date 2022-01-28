@@ -1,45 +1,45 @@
-﻿using ExpenseTracker.Core.Dto.Transaction;
-using ExpenseTracker.Core.Repositories.Interface;
-using ExpenseTracker.Core.Services.Interface;
-using System.Threading.Tasks;
-using ExpenseTracker.Common.DBAL;
+﻿using System.Threading.Tasks;
 using ExpenseTracker.Common.Helpers;
+using ExpenseTracker.Core.Dto.Transaction;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Exceptions;
+using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.Core.Services.Interface;
 
-namespace ExpenseTracker.Core.Services.Implementation
+namespace ExpenseTracker.Core.Services
 {
     public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly IWorkspaceRepository _workspaceRepository;
-        private readonly IUnitofWork _unitOfWork;
 
         public TransactionService(ITransactionRepository transactionRepository,
             ITransactionCategoryRepository transactionCategoryRepository,
-            IWorkspaceRepository workspaceRepository,IUnitofWork unitOfWork)
+            IWorkspaceRepository workspaceRepository)
         {
             _transactionRepository = transactionRepository;
             _transactionCategoryRepository = transactionCategoryRepository;
             _workspaceRepository = workspaceRepository;
-            _unitOfWork = unitOfWork;
         }
         public async Task Create(TransactionCreateDto transactionCreateDto)
         {
             using var tx = TransactionScopeHelper.GetInstance();
             
-            var workspace = await  _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken).ConfigureAwait(false) ?? throw new WorkspaceNotFoundException();
+            var workspace = await _workspaceRepository.GetByToken(transactionCreateDto.WorkspaceToken)
+                                .ConfigureAwait(false) ??
+                            throw new WorkspaceNotFoundException();
 
-            var transactionCategory = await _transactionCategoryRepository.GetByIdAsync(transactionCreateDto.TransactionCategoryId).ConfigureAwait(false) ?? throw new TransactionCategoryNotFoundException();
+            var transactionCategory = await _transactionCategoryRepository
+                                          .FindAsync(transactionCreateDto.TransactionCategoryId)
+                                          .ConfigureAwait(false) ??
+                                      throw new TransactionCategoryNotFoundException();
 
             var transaction = Transaction.Create(workspace,transactionCategory,transactionCreateDto.Amount, transactionCreateDto.TransactionDate,
                 transactionCreateDto.Type);
             transaction.Description = transactionCreateDto.Description;
 
             await _transactionRepository.InsertAsync(transaction).ConfigureAwait(false);
-            
-            await _unitOfWork.CommitAsync();
             
             tx.Complete();
         }
@@ -51,11 +51,9 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             using var tx = TransactionScopeHelper.GetInstance();
             
-            var transaction = await _transactionRepository.GetByIdAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
+            var transaction = await _transactionRepository.FindAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
 
             await _transactionRepository.DeleteAsync(transaction).ConfigureAwait(false);
-            
-            await _unitOfWork.CommitAsync();
             
             tx.Complete();
         }
@@ -67,13 +65,11 @@ namespace ExpenseTracker.Core.Services.Implementation
             
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var transaction = await _transactionRepository.GetByIdAsync(transactionUpdateDto.Id).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
+            var transaction = await _transactionRepository.FindAsync(transactionUpdateDto.Id).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
             transaction.UpdateAmount(transactionUpdateDto.Amount);
             transaction.UpdateTransactionDate(transactionUpdateDto.TransactionDate);
 
             await _transactionRepository.UpdateAsync(transaction).ConfigureAwait(false);
-
-            await _unitOfWork.CommitAsync();
             
             tx.Complete();
         }

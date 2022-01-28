@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.Web.Providers.Interface;
 using Microsoft.AspNetCore.Http;
 
-namespace ExpenseTracker.Web.Provider
+namespace ExpenseTracker.Web.Providers
 {
     public class UserProvider : IUserProvider
     {
@@ -17,12 +16,12 @@ namespace ExpenseTracker.Web.Provider
         public UserProvider(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
         {
             _httpContextAccessor = httpContextAccessor;
-            this._userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<User> GetCurrentUser()
         {
-            return await _userRepository.GetByIdAsync(GetCurrentUserId()) ?? throw new Exception("User Not Found.");
+            return await _userRepository.FindAsync(GetCurrentUserId()) ?? throw new Exception("User Not Found.");
         }
 
         public int GetCurrentUserId()

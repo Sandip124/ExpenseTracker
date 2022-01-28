@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Entities;
 
-namespace ExpenseTracker.Web.Provider
+namespace ExpenseTracker.Web.Providers.Interface
 {
     public interface IUserProvider
     {

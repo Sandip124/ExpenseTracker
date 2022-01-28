@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Infrastructure.Middleware;
-using ExpenseTracker.Web.Provider;
+using ExpenseTracker.Web.Providers;
+using ExpenseTracker.Web.Providers.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -16,14 +16,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
     {
         private const string WorkspaceCreateUrl = "/Workspace/Create";
         private const string LoginUrl = "/Account/Login";
-        
 
-        private static readonly List<string> PathsToAvoid = new()
-        {
-            LoginUrl,
-            WorkspaceCreateUrl
-        };
-        
         private readonly Options _options;
         private readonly RequestDelegate _next;
         public WorkspaceMiddleware(RequestDelegate next,IOptions<Options> options)
@@ -42,14 +35,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
             if ( currentUserId > 0 && IgnorePath(currentRequestPath,_options))
             {
                 var hasDefaultWorkspace = await workspaceRepository.HasDefaultWorkspace(currentUserId);
-                if (!hasDefaultWorkspace)
-                {
-                    httpContext.Response.Redirect(WorkspaceCreateUrl);
-                }
-                else
-                {
-                    httpContext.Response.Redirect(LoginUrl);
-                }
+                httpContext.Response.Redirect(!hasDefaultWorkspace ? WorkspaceCreateUrl : LoginUrl);
             }
 
             await _next.Invoke(httpContext);
@@ -58,7 +44,9 @@ namespace ExpenseTracker.Infrastructure.Middleware
         
         private static bool IgnorePath(PathString path, Options options)
         {
-            return options.IgnorePatterns.Any(ignorePattern => Regex.IsMatch(path, ignorePattern, RegexOptions.Compiled | RegexOptions.IgnoreCase));
+            return options.IgnorePatterns.Any(ignorePattern => Regex.IsMatch(path,
+                ignorePattern,
+                RegexOptions.Compiled | RegexOptions.IgnoreCase));
         }
 
         public class Options

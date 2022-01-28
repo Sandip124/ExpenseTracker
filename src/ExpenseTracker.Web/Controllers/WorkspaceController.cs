@@ -1,11 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using ExpenseTracker.Core.Dto.Workspace;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
-using ExpenseTracker.Web.Provider;
+using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels.Workspace;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,20 +17,24 @@ namespace ExpenseTracker.Web.Controllers
         private readonly IWorkspaceService _workspaceService;
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IUserProvider _userProvider;
+        private readonly INotyfService _notifyService;
 
-        public WorkspaceController(IWorkspaceService workspaceService,IWorkspaceRepository workspaceRepository,IUserProvider userProvider)
+        public WorkspaceController(IWorkspaceService workspaceService,
+            IWorkspaceRepository workspaceRepository,
+            IUserProvider userProvider,INotyfService notifyService)
         {
             _workspaceService = workspaceService;
             _workspaceRepository = workspaceRepository;
             _userProvider = userProvider;
+            _notifyService = notifyService;
         }
         // GET
-        public async Task<IActionResult> Index(string name)
+        public async Task<IActionResult> Index()
         {
             var currentUser = await _userProvider.GetCurrentUser();
             var workspaceViewModel = new WorkspaceIndexViewModel
             {
-                Workspaces = await _workspaceRepository.GetActiveWorkspaces(currentUser.UserId).ConfigureAwait(true)
+                Workspaces = await _workspaceRepository.GetActiveWorkspaces(currentUser.UserId)
             };
             return View(workspaceViewModel);
         }
@@ -57,11 +62,11 @@ namespace ExpenseTracker.Web.Controllers
                     WorkspaceType = WorkspaceType.Personal
                 };
                 
-                await _workspaceService.Create(workspaceDto).ConfigureAwait(true);
+                await _workspaceService.Create(workspaceDto);
                 
                 HttpContext?.Session.SetDefaultWorkspace(currentUser.DefaultWorkspace.Token);
 
-                this.AddSuccessMessage("Workspace Created Successfully.");
+                _notifyService.Success("Workspace Created Successfully.");
             }
             catch (Exception e)
             {
@@ -75,9 +80,9 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                await _workspaceService.ChangeDefault(workspaceToken).ConfigureAwait(true);
+                await _workspaceService.ChangeDefault(workspaceToken);
             
-                this.AddSuccessMessage("Workspace Changed Successfully");
+                _notifyService.Success("Workspace Changed Successfully");
             }
             catch (Exception e)
             {

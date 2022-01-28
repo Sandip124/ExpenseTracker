@@ -11,21 +11,16 @@
     
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true"/>
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css" asp-append-version="true">
-
-    @await RenderSectionAsync("Styles", required: false).ConfigureAwait(true)
+    @await RenderSectionAsync("Styles", false)
   </head>
   <body class="antialiased">
    @RenderBody()
     <!-- Libs JS -->
   <script src="~/dist/js/tabler.min.js" asp-append-version="true"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js" asp-append-version="true"></script>
-  
-  <script src="~/js/Helper/NotifyHelper.js" asp-append-version="true"></script>
-  @await Component.InvokeAsync("Notify").ConfigureAwait(true)
   <!--    Section Scripts-->
-  @await RenderSectionAsync("Scripts", required: false).ConfigureAwait(true)
+   @await Component.InvokeAsync("Notyf")
+
+  @await RenderSectionAsync("Scripts", false)
   
   @await RenderSectionAsync("_ValidationScriptsPartial",false)
 
