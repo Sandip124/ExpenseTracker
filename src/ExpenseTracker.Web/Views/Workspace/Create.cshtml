@@ -1,81 +1,66 @@
+@model ExpenseTracker.Web.ViewModels.Workspace.WorkspaceViewModel
 @{
     ViewData["Title"] = "Workspace";
     Layout = "_LayoutSecondary";
 }
-@model ExpenseTracker.Web.ViewModels.Workspace.WorkspaceViewModel
 
-@{
-    ViewData["Title"] = "Home Page";
-}
-
-<!--TODO: To render a component from a page or view, use the Component Tag Helper -->
-<component type="typeof(PersonViewModel)" render-mode="ServerPrerendered"
-           param-APerson="Model" />
-
-@section scripts {
-    <!--TODO: Add a reference to blazor.server.js-->
-    <script src="_framework/blazor.server.js"></script>
-}
-
-
-@* *@
-@* <div class="page page-center"> *@
-@*     <div class="container-tight py-4"> *@
-@*         <div class="text-center mb-4"> *@
-@*             <a href="."> *@
-@*                 <img src="~/static/expense-tracker-logo.svg" height="36" alt=""> *@
-@*             </a> *@
-@*         </div> *@
-@*         <form asp-action="Create" asp-controller="Workspace"> *@
-@*         <div class="card card-md"> *@
-@*             <div class="card-body text-center py-4 p-sm-5"> *@
-@*                 <img src="~/static/illustrations/undraw_sign_in_e6hj.svg" height="128" class="mb-n2" height="120" alt=""> *@
-@*                 <h1 class="mt-5">Welcome to Expense Tracker!</h1> *@
-@*                 <p class="text-muted">All you need is a workspace to get started.</p> *@
-@*             </div> *@
-@*             <div class="hr-text hr-text-center hr-text-spaceless">Workspace</div> *@
-@*             <div class="card-body"> *@
-@*                 <div class="mb-3"> *@
-@*                     <label class="form-label" asp-for="WorkspaceName"></label> *@
-@*                     <div class="input-group input-group-flat"> *@
-@*                         <span class="input-group-text"> *@
-@*                             @@ *@
-@*                         </span> *@
-@*                         <input asp-for="WorkspaceName" class="form-control ps-1" autocomplete="off"> *@
-@*                     </div> *@
-@*                     <div class="form-hint">Choose a Name that describes you or your business in a concise way. Make it short and easy to remember.</div> *@
-@*                 </div> *@
-@*                 <div class="mb-3"> *@
-@*                     @Html.LabelFor(a => a.Color, new { @class = "form-label col-3 col-form-label" }) *@
-@*                     <div class="row g-2"> *@
-@*                     @foreach (var color in Model.ColorList) *@
-@*                     { *@
-@*                         <div class="col-auto"> *@
-@*                             <label class="form-colorinput" title="@color.Key"> *@
-@*                                 <input asp-for="Color" type="radio" value="@color.Value" class="form-colorinput-input" data-com.bitwarden.browser.user-edited="yes"> *@
-@*                                 <span class="form-colorinput-color bg-@color.Key.ToLowerInvariant()"></span> *@
-@*                             </label> *@
-@*                         </div> *@
-@*                     } *@
-@*                     </div> *@
-@*                 </div> *@
-@*                 <div class="mb-3"> *@
-@*                     <label class="form-label" asp-for="Description"> Description (Optional)</label> *@
-@*                     <div class="input-group input-group-flat"> *@
-@*                         <textarea asp-for="WorkspaceName" class="form-control ps-1" autocomplete="off"></textarea> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*         <div class="row align-items-center mt-3"> *@
-@*             <div class="col"> *@
-@*                 <div class="btn-list justify-content-end"> *@
-@*                     <button type="submit" class="btn btn-primary"> *@
-@*                         Continue *@
-@*                     </button> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*         </form> *@
-@*     </div> *@
-@* </div> *@
+<div class="page page-center">
+    <div class="container-tight py-4">
+        <div class="text-center mb-4">
+            <a href=".">
+                <img src="~/static/expense-tracker-logo.svg" height="36" alt="">
+            </a>
+        </div>
+        <form asp-action="Create" asp-controller="Workspace">
+        <div class="card card-md">
+            <div class="card-body text-center py-4 p-sm-5">
+                <img src="~/static/illustrations/undraw_sign_in_e6hj.svg" height="128" class="mb-n2" height="120" alt="">
+                <h1 class="mt-5">Welcome to Expense Tracker!</h1>
+                <p class="text-muted">All you need is a workspace to get started.</p>
+            </div>
+            <div class="hr-text hr-text-center hr-text-spaceless">Workspace</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label" asp-for="WorkspaceName"></label>
+                    <div class="input-group input-group-flat">
+                        <span class="input-group-text">
+                            @@
+                        </span>
+                        <input asp-for="WorkspaceName" class="form-control ps-1" autocomplete="off">
+                    </div>
+                    <div class="form-hint">Choose a Name that describes you or your business in a concise way. Make it short and easy to remember.</div>
+                </div>
+                <div class="mb-3">
+                    @Html.LabelFor(a => a.Color, new { @class = "form-label col-3 col-form-label" })
+                    <div class="row g-2">
+                    @foreach (var color in Model.ColorList)
+                    {
+                        <div class="col-auto">
+                            <label class="form-colorinput" title="@color.Key">
+                                <input asp-for="Color" type="radio" value="@color.Value" class="form-colorinput-input" data-com.bitwarden.browser.user-edited="yes">
+                                <span class="form-colorinput-color bg-@color.Key.ToLowerInvariant()"></span>
+                            </label>
+                        </div>
+                    }
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" asp-for="Description"> Description (Optional)</label>
+                    <div class="input-group input-group-flat">
+                        <textarea asp-for="WorkspaceName" class="form-control ps-1" autocomplete="off"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center mt-3">
+            <div class="col">
+                <div class="btn-list justify-content-end">
+                    <button type="submit" class="btn btn-primary">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
