@@ -73,11 +73,22 @@ namespace ExpenseTracker.Core.Services
             var userWorkspaces =  _workspaceRepository
                 .GetPredicatedQueryable(a => a.UserId == selectedWorkspace.UserId).ToList();
 
-            foreach (var workspace in userWorkspaces.Except(new List<Workspace> {selectedWorkspace}))
+            foreach (var workspace in userWorkspaces)
             {
-                workspace.RemoveDefault();
+                if (workspace.Token == selectedWorkspace.Token)
+                {
+                    workspace.SetDefault();
+                }
+                else
+                {
+                    workspace.RemoveDefault();
+                }
+                
+                await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
+
             }
-            selectedWorkspace.SetDefault();
+            
+
             tx.Complete();
         }
     }
