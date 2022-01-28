@@ -32,7 +32,7 @@ namespace ExpenseTracker.Infrastructure.Middleware
 
             var currentUserId = userProvider.GetCurrentUserId();
 
-            if ( currentUserId > 0 && IgnorePath(currentRequestPath,_options))
+            if ( currentUserId <= 0 && IgnorePath(currentRequestPath,_options))
             {
                 var hasDefaultWorkspace = await workspaceRepository.HasDefaultWorkspace(currentUserId);
                 httpContext.Response.Redirect(!hasDefaultWorkspace ? WorkspaceCreateUrl : LoginUrl);
