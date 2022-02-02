@@ -13,6 +13,7 @@ namespace ExpenseTracker.Web.Middleware
     {
         private const string OnBoardingWorkspaceUrl = "/OnBoarding/Workspace";
         private const string LoginUrl = "/Account/Login";
+        private const string HomeUrl = "/Home/Index";
 
         private readonly Options _options;
         private readonly RequestDelegate _next;
@@ -32,7 +33,9 @@ namespace ExpenseTracker.Web.Middleware
             if ( currentUserId > 0 && IgnorePath(currentRequestPath,_options))
             {
                 var hasDefaultWorkspace = await workspaceRepository.HasDefaultWorkspace(currentUserId);
-                httpContext.Response.Redirect(!hasDefaultWorkspace ? OnBoardingWorkspaceUrl : LoginUrl);
+                if (!hasDefaultWorkspace) httpContext.Response.Redirect(OnBoardingWorkspaceUrl);
+                else if (currentRequestPath == LoginUrl) httpContext.Response.Redirect(HomeUrl);
+                else httpContext.Response.Redirect(LoginUrl);
             }
 
             await _next.Invoke(httpContext);
