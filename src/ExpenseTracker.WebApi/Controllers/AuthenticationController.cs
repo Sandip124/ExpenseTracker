@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using ExpenseTracker.Contracts.Dto.Request;
-using ExpenseTracker.Core.Dto;
 using ExpenseTracker.Core.Logging;
 using ExpenseTracker.Core.Services.Interface;
 using Microsoft.AspNetCore.Authentication;

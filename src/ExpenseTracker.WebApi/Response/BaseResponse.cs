@@ -1,10 +1,6 @@
-namespace ExpenseTracker.WebApi;
-
-public abstract class BaseResponse : BaseMessage
+namespace ExpenseTracker.WebApi.Response
 {
-    public BaseResponse()
+    public abstract class BaseResponse : BaseMessage
     {
     }
-
-
 }

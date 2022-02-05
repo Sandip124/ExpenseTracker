@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using ExpenseTracker.Contracts.Dto.Response;
 
-namespace ExpenseTracker.WebApi.Response;
-
-public class TransactionCategoryResponse : BaseResponse
+namespace ExpenseTracker.WebApi.Response
 {
-    public List<TransactionCategoryResponseDto> Categories { get; set; } = new();
+    public class TransactionCategoryResponse : BaseResponse
+    {
+        public List<TransactionCategoryResponseDto> Categories { get; set; } = new();
+    }
 }
+

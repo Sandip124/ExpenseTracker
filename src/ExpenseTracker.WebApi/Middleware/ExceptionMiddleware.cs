@@ -1,9 +1,14 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
+using System.Threading.Tasks;
 using ExpenseTracker.WebApi.Response;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
-namespace ExpenseTracker.WebApi.Middleware;
-
+namespace ExpenseTracker.WebApi.Middleware
+{
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
@@ -59,4 +64,5 @@ public class ExceptionMiddleware
         await context.Response.WriteAsync(result);
     }
 
+}
 }
