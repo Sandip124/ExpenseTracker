@@ -1,13 +1,14 @@
-using System.Threading.Tasks;
+using ExpenseTracker.Contracts.Dto.Response;
 using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.WebApi.Response;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpenseTracker.Web.Controllers.Api
+namespace ExpenseTracker.WebApi.Controllers
 {
     [ApiController]
     [Route("/api/transaction-categories/")]
-    public class TransactionCategoryApiController : ControllerBase
+    public class TransactionCategoryApiController : ApiControllerBase
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
 
@@ -26,7 +27,19 @@ namespace ExpenseTracker.Web.Controllers.Api
 
             var transactionCategories = await _transactionCategoryRepository.GetByType(type);
 
-            return Ok(transactionCategories);
+            var transactionCategoryResponse = new TransactionCategoryResponse()
+            {
+                Categories = transactionCategories.Select(a => new TransactionCategoryResponseDto()
+                {
+                    Id = a.Id,
+                    CategoryName = a.CategoryName,
+                    Type = a.Type,
+                    Icon = a.Icon,
+                    Color = a.Color
+                }).ToList()
+            };
+            
+            return Ok(transactionCategoryResponse);
         }
     }
 }

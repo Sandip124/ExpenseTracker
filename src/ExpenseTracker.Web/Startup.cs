@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using AspNetCoreHero.ToastNotification;
+using ExpenseTracker.Infrastructure.Configurations;
 using ExpenseTracker.Infrastructure.Data;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Middleware;
@@ -35,70 +36,18 @@ namespace ExpenseTracker.Web
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseMySQL(Configuration.GetConnectionString("Default")).EnableDetailedErrors();
+                options.UseMySQL(Configuration.GetConnection()).EnableDetailedErrors();
             });
 
-            services.Configure<CookiePolicyOptions>(
-                options =>
-                {
-                    options.CheckConsentNeeded = context => true;
-                    options.MinimumSameSitePolicy = SameSiteMode.None;
-                }
-            );
+            services.AddCookiePolicyConfiguration();
 
             services.Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
-
-
-            var key = Encoding.ASCII.GetBytes(Configuration.GetSecret());
-
-            services.AddAuthentication(
-                    x =>
-                    {
-                        x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                        x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    }
-                ).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
-                    x =>
-                    {
-                        x.RequireHttpsMetadata = false;
-                        x.SaveToken = true;
-                        x.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(key),
-                            ValidateIssuer = false,
-                            ValidateAudience = false
-                        };
-                    }
-                );
-
-            services.AddAuthorization(
-                options =>
-                {
-                    var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
-                        JwtBearerDefaults.AuthenticationScheme,
-                        CookieAuthenticationDefaults.AuthenticationScheme
-                    );
-                    defaultAuthorizationPolicyBuilder =
-                        defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
-                    options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-                }
-            );
+            
+            services.AddCookieAuthenticationConfiguration(Configuration.GetSecret());
 
             services.AddControllersWithViews();
 
-            services.AddSession(
-                options =>
-                {
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.IdleTimeout = TimeSpan.FromMinutes(3);
-                }
-            );
+            services.AddSessionConfiguration();
 
             services.AddMvc().AddJsonOptions(options =>
                 {
@@ -130,8 +79,7 @@ namespace ExpenseTracker.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-
+            
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

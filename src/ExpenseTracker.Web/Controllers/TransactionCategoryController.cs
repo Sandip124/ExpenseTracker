@@ -3,13 +3,12 @@ using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Exceptions;
+using ExpenseTracker.Core.Logging;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
-using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.ViewModels.TransactionCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace ExpenseTracker.Web.Controllers
 {
@@ -18,12 +17,12 @@ namespace ExpenseTracker.Web.Controllers
     {
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly ITransactionCategoryService _transactionCategoryService;
-        private readonly ILogger<TransactionCategoryController> _logger;
+        private readonly IApplicationLogger<TransactionCategoryController> _logger;
         private readonly INotyfService _notifyService;
 
         public TransactionCategoryController(ITransactionCategoryRepository transactionCategoryRepository,
             ITransactionCategoryService transactionCategoryService,
-            ILogger<TransactionCategoryController> logger,INotyfService notifyService)
+            IApplicationLogger<TransactionCategoryController> logger,INotyfService notifyService)
         {
             _transactionCategoryRepository = transactionCategoryRepository;
             _transactionCategoryService = transactionCategoryService;
@@ -67,8 +66,8 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
-                this.AddErrorMessage(e.Message);
+                _logger.LogError(e.Message,e);
+                _notifyService.Error(e.Message);
             }
             return RedirectToAction(nameof(Index));
 
@@ -94,8 +93,8 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
-                this.AddErrorMessage(e.Message);
+                _logger.LogError(e.Message,e);
+                _notifyService.Error(e.Message);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -121,8 +120,8 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
-                this.AddErrorMessage(e.Message);
+                _logger.LogError(e.Message,e);
+                _notifyService.Error(e.Message);
             }
             return RedirectToAction(nameof(Index));
         }
@@ -140,8 +139,8 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.Message);
-                this.AddErrorMessage(e.Message);
+                _logger.LogError(e.Message,e);
+                _notifyService.Error(e.Message);
             }
             return RedirectToAction(nameof(Index));
         }

@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace ExpenseTracker.Core.Exceptions
 {
     [Serializable]
-    public class InvalidTransactionAmountException : Exception
+    public class InvalidTransactionAmountException : ApplicationException
     {
         public InvalidTransactionAmountException() : base("Invalid Transaction Amount.")
         {

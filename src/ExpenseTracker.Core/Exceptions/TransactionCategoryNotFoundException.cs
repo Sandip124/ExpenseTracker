@@ -2,7 +2,7 @@ using System;
 
 namespace ExpenseTracker.Core.Exceptions
 {
-    public class TransactionCategoryNotFoundException: Exception
+    public class TransactionCategoryNotFoundException: ApplicationException
     {
         public TransactionCategoryNotFoundException(): base("Transaction Category Not Found.")
         {

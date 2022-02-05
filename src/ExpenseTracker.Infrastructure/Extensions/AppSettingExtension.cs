@@ -9,6 +9,11 @@ namespace ExpenseTracker.Infrastructure.Extensions
         private const string AppSettingSection = "AppSettings";
         private const string Secret = "Secret";
 
+        
+        public static string GetConnection(this IConfiguration configuration,string key = "Default")
+        {
+            return configuration.GetConnectionString(key);
+        }
         public static IConfigurationSection GetAppSettingSection(this IConfiguration configuration)
         {
             return configuration.GetSection(AppSettingSection);

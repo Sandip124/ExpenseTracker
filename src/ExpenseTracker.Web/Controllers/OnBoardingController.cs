@@ -56,7 +56,7 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                this.AddErrorMessage(e.Message);
+                _notifyService.Error(e.Message);
             }
             
             return RedirectToAction(nameof(Index),"Home");

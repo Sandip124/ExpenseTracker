@@ -2,7 +2,7 @@ using System;
 
 namespace ExpenseTracker.Core.Exceptions
 {
-    public class WorkspaceNotFoundException : Exception
+    public class WorkspaceNotFoundException : ApplicationException
     {
         public WorkspaceNotFoundException() : base("Workspace not found.")
         {

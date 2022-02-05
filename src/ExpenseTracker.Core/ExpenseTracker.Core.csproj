@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -11,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ExpenseTracker.Common\ExpenseTracker.Common.csproj" />
+      <ProjectReference Include="..\ExpenseTracker.Contracts\ExpenseTracker.Contracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

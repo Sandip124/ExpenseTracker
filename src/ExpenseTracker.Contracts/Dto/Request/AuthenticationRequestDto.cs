@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ExpenseTracker.Core.Dto
+namespace ExpenseTracker.Contracts.Dto.Request
 {
-    public class AuthenticateRequestDto
+    public class AuthenticationRequestDto
     {
         [Required]
-        
         public string Username { get; set; }
 
         [Required]
@@ -13,6 +12,6 @@ namespace ExpenseTracker.Core.Dto
 
         public bool RememberMe { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
     }
 }

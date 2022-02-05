@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace ExpenseTracker.Core.Exceptions
 {
     [Serializable]
-    public class TransactionNotFoundException : Exception
+    public class TransactionNotFoundException : ApplicationException
     {
         public TransactionNotFoundException() : base("Transaction not found.")
         {

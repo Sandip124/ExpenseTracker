@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Core.Repositories.Interface;
-using ExpenseTracker.Infrastructure.Extensions;
-using ExpenseTracker.Web.Providers;
 using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels.Report;
 using Microsoft.AspNetCore.Authorization;

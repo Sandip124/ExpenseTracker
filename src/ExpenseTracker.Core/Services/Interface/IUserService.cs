@@ -1,10 +1,10 @@
-using AuthenticateRequestDto = ExpenseTracker.Core.Dto.AuthenticateRequestDto;
-using AuthenticateResponseDto = ExpenseTracker.Core.Dto.AuthenticateResponseDto;
+using ExpenseTracker.Contracts.Dto.Request;
+using ExpenseTracker.Contracts.Dto.Response;
 
 namespace ExpenseTracker.Core.Services.Interface
 {
     public interface IUserService
     {
-        AuthenticateResponseDto Authenticate(AuthenticateRequestDto authenticateRequestDto);
+        AuthenticationResponseDto Authenticate(AuthenticationRequestDto authenticateRequestDto);
     }
 }

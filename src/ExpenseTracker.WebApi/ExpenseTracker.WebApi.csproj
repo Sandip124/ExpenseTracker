@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Serilog" Version="2.10.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ExpenseTracker.Common\ExpenseTracker.Common.csproj" />
+      <ProjectReference Include="..\ExpenseTracker.Contracts\ExpenseTracker.Contracts.csproj" />
+      <ProjectReference Include="..\ExpenseTracker.Core\ExpenseTracker.Core.csproj" />
+      <ProjectReference Include="..\ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj" />
+      <ProjectReference Include="..\ExpenseTracker.Web\ExpenseTracker.Web.csproj" />
+    </ItemGroup>
+
+</Project>

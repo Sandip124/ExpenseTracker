@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ExpenseTracker.Core.Dto.Workspace;
 using ExpenseTracker.Core.Entities.Common;
+using ExpenseTracker.Core.Logging;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
@@ -18,15 +19,18 @@ namespace ExpenseTracker.Web.Controllers
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IUserProvider _userProvider;
         private readonly INotyfService _notifyService;
+        private readonly IApplicationLogger<WorkspaceController> _logger;
 
         public WorkspaceController(IWorkspaceService workspaceService,
             IWorkspaceRepository workspaceRepository,
-            IUserProvider userProvider,INotyfService notifyService)
+            IUserProvider userProvider,INotyfService notifyService,
+            IApplicationLogger<WorkspaceController> logger)
         {
             _workspaceService = workspaceService;
             _workspaceRepository = workspaceRepository;
             _userProvider = userProvider;
             _notifyService = notifyService;
+            _logger = logger;
         }
         // GET
         public async Task<IActionResult> Index()
@@ -70,7 +74,8 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                this.AddErrorMessage(e.Message);
+                _logger.LogError(e.Message,e);
+                _notifyService.Error(e.Message);
             }
             
             return RedirectToAction(nameof(Index),"Home");
@@ -82,11 +87,12 @@ namespace ExpenseTracker.Web.Controllers
             {
                 await _workspaceService.ChangeDefault(workspaceToken);
             
-                _notifyService.Success("Workspace Changed Successfully");
+                _notifyService.Success("Workspace Changed Successfully.");
             }
             catch (Exception e)
             {
-                this.AddErrorMessage(e.Message);
+                _logger.LogError(e.Message,e);
+                _notifyService.Error(e.Message);
             }
 
             return LocalRedirectPreserveMethod(redirectUrl);

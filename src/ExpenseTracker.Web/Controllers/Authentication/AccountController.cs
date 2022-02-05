@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ExpenseTracker.Contracts.Dto.Request;
 using ExpenseTracker.Core.Dto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -13,7 +14,7 @@ namespace ExpenseTracker.Web.Controllers.Authentication
        
         public IActionResult Login(string returnUrl = "/")
         {
-            var authenticationResponseDto = new AuthenticateRequestDto
+            var authenticationResponseDto = new AuthenticationRequestDto
             {
                 ReturnUrl = returnUrl
             };

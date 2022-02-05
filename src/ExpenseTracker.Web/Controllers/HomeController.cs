@@ -2,16 +2,13 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCoreHero.ToastNotification.Abstractions;
-using AspNetCoreHero.ToastNotification.Notyf;
+using ExpenseTracker.Core.Logging;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Web.Models;
-using ExpenseTracker.Web.Providers;
 using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace ExpenseTracker.Web.Controllers
 {
@@ -20,12 +17,12 @@ namespace ExpenseTracker.Web.Controllers
     {
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
-        private readonly ILogger<HomeController> _logger;
+        private readonly IApplicationLogger<HomeController> _logger;
         private readonly IUserProvider _userProvider;
 
         public HomeController(ITransactionRepository transactionRepository,
             ITransactionCategoryRepository transactionCategoryRepository,
-            ILogger<HomeController> logger,IUserProvider userProvider)
+            IApplicationLogger<HomeController> logger,IUserProvider userProvider)
         {
             _transactionRepository = transactionRepository;
             _transactionCategoryRepository = transactionCategoryRepository;
@@ -56,7 +53,7 @@ namespace ExpenseTracker.Web.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e,e.ToString());
+                _logger.LogError(e.Message,e);
                 return RedirectToAction(nameof(Index));
             }
         }

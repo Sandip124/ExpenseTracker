@@ -3,7 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using ExpenseTracker.Core.Dto;
+using ExpenseTracker.Contracts.Dto.Request;
+using ExpenseTracker.Contracts.Dto.Response;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
@@ -24,7 +25,7 @@ namespace ExpenseTracker.Infrastructure.Services
             _userRepository = userRepository;
         }
 
-        public AuthenticateResponseDto Authenticate(AuthenticateRequestDto model)
+        public AuthenticationResponseDto Authenticate(AuthenticationRequestDto model)
         {
             var user = _userRepository.GetQueryable().SingleOrDefault(x => x.Username == model.Username);
 
@@ -32,8 +33,10 @@ namespace ExpenseTracker.Infrastructure.Services
 
             var token = GenerateJwtToken(user);
 
-            return new AuthenticateResponseDto(user, token)
+            return new AuthenticationResponseDto(user.UserId,user.Username, token)
             {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
                 RememberMe = model.RememberMe,
                 ReturnUrl = model.ReturnUrl
             };
