@@ -1,10 +1,10 @@
 using System;
-using System.Runtime.Serialization;
+using ExpenseTracker.Core.Exceptions.BaseException;
 
 namespace ExpenseTracker.Core.Exceptions
 {
     [Serializable]
-    public class TransactionNotFoundException : ApplicationException
+    public class TransactionNotFoundException : ApplicationExceptionBase
     {
         public TransactionNotFoundException() : base("Transaction not found.")
         {

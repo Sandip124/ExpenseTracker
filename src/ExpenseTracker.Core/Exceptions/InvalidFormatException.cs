@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ExpenseTracker.Core.Exceptions.BaseException;
 
 namespace ExpenseTracker.Core.Exceptions
 {
-     public class InvalidFormatException : ApplicationException
+     public class InvalidFormatException : ApplicationExceptionBase
     {
         public InvalidFormatException(string message = "Invalid File Format") : base(message)
         {

@@ -1,8 +1,8 @@
-using System;
+using ExpenseTracker.Core.Exceptions.BaseException;
 
 namespace ExpenseTracker.Core.Exceptions
 {
-    public class TransactionCategoryNotFoundException: ApplicationException
+    public class TransactionCategoryNotFoundException: ApplicationExceptionBase
     {
         public TransactionCategoryNotFoundException(): base("Transaction Category Not Found.")
         {

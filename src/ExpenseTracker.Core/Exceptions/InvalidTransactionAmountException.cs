@@ -1,26 +1,16 @@
 using System;
-using System.Runtime.Serialization;
+using ExpenseTracker.Core.Exceptions.BaseException;
 
 namespace ExpenseTracker.Core.Exceptions
 {
     [Serializable]
-    public class InvalidTransactionAmountException : ApplicationException
+    public class InvalidTransactionAmountException : ApplicationExceptionBase
     {
         public InvalidTransactionAmountException() : base("Invalid Transaction Amount.")
         {
         }
 
         public InvalidTransactionAmountException(string message) : base(message)
-        {
-        }
-
-        public InvalidTransactionAmountException(string message, Exception inner) : base(message, inner)
-        {
-        }
-
-        protected InvalidTransactionAmountException(
-            SerializationInfo info,
-            StreamingContext context) : base(info, context)
         {
         }
     }

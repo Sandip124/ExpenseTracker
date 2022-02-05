@@ -1,8 +1,9 @@
 using System;
+using ExpenseTracker.Core.Exceptions.BaseException;
 
 namespace ExpenseTracker.Core.Exceptions
 {
-    public class WorkspaceNotFoundException : ApplicationException
+    public class WorkspaceNotFoundException : ApplicationExceptionBase
     {
         public WorkspaceNotFoundException() : base("Workspace not found.")
         {
