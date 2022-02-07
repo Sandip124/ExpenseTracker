@@ -1,5 +1,4 @@
 @model ExpenseTracker.Contracts.Dto.Request.AuthenticationRequestDto
-
 @{
   ViewData["Title"] = "Login";
   Layout = "_LayoutSecondary";
@@ -87,7 +86,7 @@
               };
   
               $.ajax({
-                  url: "@Url.ActionLink("JwtLogin","Authentication")",
+                  url: "/api/authentication/login",
                   type: "POST",
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
@@ -98,7 +97,7 @@
                   },
                   error: function (errorResponse) {
                   console.log(errorResponse)
-                    notifyError(errorResponse.responseText);
+                    toastNotifyError(errorResponse.responseText);
                   }
               });
   })  
