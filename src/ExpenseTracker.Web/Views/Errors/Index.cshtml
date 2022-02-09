@@ -1,0 +1,23 @@
+@using Microsoft.AspNetCore.Http
+@model ErrorViewModel
+@{
+    Layout = null;
+}
+@if (Model.StatusCode == StatusCodes.Status404NotFound)
+{
+    <h1>Not Found</h1>
+}else if (Model.StatusCode == StatusCodes.Status401Unauthorized)
+{
+    <h1>Un Authorized</h1>
+}else if (Model.StatusCode == StatusCodes.Status403Forbidden)
+{
+    <h1>Forbidden</h1>
+}else if (Model.StatusCode == StatusCodes.Status500InternalServerError)
+{
+    <h1>Internal Server Errir</h1>
+}else if (Model.StatusCode == StatusCodes.Status204NoContent)
+{
+    <h1>No Content</h1>
+}
+
+
