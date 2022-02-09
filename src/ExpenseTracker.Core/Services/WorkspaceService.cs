@@ -32,6 +32,7 @@ namespace ExpenseTracker.Core.Services
             if (!user.HasWorkspace) workspace.SetDefault();
 
             await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
+            await _workspaceRepository.CommitAsync().ConfigureAwait(false);
 
             tx.Complete();
         }
@@ -49,6 +50,7 @@ namespace ExpenseTracker.Core.Services
             workspace.Description = workspaceUpdateDto.Description;
 
             await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
+            await _workspaceRepository.CommitAsync().ConfigureAwait(false);
             tx.Complete();
         }
 
@@ -60,6 +62,7 @@ namespace ExpenseTracker.Core.Services
                             throw new WorkspaceNotFoundException();
 
             await _workspaceRepository.DeleteAsync(workspace).ConfigureAwait(false);
+            await _workspaceRepository.CommitAsync().ConfigureAwait(false);
             tx.Complete();
         }
 
@@ -85,7 +88,7 @@ namespace ExpenseTracker.Core.Services
                 }
                 
                 await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
-
+                await _workspaceRepository.CommitAsync().ConfigureAwait(false);
             }
             
 
