@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace ExpenseTracker.Web.Controllers
         // GET
         public IActionResult Index()
         {
+            throw new ArgumentException();
             return View();
         }
     }
