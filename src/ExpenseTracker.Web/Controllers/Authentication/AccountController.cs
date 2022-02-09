@@ -1,12 +1,11 @@
 using System.Threading.Tasks;
 using ExpenseTracker.Contracts.Dto.Request;
-using ExpenseTracker.Core.Dto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpenseTracker.Web.Controllers.Authentication
+namespace ExpenseTracker.Web.Controllers.Api.Authentication
 {
     [AllowAnonymous]
     public class AccountController : Controller
