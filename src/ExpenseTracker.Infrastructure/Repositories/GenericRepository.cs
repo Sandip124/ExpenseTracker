@@ -24,19 +24,19 @@ namespace ExpenseTracker.Infrastructure.Repositories
         public Task DeleteAsync(T entities,CancellationToken cancellationToken = default)
         {
             _currentSession.Remove(entities);
-            return _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
         public async Task InsertAsync(T entities,CancellationToken cancellationToken = default)
         {
             await _currentSession.AddAsync(entities, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateAsync(T entities,CancellationToken cancellationToken = default)
+        public Task UpdateAsync(T entities,CancellationToken cancellationToken = default)
         {
             _currentSession.Update(entities);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.Entry(entities).State = EntityState.Modified;
+            return Task.CompletedTask;
         }
 
         public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -70,7 +70,10 @@ namespace ExpenseTracker.Infrastructure.Repositories
             return await GetPredicatedQueryable(predicate)
                 .CountAsync(cancellationToken)
                 .ConfigureAwait(false) != 0;
-            
+        }
+        public async Task CommitAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Pagination<T>> PaginateAsync(IQueryable<T> queryable, int page = 1, int limit = 50)

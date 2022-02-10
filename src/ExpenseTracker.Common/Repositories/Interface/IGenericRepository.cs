@@ -19,6 +19,7 @@ namespace ExpenseTracker.Common.Repositories.Interface
         IQueryable<T> GetQueryable();
         Task<T?> FindAsync(int id);
         Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate,CancellationToken cancellationToken = default);
+        Task CommitAsync();
         Task<Pagination<T>> PaginateAsync(IQueryable<T> queryable, int page = 1, int limit = 50);
     }
 }

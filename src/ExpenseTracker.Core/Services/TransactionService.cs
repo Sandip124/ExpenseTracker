@@ -40,6 +40,7 @@ namespace ExpenseTracker.Core.Services
             transaction.Description = transactionCreateDto.Description;
 
             await _transactionRepository.InsertAsync(transaction).ConfigureAwait(false);
+            await _transactionRepository.CommitAsync().ConfigureAwait(false);
             
             tx.Complete();
         }
@@ -54,7 +55,8 @@ namespace ExpenseTracker.Core.Services
             var transaction = await _transactionRepository.FindAsync(transactionId).ConfigureAwait(false) ?? throw new TransactionNotFoundException();
 
             await _transactionRepository.DeleteAsync(transaction).ConfigureAwait(false);
-            
+            await _transactionRepository.CommitAsync().ConfigureAwait(false);
+
             tx.Complete();
         }
 
@@ -70,7 +72,8 @@ namespace ExpenseTracker.Core.Services
             transaction.UpdateTransactionDate(transactionUpdateDto.TransactionDate);
 
             await _transactionRepository.UpdateAsync(transaction).ConfigureAwait(false);
-            
+            await _transactionRepository.CommitAsync().ConfigureAwait(false);
+
             tx.Complete();
         }
     }
