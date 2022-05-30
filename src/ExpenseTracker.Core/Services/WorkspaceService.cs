@@ -25,14 +25,14 @@ namespace ExpenseTracker.Core.Services
         {
             using var tx = TransactionScopeHelper.GetInstance();
             
-            var user = await _userRepository.FindAsync(workspaceCreateDto.UserId).ConfigureAwait(false) ?? throw new Exception("User not found exception");
+            var user = await _userRepository.FindAsync(workspaceCreateDto.UserId) ?? throw new Exception("User not found exception");
             
             var workspace = Workspace.Create(workspaceCreateDto.WorkspaceType,user,workspaceCreateDto.Name,workspaceCreateDto.Color);
             
             if (!user.HasWorkspace) workspace.SetDefault();
 
-            await _workspaceRepository.InsertAsync(workspace).ConfigureAwait(false);
-            await _workspaceRepository.CommitAsync().ConfigureAwait(false);
+            await _workspaceRepository.InsertAsync(workspace);
+            await _workspaceRepository.CommitAsync();
 
             tx.Complete();
         }
@@ -42,15 +42,15 @@ namespace ExpenseTracker.Core.Services
             using var tx = TransactionScopeHelper.GetInstance();
 
             var workspace = await _workspaceRepository.FindAsync(workspaceUpdateDto.WorkspaceId)
-                                .ConfigureAwait(false) ??
+                                 ??
                             throw new WorkspaceNotFoundException();
                 
             workspace.UpdateName(workspaceUpdateDto.Name);
             workspace.UpdateColor(workspaceUpdateDto.Color);
             workspace.Description = workspaceUpdateDto.Description;
 
-            await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
-            await _workspaceRepository.CommitAsync().ConfigureAwait(false);
+            await _workspaceRepository.UpdateAsync(workspace);
+            await _workspaceRepository.CommitAsync();
             tx.Complete();
         }
 
@@ -58,11 +58,11 @@ namespace ExpenseTracker.Core.Services
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var workspace = await _workspaceRepository.FindAsync(workspaceId).ConfigureAwait(false) ??
+            var workspace = await _workspaceRepository.FindAsync(workspaceId) ??
                             throw new WorkspaceNotFoundException();
 
-            await _workspaceRepository.DeleteAsync(workspace).ConfigureAwait(false);
-            await _workspaceRepository.CommitAsync().ConfigureAwait(false);
+            await _workspaceRepository.DeleteAsync(workspace);
+            await _workspaceRepository.CommitAsync();
             tx.Complete();
         }
 
@@ -70,7 +70,7 @@ namespace ExpenseTracker.Core.Services
         {
             using var tx = TransactionScopeHelper.GetInstance();
 
-            var selectedWorkspace = await _workspaceRepository.GetByToken(workspaceToken).ConfigureAwait(false) ??
+            var selectedWorkspace = await _workspaceRepository.GetByToken(workspaceToken) ??
                             throw new WorkspaceNotFoundException();
             
             var userWorkspaces =  _workspaceRepository
@@ -87,8 +87,8 @@ namespace ExpenseTracker.Core.Services
                     workspace.RemoveDefault();
                 }
                 
-                await _workspaceRepository.UpdateAsync(workspace).ConfigureAwait(false);
-                await _workspaceRepository.CommitAsync().ConfigureAwait(false);
+                await _workspaceRepository.UpdateAsync(workspace);
+                await _workspaceRepository.CommitAsync();
             }
             
 

@@ -22,8 +22,8 @@ namespace ExpenseTracker.Core.Services
 
             var transaction = TransactionCategory.Create(transactionCategoryCreateDto.Type,transactionCategoryCreateDto.Name, transactionCategoryCreateDto.Color,
                 transactionCategoryCreateDto.Icon);
-            await _transactionCategoryRepository.InsertAsync(transaction).ConfigureAwait(false);
-            await _transactionCategoryRepository.CommitAsync().ConfigureAwait(false);
+            await _transactionCategoryRepository.InsertAsync(transaction);
+            await _transactionCategoryRepository.CommitAsync();
             tx.Complete();
         }
 
@@ -33,14 +33,14 @@ namespace ExpenseTracker.Core.Services
 
             var transaction = await _transactionCategoryRepository
                                   .FindAsync(transactionCategoryUpdateDto.TransactionCategoryId)
-                                  .ConfigureAwait(false) ??
+                                   ??
                               throw new TransactionCategoryNotFoundException();
             transaction.UpdateName(transactionCategoryUpdateDto.Name);
             transaction.UpdateColor(transactionCategoryUpdateDto.Color);
             transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
 
-            await _transactionCategoryRepository.UpdateAsync(transaction).ConfigureAwait(false);
-            await _transactionCategoryRepository.CommitAsync().ConfigureAwait(false);
+            await _transactionCategoryRepository.UpdateAsync(transaction);
+            await _transactionCategoryRepository.CommitAsync();
             tx.Complete();
         }
 
@@ -49,11 +49,11 @@ namespace ExpenseTracker.Core.Services
             using var tx = TransactionScopeHelper.GetInstance();
             
             var transaction = await _transactionCategoryRepository.FindAsync(transactionCategoryId)
-                                  .ConfigureAwait(false) ??
+                                   ??
                               throw new TransactionCategoryNotFoundException();
 
-            await _transactionCategoryRepository.DeleteAsync(transaction).ConfigureAwait(false);
-            await _transactionCategoryRepository.CommitAsync().ConfigureAwait(false);
+            await _transactionCategoryRepository.DeleteAsync(transaction);
+            await _transactionCategoryRepository.CommitAsync();
             tx.Complete();
         }
     }

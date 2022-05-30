@@ -1,4 +1,4 @@
-using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Data
@@ -16,30 +16,10 @@ namespace ExpenseTracker.Infrastructure.Data
             base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<Workspace>()
-                .HasOne(s => s.User)
-                .WithMany(g => g.Workspaces)
-                .HasForeignKey(s => s.UserId);
-
-            modelBuilder.Entity<User>()
-                .HasMany(s => s.Workspaces);
-
-            modelBuilder.Entity<Transaction>()
-                .HasOne(s => s.TransactionCategory)
-                .WithMany(g => g.Transactions)
-                .HasForeignKey(s => s.TransactionCategoryId);
-
-            modelBuilder.Entity<TransactionCategory>()
-                .HasMany(s => s.Transactions);
-
-            modelBuilder.Entity<Transaction>()
-                .HasOne(s => s.Workspace);
-                
-                
-                
-            base.OnModelCreating(modelBuilder);
+            builder.AddCore();
+            base.OnModelCreating(builder);
         }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ExpenseTracker.Core.Entities.Common
+namespace ExpenseTracker.Core.Constants
 {
     public static class CategoryIcon
     {

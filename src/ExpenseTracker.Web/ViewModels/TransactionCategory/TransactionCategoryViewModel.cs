@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using ExpenseTracker.Core.Constants;
 using ExpenseTracker.Core.Entities.Common;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -17,7 +18,7 @@ namespace ExpenseTracker.Web.ViewModels.TransactionCategory
         [Display(Name = "Color")]
         public string Color { get; set; }
 
-        public readonly Dictionary<string, string> ColorList = Colors.GetColors;
+        public readonly List<Colors.Color> ColorList = Colors.GetColors;
 
 
         [Display(Name = "Icon")]

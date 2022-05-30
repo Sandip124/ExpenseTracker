@@ -3,8 +3,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using ExpenseTracker.Common.Helpers;
 using ExpenseTracker.Contracts.Dto.Request;
 using ExpenseTracker.Contracts.Dto.Response;
+using ExpenseTracker.Core.Dto;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
@@ -41,7 +44,19 @@ namespace ExpenseTracker.Infrastructure.Services
                 ReturnUrl = model.ReturnUrl
             };
         }
-        
+
+        public async Task CreateUser(UserDto userDto)
+        {
+            using var tx = TransactionScopeHelper.GetInstance();
+            var user = User.Create(userDto.UserName, userDto.Password);
+            user.FirstName = userDto.FirstName;
+            user.LastName = userDto.LastName;
+            
+            await _userRepository.InsertAsync(user);
+            await _userRepository.CommitAsync();
+            tx.Complete();
+        }
+
         private string GenerateJwtToken(User user)
         {
             var claims = new Claim[] {

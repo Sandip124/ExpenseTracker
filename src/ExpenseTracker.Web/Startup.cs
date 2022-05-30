@@ -38,7 +38,7 @@ namespace ExpenseTracker.Web
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseMySQL(Configuration.GetConnection()).EnableDetailedErrors();
+                options.UseNpgsql(Configuration.GetConnection()).EnableDetailedErrors();
             });
 
             services.AddCookiePolicyConfiguration();
@@ -66,8 +66,10 @@ namespace ExpenseTracker.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider,ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider,ILoggerFactory loggerFactory,AppDbContext appDbContext)
         {
+
+
             ServiceActivator.Configure(app.ApplicationServices);
 
             loggerFactory.AddSerilog();
@@ -89,6 +91,8 @@ namespace ExpenseTracker.Web
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            appDbContext.Database.Migrate();
+            
             app.UseStaticFiles();
 
             app.UseCookiePolicy();

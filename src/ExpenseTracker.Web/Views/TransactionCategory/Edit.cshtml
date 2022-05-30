@@ -1,5 +1,6 @@
 @using ExpenseTracker.Web.ViewModels.TransactionCategory
 @using ExpenseTracker.Core.Entities.Common
+@using ExpenseTracker.Core.Constants
 @model ExpenseTracker.Web.ViewModels.TransactionCategory.TransactionCategoryViewModel
 
 @{
@@ -81,9 +82,9 @@
                             @foreach (var color in Model.ColorList)
                             {
                                 <div class="col-auto">
-                                    <label class="form-colorinput" title="@color.Key">
-                                        <input asp-for="Color" type="radio" value="@color.Value" class="form-colorinput-input" data-com.bitwarden.browser.user-edited="yes">
-                                        <span class="form-colorinput-color bg-@color.Key.ToLowerInvariant()"></span>
+                                    <label class="form-colorinput" title="@color.name">
+                                        <input asp-for="Color" type="radio" value="@color.hexValue" class="form-colorinput-input" data-com.bitwarden.browser.user-edited="yes">
+                                        <span class="form-colorinput-color bg-@color.name.ToLowerInvariant()"></span>
                                     </label>
                                 </div>
                             }
