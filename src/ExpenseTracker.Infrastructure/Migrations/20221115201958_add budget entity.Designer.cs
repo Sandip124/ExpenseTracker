@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221115194543_add budget entity")]
+    [Migration("20221115201958_add budget entity")]
     partial class addbudgetentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,9 @@ namespace ExpenseTracker.Infrastructure.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("timestamp without time zone");

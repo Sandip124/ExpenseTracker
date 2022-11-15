@@ -19,6 +19,7 @@ namespace ExpenseTracker.Infrastructure.Migrations
                     ToDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     WorkspaceId1 = table.Column<int>(type: "integer", nullable: true),
                     WorkspaceId = table.Column<long>(type: "bigint", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     RecByUserId = table.Column<int>(type: "integer", nullable: true),
                     RecById = table.Column<long>(type: "bigint", nullable: false)
                 },
