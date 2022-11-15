@@ -51,9 +51,15 @@ namespace ExpenseTracker.Web.Controllers
             return View(vm);
         }
 
-        public async Task<IActionResult> SetBudget()
+        public IActionResult SetBudget()
         {
-            return View();
+            var (firstDay, lastDay) = DateTime.Now.GetDateBound();
+            var vm = new BudgetViewModel
+            {
+                FromDate = firstDay,
+                ToDate = lastDay
+            };
+            return View(vm);
         }
 
         [HttpPost]
