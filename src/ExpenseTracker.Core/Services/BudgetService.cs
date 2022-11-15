@@ -1,9 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Core.Services
 {
@@ -19,6 +21,13 @@ namespace ExpenseTracker.Core.Services
         public async Task Create(BudgetCreateDto dto)
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+
+            var existingBudgets = await _budgetRepository.GetPredicatedQueryable(a =>
+                (a.FromDate.Date >= dto.FromDate.Date && dto.FromDate.Date <= a.ToDate.Date) ||
+                a.FromDate.Date >= dto.ToDate.Date && dto.ToDate.Date <= a.ToDate.Date).ToListAsync();
+
+            if (existingBudgets.Any())
+                throw new Exception($"Budget already set for the date range [{dto.FromDate:d} to {dto.ToDate:d}]");
 
             var budget = new Budget
             {
