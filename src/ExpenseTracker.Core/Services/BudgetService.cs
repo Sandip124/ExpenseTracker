@@ -23,11 +23,11 @@ namespace ExpenseTracker.Core.Services
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
             var existingBudgets = await _budgetRepository.GetPredicatedQueryable(a =>
-                (a.FromDate.Date >= dto.FromDate.Date && dto.FromDate.Date <= a.ToDate.Date) ||
-                a.FromDate.Date >= dto.ToDate.Date && dto.ToDate.Date <= a.ToDate.Date).ToListAsync();
+                (a.FromDate.Date <= dto.FromDate.Date && dto.FromDate.Date <= a.ToDate.Date) ||
+                a.FromDate.Date <= dto.ToDate.Date && dto.ToDate.Date <= a.ToDate.Date).ToListAsync();
 
             if (existingBudgets.Any())
-                throw new Exception($"Budget already set for the date range [{dto.FromDate:d} to {dto.ToDate:d}]");
+                throw new Exception($"Budget already set for the date range.");
 
             var budget = new Budget
             {
