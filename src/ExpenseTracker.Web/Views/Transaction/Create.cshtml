@@ -109,18 +109,16 @@
        function fetchAndUpdateCategoriesList(){
                    let type = $('#transactionType').val();
                       $.ajax({
-                          url: `/api/TransactionCategory/${type}/getByType`,
+                          url: `/api/TransactionCategoryApi/GetCategoriesByType?type=${type}`,
                           type: "GET",
                           dataType: "json",
                           contentType: "application/json; charset=utf-8",
                           success: function (response) {
-                            console.log(response);
                             $('#TransactionCategoryId').empty();
-                            $.each(response,
-                                        function (index, value) {
-                                            $('#TransactionCategoryId').append(`<option value="${value.transactionCategoryId}">${value.categoryName}</option>`);
-                                        });
-                            //initChoices();
+                            $.each(response.categories,
+                             function (index, value) {
+                                $('#TransactionCategoryId').append(`<option value="${value.id}">${value.categoryName}</option>`);
+                             });
                             $('#TransactionCategoryId').select2();
                           },
                           error: function (errorResponse) {
