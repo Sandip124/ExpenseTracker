@@ -63,7 +63,7 @@
                 <div class="form-group mb-3 row">
                     @Html.LabelFor(a => a.TransactionEntryDate, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
-                        <input asp-for="TransactionEntryDate" class="form-control" disabled="disabled" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" autofocus/>
+                        <input asp-for="TransactionEntryDate" class="form-control" disabled="disabled" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")"/>
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
                         <span class="input-group-text">
                             Rs.
                         </span>
-                        @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", placeholder = "Enter Amount" })
+                        <input asp-for="Amount" type="number" class="form-control" autofocus placeholder="Enter Amount">
                     </div>
                 </div>
                 
@@ -98,57 +98,3 @@
         </div>
     </div>
 </div>
-
-
-@section Scripts
-{
-    <script>
-        // @@formatter:off
-        document.addEventListener("DOMContentLoaded", function () {
-        	let el;
-        	window.Choices && (new Choices(el = document.getElementById('select-icon'), {
-        		classNames: {
-        			containerInner: el.className,
-        			input: 'form-control',
-        			inputCloned: 'form-control-sm',
-        			listDropdown: 'dropdown-menu',
-        			itemChoice: 'dropdown-item',
-        			activeState: 'show',
-        			selectedState: 'active',
-        		},
-        		shouldSort: false,
-        		searchEnabled: false,
-        		callbackOnCreateTemplates: function(template) {
-        			let classNames = this.config.className,
-        			itemSelectText = this.config.itemSelectText;
-        			return {
-        				item: function(classNames, data) {
-        					return template('<div class="' + String(classNames.item) + ' ' + String( data.highlighted ? classNames.highlightedState : classNames.itemSelectable ) + '" data-item data-id="' + String(data.id) + '" data-value="' + String(data.value) + '"' + String(data.active ? 'aria-selected="true"' : '') + '' + String(data.disabled ? 'aria-disabled="true"' : '') + '><span class="dropdown-item-indicator"> <img class="avatar avatar-xs" src="data:image/svg+xml;utf8,' + data.customProperties + '"></span>' + String(data.label) + '</div>');
-        				},
-        				choice: function(classNames, data) {
-        					console.log('data', data);
-        					return template('<div class="' + String(classNames.item) + ' ' + String(classNames.itemChoice) + ' ' + String( data.disabled ? classNames.itemDisabled : classNames.itemSelectable ) + '" data-select-text="' + String(itemSelectText) + '" data-choice  ' + String( data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable' ) + ' data-id="' + String(data.id) + '" data-value="' + String(data.value) + '" ' + String( data.groupId > 0 ? 'role="treeitem"' : 'role="option"' ) + ' ><span class="dropdown-item-indicator"><img class="avatar avatar-xs" src="data:image/svg+xml;utf8,' + data.customProperties + '"></span>' + String(data.label) + '</div>');
-        				},
-        			};
-        		},
-        	}));
-        });
-            document.addEventListener("DOMContentLoaded", function () {
-            	let el;
-            	window.Choices && (new Choices(el = document.getElementById('select-type'), {
-            		classNames: {
-            			containerInner: el.className,
-            			input: 'form-control',
-            			inputCloned: 'form-control-sm',
-            			listDropdown: 'dropdown-menu',
-            			itemChoice: 'dropdown-item',
-            			activeState: 'show',
-            			selectedState: 'active',
-            		},
-            		shouldSort: false,
-            		searchEnabled: false,
-            	}));
-            });
-            // @@formatter:on
-      </script>
-}
