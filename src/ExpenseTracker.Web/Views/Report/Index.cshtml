@@ -26,10 +26,12 @@
                     <div class="form-group mb-3">
                         <label class="form-label">Transaction Date</label>
                         <div class="input-group">
-                            <input accepttype="Date" asp-for="TransactionDate"  class="form-control col-6" value="@Model.TransactionDate.Value.ToString("yyyy-MM-ddThh:mm")">
+                            <input accepttype="Date" asp-for="TransactionDate" class="form-control col-6" value="@Model.TransactionDate.Value.ToString("yyyy-MM-ddThh:mm")">
                             <button type="submit" class="btn btn-primary d-none d-sm-inline-block">
-                               <!-- Download SVG icon from http://tabler-icons.io/i/filter -->
-                               	<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5" /></svg>
+                                <!-- Download SVG icon from http://tabler-icons.io/i/filter -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"/>
+                                </svg>
                                 Filter
                             </button>
                         </div>
@@ -73,13 +75,13 @@
                                             @if (item.Type == TransactionType.Income)
                                             {
                                                 <span class="text-success">
-                                                    @item.Amount
+                                                    Rs. @item.Amount
                                                 </span>
                                             }
                                             else if (item.Type == TransactionType.Expense)
                                             {
                                                 <span class="text-danger">
-                                                    @item.Amount
+                                                    Rs. @item.Amount
                                                 </span>
                                             }
                                         </strong>
@@ -114,6 +116,15 @@
                             }
 
                             </tbody>
+                            <tfoot>
+                            <tr>
+                                <td>Total</td>
+                                <td><strong>Rs. @Model.DailyTransactions.Sum(a=>a.Amount)</strong></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            </tfoot>
                         </table>
                     }
                     else
