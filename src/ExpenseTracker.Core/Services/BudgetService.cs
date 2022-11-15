@@ -27,6 +27,7 @@ namespace ExpenseTracker.Core.Services
                 ToDate = dto.ToDate,
                 Workspace = dto.Workspace,
                 RecBy = dto.RecBy,
+                Description = dto.Description
             };
             await _budgetRepository.InsertAsync(budget);
             await _budgetRepository.CommitAsync();

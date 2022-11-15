@@ -6,7 +6,7 @@ namespace ExpenseTracker.Infrastructure.Repositories
 {
     public class BudgetRepository : GenericRepository<Budget>,IBudgetRepository
     {
-        protected BudgetRepository(DbContext context) : base(context)
+        public BudgetRepository(DbContext context) : base(context)
         {
         }
     }

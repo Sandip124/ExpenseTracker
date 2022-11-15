@@ -13,6 +13,8 @@ namespace ExpenseTracker.Core.Entities
         public virtual Workspace Workspace { get; set; }
         public long WorkspaceId { get; set; }
 
+        public string? Description { get; set; }
+
         public virtual User RecBy { get; set; }
         public long RecById { get; set; }
     }

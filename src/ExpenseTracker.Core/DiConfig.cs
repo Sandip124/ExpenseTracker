@@ -11,6 +11,7 @@ namespace ExpenseTracker.Core
             services.AddScoped<ITransactionCategoryService, TransactionCategoryService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IWorkspaceService, WorkspaceService>();
+            services.AddScoped<IBudgetService, BudgetService>();
             return services;
         }
 

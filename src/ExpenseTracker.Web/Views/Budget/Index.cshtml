@@ -1,0 +1,122 @@
+@model ExpenseTracker.Web.ViewModels.Budget.BudgetIndexViewModel
+@using ExpenseTracker.Core.Entities.Common
+@using ExpenseTracker.Core.Constants
+
+@{
+    ViewData["Title"] = "Budgets";
+    Layout = "_Layout";
+}
+
+@section PageTitle
+{
+    <div class="page-header d-print-none">
+        <div class="row align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    Overview
+                </div>
+                <h2 class="page-title">
+                    @ViewData["Title"]
+                </h2>
+            </div>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a asp-action="Create" asp-controller="Transaction" class="btn btn-primary d-none d-sm-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Set New
+                    </a>
+                    <a asp-action="Create" asp-controller="Transaction" class="btn btn-primary d-sm-none d-sm-inline-block btn-icon" aria-label="Create new Transaction Category">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row row-cards">
+    <div class="col-12">
+        <div class="card">
+            <div class="table-responsive">
+                @if (Model.Budgets.Any())
+                {
+                    <table class="table card-table table-vcenter text-nowrap">
+
+                        <thead>
+                        <tr>
+                            <th class="w-2">TXN No.</th>
+                            <th>Budget Amount</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        @foreach (var item in Model.Budgets)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted">@item.Id.ToString("D5")</span>
+                                </td>
+                                <td>
+                                    <strong>
+                                        @item.Amount
+                                    </strong>
+                                </td>
+                                <td>
+                                    @item.FromDate.ToString("f")
+                                </td>
+                                <td>
+                                    @item.ToDate.ToString("f")
+                                </td>
+                                <td class="w-2">
+                                    <a asp-action="Delete" asp-controller="Budget" asp-route-Id="@item.Id" class="btn btn-default">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <line x1="4" y1="7" x2="20" y2="7"/>
+                                            <line x1="10" y1="11" x2="10" y2="17"/>
+                                            <line x1="14" y1="11" x2="14" y2="17"/>
+                                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                                        </svg>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="empty">
+                        <div class="empty-img">
+                            <img src="./static/illustrations/undraw_printing_invoices_5r4r.svg" height="128" alt="">
+                        </div>
+                        <p class="empty-title">Budget is not set yet.</p>
+                        <p class="empty-subtitle text-muted">
+                            Try adjusting your search or filter to find what you're looking for.
+                        </p>
+                        <div class="empty-action">
+                            <a asp-action="SetBudget" asp-controller="Budget" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Set Budget
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

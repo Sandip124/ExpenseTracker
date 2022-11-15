@@ -15,6 +15,7 @@ namespace ExpenseTracker.Infrastructure
             services.AddScoped<ITransactionCategoryRepository, TransactionCategoryRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IWorkspaceRepository, WorkspaceRepository>();
+            services.AddScoped<IBudgetRepository, BudgetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             
             services.AddScoped(typeof(IApplicationLogger<>), typeof(LoggerAdapter<>));

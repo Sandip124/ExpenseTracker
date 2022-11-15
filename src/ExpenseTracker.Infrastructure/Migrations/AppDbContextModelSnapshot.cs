@@ -29,6 +29,9 @@ namespace ExpenseTracker.Infrastructure.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("timestamp without time zone");
 
