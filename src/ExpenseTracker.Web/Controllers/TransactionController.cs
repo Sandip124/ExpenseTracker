@@ -7,6 +7,7 @@ using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Logging;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
+using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels;
 using ExpenseTracker.Web.ViewModels.Transaction;
@@ -42,8 +43,9 @@ namespace ExpenseTracker.Web.Controllers
         public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
         {
             var defaultWorkspaceToken = (await _userProvider.GetDefaultWorkspaceToken());
-            var transactions = _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == defaultWorkspaceToken)
-                .Include(a=>a.TransactionCategory)
+            var transactions = _transactionRepository
+                .GetPredicatedQueryable(a => a.Workspace.Token == defaultWorkspaceToken)
+                .Include(a => a.TransactionCategory)
                 .OrderByDescending(x => x.TransactionDate)
                 .ToList();
             transactionIndexViewModel.Transactions = transactions;
@@ -64,14 +66,19 @@ namespace ExpenseTracker.Web.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) return View(transactionViewModel);
+                // if (!ModelState.IsValid)
+                // {
+                //     _notifyService.Error(this.SerializedValidationErrors(ModelState).Values.ToString());
+                // }
+
+                //TODO : need to use another vm
 
                 await _transactionService.Create(new TransactionCreateDto()
                 {
                     UserId = _userProvider.GetCurrentUserId(),
                     Workspace = (await _userProvider.GetCurrentUser()).DefaultWorkspace,
                     TransactionDate = transactionViewModel.TransactionEntryDate,
-                    Amount = transactionViewModel.TransactionAmount,
+                    Amount = transactionViewModel.Amount,
                     TransactionCategoryId = transactionViewModel.TransactionCategoryId,
                     Type = transactionViewModel.Type,
                     Description = transactionViewModel.Description

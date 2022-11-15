@@ -4,16 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using ExpenseTracker.Core.Entities.Common;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace ExpenseTracker.Web.ViewModels
+namespace ExpenseTracker.Web.ViewModels.Transaction
 {
     public class TransactionViewModel
     {
-        public decimal TransactionAmount { get; set; }
         [Display(Name = "Entry Date")]
         public DateTime TransactionEntryDate { get; set; }
         [Display(Name = "Transaction Category")]
         public int TransactionCategoryId { get; set; }
-        public Core.Entities.TransactionCategory TransactionCategory { get; set; }
+        public Core.Entities.TransactionCategory? TransactionCategory { get; set; }
         public string Type { get; set; }
         public virtual int Id { get; set; }
 

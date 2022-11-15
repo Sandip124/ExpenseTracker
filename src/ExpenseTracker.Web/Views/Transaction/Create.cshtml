@@ -1,4 +1,4 @@
-@model ExpenseTracker.Web.ViewModels.TransactionViewModel
+@model ExpenseTracker.Web.ViewModels.Transaction.TransactionViewModel
 
 @{
     ViewData["Title"] = "Transaction";
@@ -66,12 +66,12 @@
                 </div>
                 
                 <div class="form-group mb-3 row">
-                    @Html.LabelFor(a => a.TransactionAmount, new { @class = "form-label col-3 col-form-label" })
+                    @Html.LabelFor(a => a.Amount, new { @class = "form-label col-3 col-form-label" })
                     <div class="col input-group">
                            <span class="input-group-text">
                            Rs.
                            </span>
-                        <input type="number" asp-for="TransactionAmount" placeholder="Enter Transaction Amount" class="form-control">
+                        <input type="number" asp-for="Amount" placeholder="Enter Transaction Amount" class="form-control">
                     </div>
                 </div>
                 <div class="form-group mb-3 row">
