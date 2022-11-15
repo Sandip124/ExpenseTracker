@@ -21,18 +21,18 @@ namespace ExpenseTracker.Infrastructure.Repositories
             _currentSession = _context.Set<T>();
         }
 
-        public Task DeleteAsync(T entities,CancellationToken cancellationToken = default)
+        public Task DeleteAsync(T entities, CancellationToken cancellationToken = default)
         {
             _currentSession.Remove(entities);
             return Task.CompletedTask;
         }
 
-        public async Task InsertAsync(T entities,CancellationToken cancellationToken = default)
+        public async Task InsertAsync(T entities, CancellationToken cancellationToken = default)
         {
             await _currentSession.AddAsync(entities, cancellationToken);
         }
 
-        public Task UpdateAsync(T entities,CancellationToken cancellationToken = default)
+        public Task UpdateAsync(T entities, CancellationToken cancellationToken = default)
         {
             _currentSession.Update(entities);
             _context.Entry(entities).State = EntityState.Modified;
@@ -43,8 +43,9 @@ namespace ExpenseTracker.Infrastructure.Repositories
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync(cancellationToken);
         }
-        
-        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate,CancellationToken cancellationToken = default)
+
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate,
+            CancellationToken cancellationToken = default)
         {
             predicate ??= x => true;
             return _context.Set<T>().AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
@@ -59,18 +60,25 @@ namespace ExpenseTracker.Infrastructure.Repositories
         {
             return await _currentSession.FindAsync(id);
         }
-        
+
+        public async Task<T?> FindAsync(long id)
+        {
+            return await _currentSession.FindAsync(id);
+        }
+
         public IQueryable<T> GetPredicatedQueryable(Expression<Func<T, bool>>? predicate)
         {
             return predicate == null ? GetQueryable() : GetQueryable().Where(predicate);
         }
 
-        public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate,CancellationToken cancellationToken = default)
+        public async Task<bool> CheckIfExistAsync(Expression<Func<T, bool>> predicate,
+            CancellationToken cancellationToken = default)
         {
             return await GetPredicatedQueryable(predicate)
                 .CountAsync(cancellationToken)
                 .ConfigureAwait(false) != 0;
         }
+
         public async Task CommitAsync()
         {
             await _context.SaveChangesAsync();
