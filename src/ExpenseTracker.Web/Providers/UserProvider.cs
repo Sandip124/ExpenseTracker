@@ -24,6 +24,16 @@ namespace ExpenseTracker.Web.Providers
             return await _userRepository.FindAsync(GetCurrentUserId()) ?? throw new Exception("User Not Found.");
         }
 
+        public async Task<Workspace> GetDefaultWorkspace()
+        {
+            return (await GetCurrentUser()).DefaultWorkspace;
+        }
+
+        public async Task<string> GetDefaultWorkspaceToken()
+        {
+            return (await GetDefaultWorkspace()).Token;
+        }
+
         public int GetCurrentUserId()
             => Convert.ToInt32(_httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     }

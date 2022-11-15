@@ -22,7 +22,7 @@ namespace ExpenseTracker.Web.ViewModels
         public IList<Core.Entities.TransactionCategory> TransactionCategories { get; set; } =
             new List<Core.Entities.TransactionCategory>();
 
-        public SelectList TransactionCategoriesSelectList => new SelectList(TransactionCategories,"TransactionCategoryId","CategoryName",TransactionCategoryId);
+        public SelectList TransactionCategoriesSelectList => new SelectList(TransactionCategories,nameof(TransactionCategoryId),"CategoryName",TransactionCategoryId);
         
         public string? Description { get; set; }
     }

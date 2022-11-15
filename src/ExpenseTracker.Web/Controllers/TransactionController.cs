@@ -12,6 +12,7 @@ using ExpenseTracker.Web.ViewModels;
 using ExpenseTracker.Web.ViewModels.Transaction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Web.Controllers
 {
@@ -40,8 +41,9 @@ namespace ExpenseTracker.Web.Controllers
 
         public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
         {
-            var defaultWorkspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
+            var defaultWorkspaceToken = (await _userProvider.GetDefaultWorkspaceToken());
             var transactions = _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == defaultWorkspaceToken)
+                .Include(a=>a.TransactionCategory)
                 .OrderByDescending(x => x.TransactionDate)
                 .ToList();
             transactionIndexViewModel.Transactions = transactions;
@@ -67,7 +69,7 @@ namespace ExpenseTracker.Web.Controllers
                 await _transactionService.Create(new TransactionCreateDto()
                 {
                     UserId = _userProvider.GetCurrentUserId(),
-                    WorkspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token,
+                    Workspace = (await _userProvider.GetCurrentUser()).DefaultWorkspace,
                     TransactionDate = transactionViewModel.TransactionEntryDate,
                     Amount = transactionViewModel.TransactionAmount,
                     TransactionCategoryId = transactionViewModel.TransactionCategoryId,
