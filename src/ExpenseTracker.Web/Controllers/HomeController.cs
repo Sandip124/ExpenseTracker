@@ -9,6 +9,7 @@ using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Web.Controllers
 {
@@ -42,7 +43,7 @@ namespace ExpenseTracker.Web.Controllers
                     workspaceToken = user.DefaultWorkspace.Token;    
                 }
 
-                var transactionQueryable = _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
+                var transactionQueryable = _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken).Include(a=>a.TransactionCategory);
             
                 homeViewModel.Transactions = transactionQueryable.OrderByDescending(a=>a.TransactionDate).Take(5).ToList();
                 
