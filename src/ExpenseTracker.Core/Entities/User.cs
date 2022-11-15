@@ -21,10 +21,12 @@ namespace ExpenseTracker.Core.Entities
             SetPassword(password);
         }
         
-        public virtual int UserId { get; protected set; }
-        public virtual string FirstName { get;  set; }
-        public virtual string LastName { get;  set; }
-        public virtual string Username { get; protected set; }
+        public  int UserId { get; protected set; }
+        public  string FirstName { get;  set; }
+        public  string LastName { get;  set; }
+        public  string Username { get; protected set; }
+        public  string Email { get;  set; }
+        public string? Image { get; set; }
         
         public virtual void SetUserName(string userName)
         {
