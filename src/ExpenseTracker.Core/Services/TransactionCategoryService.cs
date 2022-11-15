@@ -38,6 +38,7 @@ namespace ExpenseTracker.Core.Services
             transaction.UpdateName(transactionCategoryUpdateDto.Name);
             transaction.UpdateColor(transactionCategoryUpdateDto.Color);
             transaction.UpdateIcon(transactionCategoryUpdateDto.Icon);
+            transaction.Type = transactionCategoryUpdateDto.Type;
 
             await _transactionCategoryRepository.UpdateAsync(transaction);
             await _transactionCategoryRepository.CommitAsync();

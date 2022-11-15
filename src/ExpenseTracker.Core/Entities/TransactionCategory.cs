@@ -37,7 +37,7 @@ namespace ExpenseTracker.Core.Entities
         public virtual string Icon { get; protected set; }
         public virtual void UpdateIcon(string icon) => Icon = icon;
 
-        public virtual string Type { get; protected init; }
+        public virtual string Type { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 

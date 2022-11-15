@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ExpenseTracker.Core.Dto.TransactionCategory;
@@ -33,7 +34,7 @@ namespace ExpenseTracker.Web.Controllers
         public async Task<IActionResult> Index(TransactionCategoryIndexViewModel transactionCategoryIndexViewModel)
         {
             var transactionCategories = await _transactionCategoryRepository.GetAllAsync();
-            transactionCategoryIndexViewModel.TransactionCategories = transactionCategories;
+            transactionCategoryIndexViewModel.TransactionCategories = transactionCategories.OrderBy(a=>a.Id);
             return View(transactionCategoryIndexViewModel);
         }
         
