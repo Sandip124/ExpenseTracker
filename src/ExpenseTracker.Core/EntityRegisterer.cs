@@ -11,6 +11,7 @@ namespace ExpenseTracker.Core
             builder.Entity<TransactionCategory>();
             builder.Entity<User>();
             builder.Entity<Workspace>();
+            builder.Entity<Budget>();
             return builder;
         }
     }
