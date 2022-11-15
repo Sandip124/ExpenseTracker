@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Entities.Common;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Providers.Interface;
@@ -23,7 +26,7 @@ namespace ExpenseTracker.Web.Controllers
             _userProvider = userProvider;
         }
         // GET
-        public async Task<IActionResult> Index(ReportViewModel reportViewModel)
+        public async Task<IActionResult> Index(DailyReportViewModel reportViewModel)
         {
             var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactionQueryable =
@@ -44,7 +47,7 @@ namespace ExpenseTracker.Web.Controllers
             return View(reportViewModel);
         }
 
-        public async Task<IActionResult> Monthly(ReportViewModel reportViewModel)
+        public async Task<IActionResult> Monthly(MonthlyReportViewModel reportViewModel)
         {
             var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
             var transactionQueryable =
@@ -63,6 +66,32 @@ namespace ExpenseTracker.Web.Controllers
             }
             
             reportViewModel.MonthlyTransactions = transactionQueryable.Include(a=>a.TransactionCategory).OrderByDescending(a => a.EntryDate).ToList();
+            
+            return View(reportViewModel);
+        }
+        
+        public async Task<IActionResult> StatementReport(StatementReportViewModel reportViewModel)
+        {
+            var workspaceToken = (await _userProvider.GetCurrentUser()).DefaultWorkspace.Token;
+            var transactionQueryable =
+                _transactionRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);
+                
+            if (reportViewModel is { FromDate: { }, ToDate: { } })
+            {
+                transactionQueryable  = transactionQueryable.Where(a => a.TransactionDate.Date >= reportViewModel.FromDate.Value.Date && a.TransactionDate.Date <= reportViewModel.ToDate.Value.Date);
+            }
+            else
+            {
+                var (firstDay, lastDay) = DateTime.Now.GetDateBound();
+                transactionQueryable  = transactionQueryable.Where(a => a.TransactionDate.Date >= DateTime.Today.AddMonths(-1).Date && a.TransactionDate.Date <= DateTime.Today.Date);
+                reportViewModel.FromDate = firstDay;
+                reportViewModel.ToDate = lastDay;
+            }
+
+            var report = transactionQueryable.Include(a => a.TransactionCategory).OrderByDescending(a => a.EntryDate);
+            reportViewModel.StatementReport = new ValueTuple<IList<Transaction>, IList<Transaction>>(
+                report.Where(a => a.Type == TransactionType.Expense).ToList(),
+                report.Where(a => a.Type == TransactionType.Income).ToList());
             
             return View(reportViewModel);
         }
