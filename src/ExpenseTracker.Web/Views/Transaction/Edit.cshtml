@@ -21,6 +21,18 @@
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
+                    <a asp-action="Delete" asp-controller="Transaction" asp-route-Id="@Model.Id" class="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <line x1="4" y1="7" x2="20" y2="7"/>
+                            <line x1="10" y1="11" x2="10" y2="17"/>
+                            <line x1="14" y1="11" x2="14" y2="17"/>
+                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/>
+                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/>
+                        </svg>
+                        Delete
+                    </a>
+                    
                     <a asp-action="Index" asp-controller="Transaction" class="btn btn-default d-none d-sm-inline-block">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -33,11 +45,11 @@
                         </svg>
                     </a>
                 </div>
+                
             </div>
         </div>
     </div>
 }
-
 
 
 <div class="col-md-12">
@@ -49,15 +61,38 @@
             <form method="post" asp-action="Edit" asp-controller="Transaction">
                 <input type="hidden" asp-for="Id">
                 <div class="form-group mb-3 row">
-                    @Html.LabelFor(a => a.Amount, new { @class = "form-label col-3 col-form-label" })
+                    @Html.LabelFor(a => a.TransactionEntryDate, new { @class = "form-label col-3 col-form-label" })
                     <div class="col">
+                        <input asp-for="TransactionEntryDate" class="form-control" disabled="disabled" value="@DateTime.Now.ToString("yyyy-MM-ddThh:mm")" autofocus/>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.Type, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col">
+                        <select asp-for="Type" asp-items="Model.TransactionTypes" disabled="disabled" class="form-control" id="transactionType"></select>
+                    </div>
+                </div>
+                
+                <div class="form-group mb-3 row">
+                     @Html.LabelFor(a => a.TransactionCategory.CategoryName, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col">
+                        <input asp-for="TransactionCategory.CategoryName" class="form-control" disabled="disabled"/>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3 row">
+                    @Html.LabelFor(a => a.Amount, new { @class = "form-label col-3 col-form-label" })
+                    <div class="col input-group">
+                        <span class="input-group-text">
+                            Rs.
+                        </span>
                         @Html.TextBoxFor(a => a.Amount, new { @class = "form-control", placeholder = "Enter Amount" })
                     </div>
                 </div>
-               
-
+                
                 <div class="form-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>

@@ -97,6 +97,11 @@ namespace ExpenseTracker.Web.Controllers
 
                 var transactionViewModel = new TransactionViewModel()
                 {
+                    Id = transaction.Id,
+                    Type = transaction.Type,
+                    TransactionCategoryId = transaction.TransactionCategoryId,
+                    TransactionCategory = transaction.TransactionCategory,
+                    TransactionEntryDate = transaction.EntryDate,
                     Amount = transaction.Amount
                 };
 

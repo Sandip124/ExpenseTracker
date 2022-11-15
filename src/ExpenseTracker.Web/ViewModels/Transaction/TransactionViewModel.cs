@@ -12,6 +12,7 @@ namespace ExpenseTracker.Web.ViewModels
         public DateTime TransactionEntryDate { get; set; }
         [Display(Name = "Transaction Category")]
         public int TransactionCategoryId { get; set; }
+        public Core.Entities.TransactionCategory TransactionCategory { get; set; }
         public string Type { get; set; }
         public virtual int Id { get; set; }
 
