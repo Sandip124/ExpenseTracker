@@ -37,7 +37,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="h1 mb-3">Rs.@Model.DailyExpenseAmount</div>
+                <div class="h1 mb-3">Rs.@Model.ExpensesToday</div>
                 <div class="d-flex mb-2">
                     <div>Max Budget Limit</div>
                     <div class="ms-auto">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-baseline">
-                    <div class="h1 mb-0 me-2">Rs. @Model.DailyIncomeAmount</div>
+                    <div class="h1 mb-0 me-2">Rs. @Model.IncomeToday</div>
                     <div class="me-auto">
                         <span class="text-green d-inline-flex align-items-center lh-1">
                             8%
@@ -197,13 +197,13 @@
                                                 @if (item.Type == TransactionType.Income)
                                                 {
                                                     <span class="text-success">
-                                                        @item.Amount
+                                                        Rs. @item.Amount
                                                     </span>
                                                 }
                                                 else if (item.Type == TransactionType.Expense)
                                                 {
                                                     <span class="text-danger">
-                                                        @item.Amount
+                                                        Rs. @item.Amount
                                                     </span>
                                                 }
                                             </strong>
@@ -292,6 +292,26 @@
                     </div>
                 </div>
             </div>
+             <div class="col-lg-6 col-xl-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <h3 class="card-title">Income Vs Expenses</h3>
+                                        <div class="ms-auto">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 30 days</a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item active" href="#">Last 7 days</a>
+                                                    <a class="dropdown-item" href="#">Last 30 days</a>
+                                                    <a class="dropdown-item" href="#">Last 3 months</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="transaction-summary-pie"></div>
+                                </div>
+                            </div>
+                        </div>
         </div>
     </div>
 </div>
@@ -301,6 +321,7 @@
     <script>   
               // @@formatter:off
               document.addEventListener("DOMContentLoaded", function () {
+                  
               	window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
               		chart: {
               			type: "donut",
@@ -340,6 +361,46 @@
               			fillSeriesColor: false
               		},
               	})).render();
+                  
+                  	window.ApexCharts && (new ApexCharts(document.getElementById('transaction-summary-pie'), {
+                                		chart: {
+                                			type: "donut",
+                                			fontFamily: 'inherit',
+                                			height: 240,
+                                			sparkline: {
+                                				enabled: true
+                                			},
+                                			animations: {
+                                				enabled: false
+                                			},
+                                		},
+                                		fill: {
+                                			opacity: 1,
+                                		},
+                                		series: [@foreach (var item in  @Model.TransactionSummary){<text>@item.Amount,</text>}],
+                                		labels: [@foreach (var item in  @Model.TransactionSummary){<text>"@item.Type",</text>}],
+                                		grid: {
+                                			strokeDashArray: 4,
+                                		},
+                                		colors: [@foreach (var item in  @Model.TransactionSummary){<text>"@item.Color",</text>}],
+                                		legend: {
+                                			show: true,
+                                			position: 'bottom',
+                                			offsetY: 12,
+                                			markers: {
+                                				width: 10,
+                                				height: 10,
+                                				radius: 100,
+                                			},
+                                			itemMargin: {
+                                				horizontal: 8,
+                                				vertical: 8
+                                			},
+                                		},
+                                		tooltip: {
+                                			fillSeriesColor: false
+                                		},
+                                	})).render();
               });
               // @@formatter:on
         </script>
