@@ -5,6 +5,7 @@ using ExpenseTracker.Infrastructure.Configurations;
 using ExpenseTracker.Infrastructure.Data;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Middleware;
+using ExpenseTracker.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -66,12 +67,26 @@ namespace ExpenseTracker.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider,ILoggerFactory loggerFactory,AppDbContext appDbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider,ILoggerFactory loggerFactory,AppDbContext appDbContext,ISeedingService seedingService)
         {
-
-
             ServiceActivator.Configure(app.ApplicationServices);
-
+            
+            var hasDb = appDbContext.Database.CanConnect();
+            appDbContext.Database.Migrate();
+            if (!hasDb)
+            {
+                try
+                {
+                    var success = seedingService.InitialSeed(appDbContext).Result;
+                }
+                catch (Exception e)
+                {
+                    appDbContext.Database.EnsureDeleted();
+                    throw e;
+                }
+                
+            }
+            
             loggerFactory.AddSerilog();
             
             if (env.IsDevelopment())
