@@ -7,5 +7,6 @@ namespace ExpenseTracker.Core.Repositories.Interface
 {
     public interface IBudgetRepository : IGenericRepository<Budget>
     {
+        Task<decimal> getBudgetByWorkSpackeId(int workSpaceId);
     }
 }

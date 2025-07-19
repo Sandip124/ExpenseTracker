@@ -12,13 +12,10 @@ namespace ExpenseTracker.Web.ViewModels.Budget
 
         [Display(Name = "Amount")] public decimal Amount { get; set; }
 
-        public Core.Entities.Workspace Workspace { get; set; }
-
         [Display(Name = "Workspace")] public long WorkspaceId { get; set; }
-
-        public User User { get; set; }
 
         [Display(Name = "User")] public long UserId { get; set; }
         public string? Description { get; set; }
+        public long Id { get; set; }
     }
 }

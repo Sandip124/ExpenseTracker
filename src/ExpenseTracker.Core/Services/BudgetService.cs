@@ -2,7 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
+using ExpenseTracker.Common.Helpers;
+using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Repositories.Interface;
 using ExpenseTracker.Core.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +24,10 @@ namespace ExpenseTracker.Core.Services
         public async Task Create(BudgetCreateDto dto)
         {
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-
+            var test = await _budgetRepository.getBudgetByWorkSpackeId(dto.Workspace.Id);
             var existingBudgets = await _budgetRepository.GetPredicatedQueryable(a =>
-                (a.FromDate.Date <= dto.FromDate.Date && dto.FromDate.Date <= a.ToDate.Date) ||
-                a.FromDate.Date <= dto.ToDate.Date && dto.ToDate.Date <= a.ToDate.Date).ToListAsync();
+                ((a.FromDate.Date <= dto.FromDate.Date && dto.FromDate.Date <= a.ToDate.Date) ||
+                a.FromDate.Date <= dto.ToDate.Date && dto.ToDate.Date <= a.ToDate.Date) && a.Workspace.Id == dto.Workspace.Id ).ToListAsync();
 
             if (existingBudgets.Any())
                 throw new Exception($"Budget already set for the date range.");
@@ -53,6 +56,22 @@ namespace ExpenseTracker.Core.Services
             await _budgetRepository.DeleteAsync(budget);
             await _budgetRepository.CommitAsync();
             scope.Complete();
+        }
+        public async Task Update(BudgetUpdateDto dto)
+        {
+            using var tx = TransactionScopeHelper.GetInstance();
+
+            var budget = await _budgetRepository
+                                  .FindAsync(dto.Id)
+                                   ??
+                              throw new BudgetNotFoundException();
+            budget.Amount = dto.Amount;
+            budget.FromDate = dto.FromDate;
+            budget.ToDate = dto.ToDate;
+            budget.Description = dto.Description;
+            await _budgetRepository.UpdateAsync(budget);
+            await _budgetRepository.CommitAsync();
+            tx.Complete();
         }
     }
 }

@@ -3,15 +3,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using ExpenseTracker.Core.Dto.Transaction;
+using ExpenseTracker.Core.Dto.TransactionCategory;
 using ExpenseTracker.Core.Exceptions;
 using ExpenseTracker.Core.Logging;
 using ExpenseTracker.Core.Repositories.Interface;
+using ExpenseTracker.Core.Services;
 using ExpenseTracker.Core.Services.Interface;
 using ExpenseTracker.Infrastructure.Extensions;
 using ExpenseTracker.Web.Providers.Interface;
 using ExpenseTracker.Web.ViewModels;
 using ExpenseTracker.Web.ViewModels.Budget;
 using ExpenseTracker.Web.ViewModels.Transaction;
+using ExpenseTracker.Web.ViewModels.TransactionCategory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -105,6 +108,58 @@ namespace ExpenseTracker.Web.Controllers
                 _notifyService.Error(e.Message);
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Edit(long id)
+        {
+            try
+            {
+                var budget = await _budgetRepository.FindAsync(id)
+                     ?? throw new BudgetNotFoundException();
+
+                var budgetViewModel = new BudgetViewModel()
+                {
+                    Id = budget.Id,
+                    Amount = budget.Amount,
+                    FromDate = budget.FromDate,
+                    ToDate = budget.ToDate,
+                    Description = budget.Description,
+                    UserId = budget.RecBy.UserId,
+                    WorkspaceId = budget.Workspace.Id,
+                };
+
+                return View(budgetViewModel);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                _notifyService.Error(e.Message);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(BudgetViewModel budgetViewModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid) return View(budgetViewModel);
+
+                await _budgetService.Update(new BudgetUpdateDto()
+                {
+                    Id = budgetViewModel.Id,
+                    Amount = budgetViewModel.Amount,
+                    FromDate = budgetViewModel.FromDate,
+                    ToDate = budgetViewModel.ToDate,
+                    Description = budgetViewModel.Description
+                });
+                _notifyService.Success("BUdget Updated Successfully");
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message, e);
+                _notifyService.Error(e.Message);
+            }
             return RedirectToAction(nameof(Index));
         }
     }

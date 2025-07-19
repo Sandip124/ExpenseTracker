@@ -26,11 +26,12 @@ namespace ExpenseTracker.Web.Controllers
         private readonly IApplicationLogger<TransactionController> _logger;
         private readonly IUserProvider _userProvider;
         private readonly INotyfService _notifyService;
+        private readonly IBudgetRepository _budgetRepository;
 
         public TransactionController(ITransactionService transactionService,
             ITransactionCategoryRepository transactionCategoryRepository,
             ITransactionRepository transactionRepository,
-            IApplicationLogger<TransactionController> logger, IUserProvider userProvider, INotyfService notifyService)
+            IApplicationLogger<TransactionController> logger, IUserProvider userProvider, INotyfService notifyService,IBudgetRepository budgetRepository)
         {
             _transactionService = transactionService;
             _transactionCategoryRepository = transactionCategoryRepository;
@@ -38,6 +39,7 @@ namespace ExpenseTracker.Web.Controllers
             _logger = logger;
             _userProvider = userProvider;
             _notifyService = notifyService;
+            _budgetRepository = budgetRepository;
         }
 
         public async Task<IActionResult> Index(TransactionIndexViewModel transactionIndexViewModel)
@@ -72,19 +74,29 @@ namespace ExpenseTracker.Web.Controllers
                 // }
 
                 //TODO : need to use another vm
-
-                await _transactionService.Create(new TransactionCreateDto()
+                decimal budgetAmount = await _budgetRepository.getBudgetByWorkSpackeId((await _userProvider.GetDefaultWorkspace()).Id);
+                var totalTransactionAmout = await _transactionRepository.GetTotalTransactionAmountByWorkSpaceId((await _userProvider.GetDefaultWorkspace()).Id);
+                if(budgetAmount < totalTransactionAmout + transactionViewModel.Amount)
                 {
-                    UserId = _userProvider.GetCurrentUserId(),
-                    Workspace = (await _userProvider.GetCurrentUser()).DefaultWorkspace,
-                    TransactionDate = transactionViewModel.TransactionEntryDate,
-                    Amount = transactionViewModel.Amount,
-                    TransactionCategoryId = transactionViewModel.TransactionCategoryId,
-                    Type = transactionViewModel.Type,
-                    Description = transactionViewModel.Description
-                });
+                    _notifyService.Error("Insufficient budget to create this transaction.");
+                    return View(transactionViewModel);
+                }
+                else
+                {
+                    await _transactionService.Create(new TransactionCreateDto()
+                    {
+                        UserId = _userProvider.GetCurrentUserId(),
+                        Workspace = (await _userProvider.GetCurrentUser()).DefaultWorkspace,
+                        TransactionDate = transactionViewModel.TransactionEntryDate,
+                        Amount = transactionViewModel.Amount,
+                        TransactionCategoryId = transactionViewModel.TransactionCategoryId,
+                        Type = transactionViewModel.Type,
+                        Description = transactionViewModel.Description
+                    });
 
-                _notifyService.Success("Transaction Created Successfully");
+                    _notifyService.Success("Transaction Created Successfully1111");
+                }
+
             }
             catch (Exception e)
             {
@@ -129,13 +141,23 @@ namespace ExpenseTracker.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    await _transactionService.Update(new TransactionUpdateDto()
+                    decimal budgetAmount = await _budgetRepository.getBudgetByWorkSpackeId((await _userProvider.GetDefaultWorkspace()).Id);
+                    var totalTransactionAmout = await _transactionRepository.GetTotalTransactionAmountByWorkSpaceId((await _userProvider.GetDefaultWorkspace()).Id);
+                    if (budgetAmount < totalTransactionAmout + transactionViewModel.Amount)
                     {
-                        Amount = transactionViewModel.Amount,
-                        Id = transactionViewModel.Id,
-                    });
-                }
+                        _notifyService.Error("Insufficient budget to Update this transaction.");
+                        return View(transactionViewModel);
+                    }
+                    else
+                    {
+                        await _transactionService.Update(new TransactionUpdateDto()
+                        {
+                            Amount = transactionViewModel.Amount,
+                            Id = transactionViewModel.Id,
+                        });
+                    }
 
+                }
                 _notifyService.Success("Transaction Updated Successfully");
             }
             catch (Exception e)
