@@ -14,6 +14,7 @@ namespace ExpenseTracker.Web.ViewModels.Home
         public decimal ExpensesToday { get; set; }
         public decimal ExpensesOfTheMonth { get; set; }
         public decimal IncomeToday { get; set; }
+        public IList<BudgetSummary> BudgetSummary { get; set; } = new List<BudgetSummary>();
     }
 
     public class TopCategory
@@ -29,5 +30,11 @@ namespace ExpenseTracker.Web.ViewModels.Home
         public string? Type { get; set; }
         public decimal Amount { get; set; }
         public string  Color { get; set; }
+    }
+    public class BudgetSummary
+    {
+        public string? Type { get; set; }
+        public decimal Amount { get; set; }
+        public string Color { get; set; }
     }
 }

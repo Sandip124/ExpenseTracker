@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,15 +23,17 @@ namespace ExpenseTracker.Web.Controllers
         private readonly ITransactionCategoryRepository _transactionCategoryRepository;
         private readonly IApplicationLogger<HomeController> _logger;
         private readonly IUserProvider _userProvider;
+        private readonly IBudgetRepository _budgetRepository;
 
         public HomeController(ITransactionRepository transactionRepository,
             ITransactionCategoryRepository transactionCategoryRepository,
-            IApplicationLogger<HomeController> logger, IUserProvider userProvider)
+            IApplicationLogger<HomeController> logger, IUserProvider userProvider, IBudgetRepository budgetRepository)
         {
             _transactionRepository = transactionRepository;
             _transactionCategoryRepository = transactionCategoryRepository;
             _logger = logger;
             _userProvider = userProvider;
+            _budgetRepository = budgetRepository;
         }
 
         public async Task<IActionResult> Index(HomeViewModel homeViewModel)
@@ -93,8 +96,27 @@ namespace ExpenseTracker.Web.Controllers
                             Color = a.Select(x => x.Color).Last()
                         }
                     ).ToList();
-
-
+                var budgetQueryable =
+                     _budgetRepository.GetPredicatedQueryable(a => a.Workspace.Token == workspaceToken);// it bring the current wrokspace details including budget
+                  var totalBudgetAmount = await budgetQueryable.SumAsync(a => a.Amount);
+                var totalexpeneAmount =await transactionQueryable
+                    .Where(a => a.Type == TransactionType.Expense)
+                    .SumAsync(a => a.Amount);
+                homeViewModel.BudgetSummary = new List<BudgetSummary>()
+                   {
+                       new BudgetSummary
+                       {
+                           Type = "Budget",
+                           Amount = totalBudgetAmount,
+                           Color = "#4caf50"
+                       },
+                       new BudgetSummary
+                       {
+                           Type = "Expense",
+                           Amount = totalexpeneAmount,
+                           Color = "#d6336c"
+                       }
+                   };
                 return View(homeViewModel);
             }
             catch (Exception e)
