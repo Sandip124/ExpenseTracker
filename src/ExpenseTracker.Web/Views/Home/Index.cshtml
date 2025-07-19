@@ -312,6 +312,26 @@
                                 </div>
                             </div>
                         </div>
+            <div class="col-lg-6 col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <h3 class="card-title">Budget Vs Expenses</h3>
+                            <div class="ms-auto">
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle text-muted" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 30 days</a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item active" href="#">Last 7 days</a>
+                                        <a class="dropdown-item" href="#">Last 30 days</a>
+                                        <a class="dropdown-item" href="#">Last 3 months</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="budget-summary-pie"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -401,6 +421,55 @@
                                 			fillSeriesColor: false
                                 		},
                                 	})).render();
+                    window.ApexCharts && (new ApexCharts(document.getElementById('budget-summary-pie'), {
+                                  chart: {
+                                      type: "donut",
+                                      fontFamily: 'inherit',
+                                      height: 240,
+                                      sparkline: {
+                                          enabled: true
+                                      },
+                                      animations: {
+                                          enabled: false
+                                      },
+                                  },
+                                  fill: {
+                                      opacity: 1,
+                                  },
+                                  series: [@foreach (var item in @Model.BudgetSummary)
+                                  {
+                                      <text>@item.Amount,</text>
+                                  }],
+                                                            labels: [@foreach (var item in @Model.BudgetSummary)
+                                  {
+                                      <text>"@item.Type",</text>
+                                  }],
+                                                            grid: {
+                                                                strokeDashArray: 4,
+                                                            },
+                                                            colors: [@foreach (var item in @Model.BudgetSummary)
+                                  {
+                                      <text>"@item.Color",</text>
+                                  }],
+                                  legend: {
+                                      show: true,
+                                      position: 'bottom',
+                                      offsetY: 12,
+                                      markers: {
+                                          width: 10,
+                                          height: 10,
+                                          radius: 100,
+                                      },
+                                      itemMargin: {
+                                          horizontal: 8,
+                                          vertical: 8
+                                      },
+                                  },
+                                  tooltip: {
+                                      fillSeriesColor: false
+                                  },
+                              })).render();
+
               });
               // @@formatter:on
         </script>

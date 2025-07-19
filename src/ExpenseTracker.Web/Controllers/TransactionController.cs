@@ -76,7 +76,7 @@ namespace ExpenseTracker.Web.Controllers
                 //TODO : need to use another vm
                 decimal budgetAmount = await _budgetRepository.getBudgetByWorkSpackeId((await _userProvider.GetDefaultWorkspace()).Id);
                 var totalTransactionAmout = await _transactionRepository.GetTotalTransactionAmountByWorkSpaceId((await _userProvider.GetDefaultWorkspace()).Id);
-                if(budgetAmount < totalTransactionAmout + transactionViewModel.Amount)
+                if((budgetAmount < totalTransactionAmout + transactionViewModel.Amount) && transactionViewModel.Type == "Expense")
                 {
                     _notifyService.Error("Insufficient budget to create this transaction.");
                     return View(transactionViewModel);
